@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>496444326788-9njv1cuat9cipu6b1ncgflk3tgj4eqah.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.496444326788-9njv1cuat9cipu6b1ncgflk3tgj4eqah</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDCoXclokQcXJ3j6XwMHIJdDTXpZyQgRV0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>496444326788</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.storytellers.storytellers</string>
+	<key>PROJECT_ID</key>
+	<string>storytellers-e7bab</string>
+	<key>STORAGE_BUCKET</key>
+	<string>storytellers-e7bab.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:496444326788:ios:b31813d66eaa2afe9693d1</string>
+	<key>DATABASE_URL</key>
+	<string>https://storytellers-e7bab.firebaseio.com</string>
+</dict>
+</plist>

@@ -47,25 +47,22 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
          let largeBoldDoc = UIImage(systemName: "arrow.backward.circle.fill", withConfiguration: largeConfig)
         applyShadow(view: button)
         
-//        self.largeBoldDoc.layer.shadowColor = [[UIColor colorWithRed:0 green:0 blue:0 alpha:0.25f] CGColor];
-//        self.largeBoldDoc.layer.shadowOffset = CGSizeMake(0, 2.0f);
-//        self.largeBoldDoc.layer.shadowOpacity = 1.0f;
-//        self.largeBoldDoc.layer.shadowRadius = 0.0f;
-//        self.largeBoldDoc.layer.masksToBounds = NO;
-//        self.largeBoldDoc.layer.cornerRadius = 4.0f;
-        
 //        closeImage?.size = CGSize(width: 150, height: 150)
         button.setImage(largeBoldDoc, for: .normal)
         button.tintColor = UIColor.white
 //        button.backgroundColor = UIColor.blue
         
         view.addSubview(button)
+        
+        //traitCollection.verticalSizeClass == .regular
     }
     
     @objc
     func dismissTapped()  {
-        print("TAPPED")
+        
         self.dismiss(animated: true, completion: nil)
+//        let vc = TestViewController()
+//        self.present(vc, animated: true, completion: nil)
     }
 
 

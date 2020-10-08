@@ -9,6 +9,11 @@
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Heebo-Black.ttf">
+            <string>Heebo-Black</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -33,13 +38,44 @@
                     <view key="view" contentMode="scaleToFill" id="RjM-1s-Bss">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A0Y-Ou-YVe">
+                                <rect key="frame" x="0.0" y="44" width="240" height="161"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dU8-dN-cD8">
+                                        <rect key="frame" x="20" y="30" width="101" height="44"/>
+                                        <color key="backgroundColor" name="ColourA"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="101" id="CKa-YN-Ng3"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Heebo-Black" family="Heebo" pointSize="17"/>
+                                        <state key="normal" title="Button">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="dU8-dN-cD8" secondAttribute="bottom" constant="87" id="Fa9-cq-zqx"/>
+                                    <constraint firstItem="dU8-dN-cD8" firstAttribute="top" secondItem="A0Y-Ou-YVe" secondAttribute="topMargin" id="Yah-g6-yk6"/>
+                                    <constraint firstItem="dU8-dN-cD8" firstAttribute="leading" secondItem="A0Y-Ou-YVe" secondAttribute="leadingMargin" id="ySi-OJ-whc"/>
+                                </constraints>
+                                <edgeInsets key="layoutMargins" top="30" left="20" bottom="8" right="8"/>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Slt-yo-pAd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="A0Y-Ou-YVe" firstAttribute="leading" secondItem="RjM-1s-Bss" secondAttribute="leading" id="Sis-QI-Md3"/>
+                            <constraint firstItem="Slt-yo-pAd" firstAttribute="trailing" secondItem="A0Y-Ou-YVe" secondAttribute="trailing" constant="174" id="Yg1-Nx-fZg"/>
+                            <constraint firstAttribute="bottom" secondItem="A0Y-Ou-YVe" secondAttribute="bottom" constant="691" id="ZzW-Vl-1MN"/>
+                            <constraint firstItem="A0Y-Ou-YVe" firstAttribute="top" secondItem="Slt-yo-pAd" secondAttribute="top" id="fz1-0S-QwW"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ppF-aI-Y8u" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1848" y="-279"/>
+            <point key="canvasLocation" x="1847.826086956522" y="-279.24107142857139"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="iXW-I9-vL1">
@@ -61,10 +97,10 @@
             </objects>
             <point key="canvasLocation" x="-967" y="583"/>
         </scene>
-        <!--View Controller-->
+        <!--ProfileVC-->
         <scene sceneID="x90-pv-g2Y">
             <objects>
-                <viewController id="NLO-bu-gec" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileVC" id="NLO-bu-gec" customClass="ProfileVC" customModule="MyTestApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="huW-rp-btR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -109,6 +145,9 @@
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -11,18 +11,18 @@ class ViewController: UIViewController, SomeProtocol {
     
     var cachedPosition = Dictionary<IndexPath,CGPoint>()
     
-    func someTypeMethod() {
-        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        if let viewController = mainStoryboard.instantiateViewController(withIdentifier: "BookDetailVC") as? BookDetailVC {
-            viewController.modalPresentationStyle = .fullScreen
-            self.present(viewController, animated: true, completion: nil)
-        }
-    }
+    var tableView : UITableView!
+    
+    var featuredBooks:[Book] = []
+    var newBooks:[Book] = []
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        
+        
         
         tableView.register(FeaturedBooksCell.self, forCellReuseIdentifier: "cell")
         tableView.delegate = self
@@ -31,7 +31,28 @@ class ViewController: UIViewController, SomeProtocol {
         
         view.addSubview(tableView)
 
+        fetchBooks()
         
+    }
+    
+    func fetchBooks() {
+        API.sharedAPI.getFeaturedBooks(featured: .featured, perPage: 2) { (books) in
+            self.featuredBooks.append(contentsOf: books)
+            self.tableView.reloadData()
+        }
+        
+        API.sharedAPI.getFeaturedBooks(featured: .recently_added, perPage: 1) { (books) in
+            self.newBooks.append(contentsOf: books)
+            self.tableView.reloadData()
+        }
+    }
+    
+    func tappedBook() {
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+        if let viewController = mainStoryboard.instantiateViewController(withIdentifier: "BookDetailVC") as? BookDetailVC {
+            viewController.modalPresentationStyle = .fullScreen
+            self.present(viewController, animated: true, completion: nil)
+        }
     }
 }
 
@@ -39,11 +60,20 @@ extension ViewController :UITableViewDelegate, UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! FeaturedBooksCell
+        
+        if indexPath.row == 0 {
+            cell.books = featuredBooks
+            cell.rowName = "Featured"
+        }else if indexPath.row == 1{
+            cell.books = newBooks
+            cell.rowName = "New"
+        }
+        
         cell.selectionStyle = .none
         cell.delegate = self
         cell.initialise()
@@ -52,7 +82,7 @@ extension ViewController :UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 110
+        return 300
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -60,18 +90,25 @@ extension ViewController :UITableViewDelegate, UITableViewDataSource {
             cachedPosition[indexPath] = cell.col.contentOffset
         }
     }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView()
+    }
 }
 
 
 protocol SomeProtocol : class {
     // protocol definition goes here
-    func someTypeMethod()
+    func tappedBook()
 }
 
 class MyDelegateClass {
     var delegate:SomeProtocol?
     
     func doDelegate() {
-        delegate?.someTypeMethod()
+        delegate?.tappedBook()
     }
 }
