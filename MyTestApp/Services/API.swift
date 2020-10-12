@@ -21,47 +21,78 @@ class API {
     
     var db:Firestore!
     
-    func getFeaturedBooks(featured:FeaturedList, perPage:Int ,completion: @escaping ([Book])->Void) {
+    func getFeaturedBooks(featured:FeaturedList, completion: @escaping ([BookFeatured])->Void) {
         let docRef = db.collection(featured.rawValue)
         
-        var books:[Book] = [] {
-            didSet{
-                if books.count == perPage {
-                    completion(books)
-                }
-            }
-        }
+        var books:[BookFeatured] = []
         
         docRef.getDocuments { (snap, error) in
-            for doc in snap!.documents {
-                let bookData = doc.data()
-//                completion("I ESCAPED \(String(describing: bookData["title"]))")
-                if let bookId = bookData["id"] as? String{
-                    self.getBook(withId: bookId) { (book) in
-                        //completion(book)
+            snap?.documents.forEach({ (snapshot) in
+                
+                do{
+                    var bookData = snapshot.data()
+                    if let date = bookData["added"] as? Timestamp {
+                        date.dateValue()
+                        bookData.removeValue(forKey: "added")
+                        
+                        let book = try BookFeatured(from: bookData)
+                    
                         books.append(book)
                     }
+                } catch{
                     
                 }
                 
-            }
+            })
+            
+            completion(books)
         }
     }
     
-    func getBook(withId id: String, completion : @escaping (Book)->Void) {
+    func getFeaturedBook(withId id: String, completion : @escaping (BookInfo)->Void) {
         let docRef = db.collection("books").document(id)
         
         docRef.getDocument { (snapshot, error) in
             do {
                 let bookData = try JSONSerialization.data(withJSONObject: snapshot?.data(), options: [])
+                
+                
+                
                 let decoder = JSONDecoder()
                 
-                let book = try decoder.decode(Book.self, from: bookData)
-                completion(book)
+                //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                
+                //decoder.userInfo[CodingUserInfoKey.managedObjectContext] = context
+                
+                let bookInfo = try decoder.decode(BookInfo.self, from: bookData)
+                
+                completion(bookInfo)
             }
             catch{
                 
             }
         }
     }
+    
+    func getBookContent(withBookId id : String, completion : @escaping ([String:Any]) -> Void) {
+        let docRef = db.collection("books").document(id).collection("content")
+        
+        var content: [String:Any] = [:]
+        
+        docRef.getDocuments { (snap, error) in
+            snap?.documents.forEach({ (docSnap) in
+                content[docSnap.documentID] = docSnap.data()
+            })
+            
+            completion(content)
+        }
+    }
+}
+
+extension Decodable {
+  init(from: Any) throws {
+    let data = try JSONSerialization.data(withJSONObject: from, options: [])
+    let decoder = JSONDecoder()
+    self = try decoder.decode(Self.self, from: data)
+  }
 }

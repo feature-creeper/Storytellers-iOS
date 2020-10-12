@@ -6,19 +6,73 @@
 //
 
 import UIKit
+import FirebaseStorage
+import SDWebImage
 
 class BookDetailVC: UIViewController, UIScrollViewDelegate {
     
+    let viewModel = BookDetailVM()
+    
+    var bookFeatured : BookFeatured?
+    
+
+    
+    var book:BookInfo? {
+        didSet{
+            label.text = book?.title
+            
+            setCoverImage()
+        }
+    }
+    
     var scrollView: UIScrollView!
     
-    var label: UILabel!
+    var label: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.numberOfLines = 0
+        return label
+    }()
     
     var headerContainerView: UIView!
     
     var imageView: UIImageView!
     
+    var contentStack : UIStackView = {
+       let i = UIStackView()
+        i.translatesAutoresizingMaskIntoConstraints = false
+        i.axis = .vertical
+        return i
+    }()
+    
+    var buyButton : UIButton = {
+        let buyButton = STButton(frame: CGRect(x: 0, y: 0, width: 400, height: 50),fontSize: 22)
+        buyButton.backgroundColor = .orange
+        buyButton.setTitle("Get this book", for: .normal)
+        buyButton.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        buyButton.layer.cornerRadius = 10
+        buyButton.addTarget(self, action: #selector(browseDatabase), for: .touchUpInside)
+        
+        return buyButton
+    }()
+    
+    var testButton : UIButton = {
+        let buyButton = STButton(frame: CGRect(x: 0, y: 0, width: 400, height: 50),fontSize: 22)
+        buyButton.backgroundColor = .systemGray4
+        buyButton.setTitle("Create File", for: .normal)
+        buyButton.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        buyButton.layer.cornerRadius = 10
+        buyButton.addTarget(self, action: #selector(createFileInDB), for: .touchUpInside)
+        
+        return buyButton
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewModel.delegate = self
+        viewModel.bookFeatured = bookFeatured
         
         createViews()
         
@@ -29,12 +83,26 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         
         // Label Customization
         label.backgroundColor = .clear
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-//        label.textColor = .white
-        label.text = "YOUR TEXT HERE"
+        label.font = UIFont.systemFont(ofSize: 40, weight: .semibold)
+        label.numberOfLines = 0
+        label.text = book?.title
         
         // Set Image on the Header
-        imageView.image = UIImage(named: "Llama")
+        //.image = UIImage(named: "Llama")
+        
+//        let storageRef = Storage.storage().reference()
+        
+//        if let cover = book?.cover {
+//            let coverRef = storageRef.child(cover)
+//            coverRef.downloadURL { [self] url, error in
+//              if let error = error {
+//                print(error.localizedDescription)
+//              } else {
+//                //self.coverImageView.sd_setImage(with: url)
+//                imageView.sd_setImage(with: url, completed: nil)
+//              }
+//            }
+//        }
         
         // Do any additional setup after loading the view.
         let button = UIButton(frame: CGRect(x: 0, y: 25, width: 100, height: 100))
@@ -54,8 +122,12 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         
         view.addSubview(button)
         
-        //traitCollection.verticalSizeClass == .regular
+        
+        
+        viewModel.getBook()
     }
+    
+
     
     @objc
     func dismissTapped()  {
@@ -74,9 +146,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         scrollView.alwaysBounceVertical = true
         
         // Label
-        label = UILabel()
-        label.backgroundColor = .white
-        label.numberOfLines = 0
+
         self.scrollView.addSubview(label)
         
         // Header Container
@@ -87,9 +157,12 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         // ImageView for background
         imageView = UIImageView()
         imageView.clipsToBounds = true
-        imageView.backgroundColor = #colorLiteral(red: 0.2709999979, green: 0.4429999888, blue: 1, alpha: 1)
+        imageView.backgroundColor = .systemGray6
         imageView.contentMode = .scaleAspectFill
         self.headerContainerView.addSubview(imageView)
+        
+        scrollView.addSubview(contentStack)
+        
     }
     
 
@@ -103,14 +176,6 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
             self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         ])
         
-        // Label Constraints
-        self.label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.label.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 10),
-            self.label.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -10),
-            self.label.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor, constant: -10),
-            self.label.topAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: 280)
-        ])
 
         // Header Container Constraints
         let headerContainerViewBottom : NSLayoutConstraint!
@@ -121,7 +186,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
             self.headerContainerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             self.headerContainerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
-        headerContainerViewBottom = self.headerContainerView.bottomAnchor.constraint(equalTo: self.label.topAnchor, constant: -10)
+        headerContainerViewBottom = self.headerContainerView.bottomAnchor.constraint(equalTo: self.contentStack.topAnchor, constant: -20)
         headerContainerViewBottom.priority = UILayoutPriority(rawValue: 900)
         headerContainerViewBottom.isActive = true
 
@@ -137,6 +202,36 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         imageViewTopConstraint = self.imageView.topAnchor.constraint(equalTo: self.view.topAnchor)
         imageViewTopConstraint.priority = UILayoutPriority(rawValue: 900)
         imageViewTopConstraint.isActive = true
+        
+        
+
+
+        NSLayoutConstraint.activate([
+            self.contentStack.leadingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.leadingAnchor),
+            self.contentStack.trailingAnchor.constraint(equalTo: self.view.layoutMarginsGuide.trailingAnchor),
+            self.contentStack.topAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: 300)
+        ])
+        
+        contentStack.spacing = 8
+        
+        contentStack.addArrangedSubview(label)
+        contentStack.addArrangedSubview(testButton)
+        contentStack.addArrangedSubview(buyButton)
+        
+        contentStack.setCustomSpacing(30.0, after: contentStack.subviews[0])
+        contentStack.distribution = .fill
+        
+    }
+    
+    @objc
+    func browseDatabase(){
+        viewModel.getBookContent()
+    }
+    
+    @objc
+    func createFileInDB(){
+//        DatabaseHelper.shared.addFile()
+//        viewModel.save()
     }
     
     func applyShadow(view: UIView){
@@ -145,122 +240,34 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         view.layer.shadowOpacity = 0.3
         view.layer.shadowRadius = 4.0
     }
+    
+    fileprivate func setCoverImage() {
+        let storageRef = Storage.storage().reference()
+        
+        if let cover = book?.cover {
+            let coverRef = storageRef.child(cover)
+            coverRef.downloadURL { [self] url, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                } else {
+                    //self.coverImageView.sd_setImage(with: url)
+                    imageView.sd_setImage(with: url, completed: nil)
+                }
+            }
+        }
+    }
+}
+
+extension BookDetailVC : BookDetailDelegate {
+    func receivedBook(book: BookInfo) {
+        
+        self.book = book
+    }
+    
+    func saved() {
+        print("SAVED")
+
+        }
+        
 }
     
-    
-    
-    /*
-    
-    var scrollView: UIScrollView!
-    
-    var headerContainerView: UIView!
-    
-    var imageView: UIImageView!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        scrollView = UIScrollView()
-        scrollView.delegate = self
-        self.view.addSubview(scrollView)
-        
-        scrollView.bounces = true
-        
-        
-        self.scrollView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            self.scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            self.scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            self.scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-        ])
-        
-        // Do any additional setup after loading the view.
-        let button = UIButton(frame: CGRect(x: 0, y: 20, width: 100, height: 100))
-        button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)//addAction(#selector(tapped), for: .touchUpInside)
-        //let closeImage = UIIMage(//UIImage(systemName: "arrow.backward.circle.fill")
-        let largeConfig = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold, scale: .large)
-
-         let largeBoldDoc = UIImage(systemName: "arrow.backward.circle.fill", withConfiguration: largeConfig)
-        
-//        closeImage?.size = CGSize(width: 150, height: 150)
-        button.setImage(largeBoldDoc, for: .normal)
-        button.tintColor = UIColor.white
-//        button.backgroundColor = UIColor.blue
-        
-        scrollView.addSubview(button)
-        
-        
-        // Header Container
-        headerContainerView = UIView()
-        headerContainerView.backgroundColor = .gray
-        self.scrollView.addSubview(headerContainerView)
-        
-        // ImageView for background
-        imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.backgroundColor = .green
-        imageView.contentMode = .scaleAspectFill
-        self.headerContainerView.addSubview(imageView)
-        
-        setupViews()
-    }
-    
-    @objc
-    func dismissTapped()  {
-        print("TAPPED")
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    func setupViews() {
-        let headerImageView = UIImageView()
-        scrollView.addSubview(headerImageView)
-        headerImageView.translatesAutoresizingMaskIntoConstraints = false
-        headerImageView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        headerImageView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
-        headerImageView.bottomAnchor.constraint(equalTo: scrollView.topAnchor, constant: -120).isActive = true
-        let headerContainerViewBottom : NSLayoutConstraint!
-        headerContainerViewBottom = self.headerContainerView.bottomAnchor.constraint(equalTo: self.scrollView.topAnchor, constant: -10)
-        headerContainerViewBottom.priority = UILayoutPriority(rawValue: 900)
-        headerContainerViewBottom.isActive = true
-        headerImageView.backgroundColor = #colorLiteral(red: 0.2709999979, green: 0.4429999888, blue: 1, alpha: 1)
-        
-        
-        // ImageView Constraints
-        let imageViewTopConstraint: NSLayoutConstraint!
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            self.imageView.leadingAnchor.constraint(equalTo: self.headerContainerView.leadingAnchor),
-            self.imageView.trailingAnchor.constraint(equalTo: self.headerContainerView.trailingAnchor),
-            self.imageView.bottomAnchor.constraint(equalTo: self.headerContainerView.bottomAnchor)
-        ])
-        
-        imageViewTopConstraint = self.imageView.topAnchor.constraint(equalTo: self.view.topAnchor)
-        imageViewTopConstraint.priority = UILayoutPriority(rawValue: 900)
-        imageViewTopConstraint.isActive = true
-        
-        let stack = UIStackView()
-        stack.axis = .vertical
-        view.addSubview(stack)
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.topAnchor.constraint(equalToSystemSpacingBelow: headerImageView.bottomAnchor, multiplier: 1).isActive = true
-//        stack.leftAnchor.constraint(equalToSystemSpacingAfter: view.leftAnchor, multiplier: 1).isActive = true
-        stack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
-        
-        let titleLabel = UILabel()
-        view.addSubview(titleLabel)
-        titleLabel.text = "Title"
-        titleLabel.font = UIFont(name: "KohinoorTelugu-Medium", size: 35)
-        
-        let authorLabel = UILabel()
-        view.addSubview(authorLabel)
-        authorLabel.text = "Author"
-        authorLabel.font = UIFont(name: "KohinoorTelugu-Medium", size: 20)
-        
-        stack.addArrangedSubview(titleLabel)
-        stack.addArrangedSubview(authorLabel)
-        
-    }
-
-}
-*/

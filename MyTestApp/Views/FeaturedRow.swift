@@ -7,6 +7,9 @@
 
 import Foundation
 import UIKit
+import FirebaseStorage
+import SDWebImage
+
 
 
 class FeaturedBooksCell: UITableViewCell {
@@ -15,7 +18,7 @@ class FeaturedBooksCell: UITableViewCell {
     
     var col : UICollectionView!
     
-    var books : [Book] = []
+    var books : [BookFeatured] = []
     
     var rowName : String!
     
@@ -88,7 +91,7 @@ extension FeaturedBooksCell:UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        print("TAPPED \(indexPath)")
-        delegate?.tappedBook()
+        delegate?.tappedBook(books[indexPath.item])//.tappedBook(books[indexPath.item])
         //vc.present(bookDetailVC, animated: true)
     }
 }
@@ -134,10 +137,10 @@ class MyCell: UICollectionViewCell {
     }()
     
     
-    private let coverImageView : UIView = {
-        let i = UIView()
+    private let coverImageView : UIImageView = {
+        let i = UIImageView()
         i.translatesAutoresizingMaskIntoConstraints = false
-        i.backgroundColor = UIColor.orange
+        i.backgroundColor = .systemGray5
         return i
     }()
     
@@ -153,7 +156,7 @@ class MyCell: UICollectionViewCell {
         return i
     }()
     
-    var book : Book?{
+    var book : BookFeatured?{
         didSet{
             setupViews()
         }
@@ -174,8 +177,13 @@ class MyCell: UICollectionViewCell {
         coverImageView.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor).isActive = true
         coverImageView.heightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.widthAnchor).isActive = true
         coverImageView.layer.cornerRadius = 17
+        coverImageView.contentMode = .scaleAspectFill
+        coverImageView.clipsToBounds = true
         
 
+        
+
+        
 
     }
     
@@ -197,6 +205,19 @@ class MyCell: UICollectionViewCell {
             authorLabel.topAnchor.constraint(equalTo: bookTitleLabel.bottomAnchor, constant: -3).isActive = true
             authorLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor).isActive = true
             authorLabel.rightAnchor.constraint(equalTo: contentView.layoutMarginsGuide.rightAnchor).isActive = true
+        }
+        
+        let storageRef = Storage.storage().reference()
+        
+        if let cover = book?.cover {
+            let coverRef = storageRef.child(cover)
+            coverRef.downloadURL { url, error in
+              if let error = error {
+                print(error.localizedDescription)
+              } else {
+                self.coverImageView.sd_setImage(with: url)
+              }
+            }
         }
     }
     

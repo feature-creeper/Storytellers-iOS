@@ -13,8 +13,8 @@ class ViewController: UIViewController, SomeProtocol {
     
     var tableView : UITableView!
     
-    var featuredBooks:[Book] = []
-    var newBooks:[Book] = []
+    var featuredBooks:[BookFeatured] = []
+    var newBooks:[BookFeatured] = []
 
     
     override func viewDidLoad() {
@@ -36,21 +36,28 @@ class ViewController: UIViewController, SomeProtocol {
     }
     
     func fetchBooks() {
-        API.sharedAPI.getFeaturedBooks(featured: .featured, perPage: 2) { (books) in
+        API.sharedAPI.getFeaturedBooks(featured: .featured) { (books) in
             self.featuredBooks.append(contentsOf: books)
-            self.tableView.reloadData()
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            
         }
         
-        API.sharedAPI.getFeaturedBooks(featured: .recently_added, perPage: 1) { (books) in
+        API.sharedAPI.getFeaturedBooks(featured: .recently_added) { (books) in
             self.newBooks.append(contentsOf: books)
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     
-    func tappedBook() {
+    func tappedBook(_ book:BookFeatured) {
         let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         if let viewController = mainStoryboard.instantiateViewController(withIdentifier: "BookDetailVC") as? BookDetailVC {
             viewController.modalPresentationStyle = .fullScreen
+            viewController.bookFeatured = book
             self.present(viewController, animated: true, completion: nil)
         }
     }
@@ -102,13 +109,13 @@ extension ViewController :UITableViewDelegate, UITableViewDataSource {
 
 protocol SomeProtocol : class {
     // protocol definition goes here
-    func tappedBook()
+    func tappedBook(_ book:BookFeatured)
 }
 
-class MyDelegateClass {
-    var delegate:SomeProtocol?
-    
-    func doDelegate() {
-        delegate?.tappedBook()
-    }
-}
+//class MyDelegateClass {
+//    var delegate:SomeProtocol?
+//    
+////    func doDelegate() {
+////        delegate?.tappedBook()
+////    }
+//}
