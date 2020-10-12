@@ -7,33 +7,40 @@
 
 import UIKit
 
-class MyBookshelfVC: UIViewController {
+class MyBookshelfVC: UITableViewController {
     
     var myBooks : [Book] = []
-    
-    let tableView : UITableView = {
-        let tv = UITableView()
-        return tv
-    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let navbarFont = UIFont(name: "Heebo-Medium", size: 17) ?? UIFont.systemFont(ofSize: 17)
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.font: navbarFont,
+        ]
 
-        let v = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 200))
-        v.backgroundColor = .brown
-        view.addSubview(v)
-        
-        tableView.frame = view.frame
-        tableView.delegate = self
-        tableView.dataSource = self
-        view.addSubview(tableView)
-        
+        let navbarFontLarge = UIFont(name: "Heebo-Bold", size: 35) ?? UIFont.systemFont(ofSize: 17)
+        navigationController?.navigationBar.largeTitleTextAttributes = [
+            NSAttributedString.Key.font: navbarFontLarge,
+//            NSAttributedString.Key.foregroundColor: UIColor.red
+        ]
+
         tableView.register(MyBookShelfTableCell.self, forCellReuseIdentifier: "cell")
         
+        title = "My Bookshelf"
+        
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         fetchSavedBooks()
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.navigationController?.navigationBar.sizeToFit()
+        }
+
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
+
     }
     
     func fetchSavedBooks() {
@@ -45,38 +52,41 @@ class MyBookshelfVC: UIViewController {
         } catch  {
             
         }
-        
     }
     
     func tappedOnBook(_ index : Int) {
-        print(index)
         
         let vc = MyBookDetailVC()
-        let nav = UINavigationController(rootViewController: vc)
-       
-
-        nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: true, completion: nil)
+        vc.book = myBooks[index]
+        navigationController?.pushViewController(vc, animated: true)
     }
 
 }
 
-extension MyBookshelfVC : UITableViewDelegate{
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+extension MyBookshelfVC {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 130
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tappedOnBook(indexPath.row)
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView()
     }
 }
 
-extension MyBookshelfVC : UITableViewDataSource{
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension MyBookshelfVC {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return myBooks.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! MyBookShelfTableCell
         cell.book = myBooks[indexPath.row]
         return cell
@@ -93,6 +103,8 @@ class MyBookShelfTableCell: UITableViewCell {
         view.backgroundColor = .systemGray6
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 9
+        view.clipsToBounds = true
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -119,6 +131,12 @@ class MyBookShelfTableCell: UITableViewCell {
         didSet{
             titleLabel.text = book?.title
             authorLabel.text = book?.author
+            
+            if let title = book?.title {
+                thumbnailImageView.setImage(fromCoreDataNamed: title.replacingOccurrences(of: " ", with: "_"))
+            }
+            
+            
         }
     }
     
@@ -126,6 +144,7 @@ class MyBookShelfTableCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
     }
+
     
     func setupViews() {
         contentView.addSubview(stackView)

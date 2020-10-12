@@ -64,7 +64,8 @@ class API {
                 
                 //decoder.userInfo[CodingUserInfoKey.managedObjectContext] = context
                 
-                let bookInfo = try decoder.decode(BookInfo.self, from: bookData)
+                var bookInfo = try decoder.decode(BookInfo.self, from: bookData)
+                bookInfo.id = snapshot?.documentID
                 
                 completion(bookInfo)
             }

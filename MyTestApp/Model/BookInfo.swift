@@ -11,5 +11,5 @@ struct BookInfo : Codable {
     var author : String?
     var title : String?
     var cover : String?
-    
+    var id : String?
 }

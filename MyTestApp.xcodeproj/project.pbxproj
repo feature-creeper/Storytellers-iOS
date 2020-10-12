@@ -20,6 +20,7 @@
 		6962B6BD2530D55600BBB81D /* MyTestApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6962B6BB2530D55600BBB81D /* MyTestApp.xcdatamodeld */; };
 		69682CCF253460A100F6A6F7 /* MyBookshelfVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69682CCE253460A100F6A6F7 /* MyBookshelfVC.swift */; };
 		69682CD42534788700F6A6F7 /* MyBookDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69682CD32534788700F6A6F7 /* MyBookDetailVC.swift */; };
+		69682CE12534AF0400F6A6F7 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69682CE02534AF0400F6A6F7 /* Helpers.swift */; };
 		6979E085252F78F800BD590F /* Heebo-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69380AFE252F758600F2B778 /* Heebo-Black.ttf */; };
 		6979E089252F78FB00BD590F /* Heebo-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69380B02252F758600F2B778 /* Heebo-Bold.ttf */; };
 		6979E08A252F78FD00BD590F /* Heebo-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69380AFD252F758600F2B778 /* Heebo-ExtraBold.ttf */; };
@@ -80,6 +81,7 @@
 		6962B6BC2530D55600BBB81D /* MyTestApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyTestApp.xcdatamodel; sourceTree = "<group>"; };
 		69682CCE253460A100F6A6F7 /* MyBookshelfVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookshelfVC.swift; sourceTree = "<group>"; };
 		69682CD32534788700F6A6F7 /* MyBookDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookDetailVC.swift; sourceTree = "<group>"; };
+		69682CE02534AF0400F6A6F7 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		697BB02D25331AF0001D17EF /* BookInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookInfo.swift; sourceTree = "<group>"; };
 		697E47B2253089DB00E769A1 /* STButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STButton.swift; sourceTree = "<group>"; };
 		697E47B725308C7E00E769A1 /* DatabaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseHelper.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			children = (
 				69380AF1252F3BC600F2B778 /* API.swift */,
 				697E47B725308C7E00E769A1 /* DatabaseHelper.swift */,
+				69682CE02534AF0400F6A6F7 /* Helpers.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -572,6 +575,7 @@
 				694D77AA252DC9E20061848B /* FeaturedRow.swift in Sources */,
 				69A97F46252C7424006EA658 /* AppDelegate.swift in Sources */,
 				697E47B3253089DB00E769A1 /* STButton.swift in Sources */,
+				69682CE12534AF0400F6A6F7 /* Helpers.swift in Sources */,
 				69380A88252ED96700F2B778 /* TestViewController.swift in Sources */,
 				695635402533034200F3EBA2 /* BookDetailVM.swift in Sources */,
 				69682CD42534788700F6A6F7 /* MyBookDetailVC.swift in Sources */,

@@ -15,18 +15,24 @@ class DatabaseHelper {
         print("ADD FILE")
     }
     
-    func browseFiles() {
-        print("Browse")
+    func browseDocuments() {
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+
         do {
-            let fm = FileManager.default
-            let docsurl = try fm.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let dir = fm.enumerator(at: docsurl, includingPropertiesForKeys: nil)!
-            for case let f as URL in dir where f.pathExtension == "txt" {
-                print(f.lastPathComponent)
-            }
+            let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
+
+            // Print the urls of the files contained in the documents directory
+            print(directoryContents)
         } catch {
-            
+            print("Could not search for urls of files in documents directory: \(error)")
         }
-        
+    }
+}
+
+extension FileManager {
+    func urls(for directory: FileManager.SearchPathDirectory, skipsHiddenFiles: Bool = false ) -> [URL]? {
+        let documentsURL = urls(for: directory, in: .userDomainMask)[0]
+        let fileURLs = try? contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: skipsHiddenFiles ? .skipsHiddenFiles : [] )
+        return fileURLs
     }
 }

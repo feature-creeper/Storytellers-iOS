@@ -54,7 +54,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="IZv-FM-hgD"/>
-                        <segue destination="6Ij-so-xD2" kind="relationship" relationship="viewControllers" id="wlg-Hk-joU"/>
+                        <segue destination="i1r-91-Xtk" kind="relationship" relationship="viewControllers" id="wlg-Hk-joU"/>
                         <segue destination="NLO-bu-gec" kind="relationship" relationship="viewControllers" id="MyL-Dz-j8F"/>
                     </connections>
                 </tabBarController>
@@ -81,24 +81,45 @@
             </objects>
             <point key="canvasLocation" x="932" y="1221"/>
         </scene>
-        <!--My BookshelfVC-->
-        <scene sceneID="Ltr-ZR-SrH">
+        <!--Navigation Controller-->
+        <scene sceneID="oRf-4X-CcJ">
             <objects>
-                <viewController id="6Ij-so-xD2" customClass="MyBookshelfVC" customModule="MyTestApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Btx-0Q-Ro2">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="PjL-jJ-KWd"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="i1r-91-Xtk" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="books.vertical.fill" catalog="system" id="yec-H6-fVX">
                         <color key="badgeColor" name="ColourA"/>
                     </tabBarItem>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1qH-Xh-VoJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Fe8-bG-yEW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="eYw-h7-Xv5" kind="relationship" relationship="rootViewController" id="eag-f5-p2w"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qcH-2m-FNY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="951" y="456"/>
+            <point key="canvasLocation" x="949.60000000000002" y="455.62218890554726"/>
+        </scene>
+        <!--My BookshelfVC-->
+        <scene sceneID="xXd-MS-xkS">
+            <objects>
+                <tableViewController interfaceStyle="light" id="eYw-h7-Xv5" customClass="MyBookshelfVC" customModule="MyTestApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="fZW-Wf-VeD">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <connections>
+                            <outlet property="dataSource" destination="eYw-h7-Xv5" id="eoP-px-D7u"/>
+                            <outlet property="delegate" destination="eYw-h7-Xv5" id="UrQ-99-bZv"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="Ttu-Pa-Ce2"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qLB-ct-FLV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1847" y="456"/>
         </scene>
     </scenes>
     <resources>

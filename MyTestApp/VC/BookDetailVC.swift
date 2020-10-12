@@ -59,10 +59,10 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
     var testButton : UIButton = {
         let buyButton = STButton(frame: CGRect(x: 0, y: 0, width: 400, height: 50),fontSize: 22)
         buyButton.backgroundColor = .systemGray4
-        buyButton.setTitle("Create File", for: .normal)
+        buyButton.setTitle("Look at docs", for: .normal)
         buyButton.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         buyButton.layer.cornerRadius = 10
-        buyButton.addTarget(self, action: #selector(createFileInDB), for: .touchUpInside)
+        buyButton.addTarget(self, action: #selector(lookAtDocs), for: .touchUpInside)
         
         return buyButton
     }()
@@ -78,36 +78,14 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         
         setViewConstraints()
         
-        // ScrollView
-//        scrollView.backgroundColor = UIColor.black
-        
         // Label Customization
         label.backgroundColor = .clear
         label.font = UIFont.systemFont(ofSize: 40, weight: .semibold)
         label.numberOfLines = 0
         label.text = book?.title
         
-        // Set Image on the Header
-        //.image = UIImage(named: "Llama")
-        
-//        let storageRef = Storage.storage().reference()
-        
-//        if let cover = book?.cover {
-//            let coverRef = storageRef.child(cover)
-//            coverRef.downloadURL { [self] url, error in
-//              if let error = error {
-//                print(error.localizedDescription)
-//              } else {
-//                //self.coverImageView.sd_setImage(with: url)
-//                imageView.sd_setImage(with: url, completed: nil)
-//              }
-//            }
-//        }
-        
-        // Do any additional setup after loading the view.
         let button = UIButton(frame: CGRect(x: 0, y: 25, width: 100, height: 100))
-        button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)//addAction(#selector(tapped), for: .touchUpInside)
-        //let closeImage = UIIMage(//UIImage(systemName: "arrow.backward.circle.fill")
+        button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold, scale: .large)
 
         
@@ -115,10 +93,8 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
          let largeBoldDoc = UIImage(systemName: "arrow.backward.circle.fill", withConfiguration: largeConfig)
         applyShadow(view: button)
         
-//        closeImage?.size = CGSize(width: 150, height: 150)
         button.setImage(largeBoldDoc, for: .normal)
         button.tintColor = UIColor.white
-//        button.backgroundColor = UIColor.blue
         
         view.addSubview(button)
         
@@ -229,9 +205,9 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
     }
     
     @objc
-    func createFileInDB(){
-//        DatabaseHelper.shared.addFile()
-//        viewModel.save()
+    func lookAtDocs(){
+
+        DatabaseHelper.shared.browseDocuments()
     }
     
     func applyShadow(view: UIView){
