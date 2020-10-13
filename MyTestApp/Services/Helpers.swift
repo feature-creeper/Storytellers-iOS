@@ -17,3 +17,12 @@ extension UIImageView{
     }
 
 }
+
+extension UIView{
+    func applyShadow(){
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: 1, height: 1)
+        layer.shadowOpacity = 0.3
+        layer.shadowRadius = 4.0
+    }
+}

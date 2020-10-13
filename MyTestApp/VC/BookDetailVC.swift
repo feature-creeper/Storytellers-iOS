@@ -15,8 +15,6 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
     
     var bookFeatured : BookFeatured?
     
-
-    
     var book:BookInfo? {
         didSet{
             label.text = book?.title
@@ -33,6 +31,8 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         label.numberOfLines = 0
         return label
     }()
+    
+    var spinner = LoadingView()
     
     var headerContainerView: UIView!
     
@@ -51,7 +51,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         buyButton.setTitle("Get this book", for: .normal)
         buyButton.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         buyButton.layer.cornerRadius = 10
-        buyButton.addTarget(self, action: #selector(browseDatabase), for: .touchUpInside)
+        buyButton.addTarget(self, action: #selector(tappedGetBook), for: .touchUpInside)
         
         return buyButton
     }()
@@ -65,6 +65,19 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         buyButton.addTarget(self, action: #selector(lookAtDocs), for: .touchUpInside)
         
         return buyButton
+    }()
+    
+    var backButton : UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: 25, width: 100, height: 100))
+        button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
+        let largeConfig = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold, scale: .large)
+        
+        let largeBoldDoc = UIImage(systemName: "arrow.backward.circle.fill", withConfiguration: largeConfig)
+        button.applyShadow()
+        
+        button.setImage(largeBoldDoc, for: .normal)
+        button.tintColor = UIColor.white
+        return button
     }()
     
     
@@ -84,22 +97,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         label.numberOfLines = 0
         label.text = book?.title
         
-        let button = UIButton(frame: CGRect(x: 0, y: 25, width: 100, height: 100))
-        button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
-        let largeConfig = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold, scale: .large)
 
-        
-        
-         let largeBoldDoc = UIImage(systemName: "arrow.backward.circle.fill", withConfiguration: largeConfig)
-        applyShadow(view: button)
-        
-        button.setImage(largeBoldDoc, for: .normal)
-        button.tintColor = UIColor.white
-        
-        view.addSubview(button)
-        
-        
-        
         viewModel.getBook()
     }
     
@@ -138,6 +136,12 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         self.headerContainerView.addSubview(imageView)
         
         scrollView.addSubview(contentStack)
+        
+        view.addSubview(backButton)
+        
+        self.view.addSubview(spinner)
+        
+        spinner.isHidden = true
         
     }
     
@@ -191,30 +195,29 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         contentStack.spacing = 8
         
         contentStack.addArrangedSubview(label)
-        contentStack.addArrangedSubview(testButton)
         contentStack.addArrangedSubview(buyButton)
+        contentStack.addArrangedSubview(testButton)
+        
         
         contentStack.setCustomSpacing(30.0, after: contentStack.subviews[0])
         contentStack.distribution = .fill
         
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        spinner.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        spinner.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        spinner.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
     
     @objc
-    func browseDatabase(){
+    func tappedGetBook(){
+        spinner.isHidden = false
         viewModel.getBookContent()
     }
     
     @objc
     func lookAtDocs(){
-
         DatabaseHelper.shared.browseDocuments()
-    }
-    
-    func applyShadow(view: UIView){
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOffset = CGSize(width: 1, height: 1)
-        view.layer.shadowOpacity = 0.3
-        view.layer.shadowRadius = 4.0
     }
     
     fileprivate func setCoverImage() {
@@ -235,15 +238,44 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
 }
 
 extension BookDetailVC : BookDetailDelegate {
-    func receivedBook(book: BookInfo) {
-        
+    
+    func receivedBookInfo(book: BookInfo) {
         self.book = book
     }
     
     func saved() {
         print("SAVED")
-
-        }
+    }
+    
+    func addedNewBookToMyBookshelf(){
+        spinner.isHidden = true
+    }
         
 }
     
+class LoadingView: UIView {
+    
+    var spinner : UIActivityIndicatorView = {
+        let s = UIActivityIndicatorView()
+        s.translatesAutoresizingMaskIntoConstraints = false
+        s.color = .white
+        s.style = .large
+        s.startAnimating()
+        return s
+    }()
+    
+    convenience init() {
+        self.init(frame: CGRect(x: 0, y: 0, width: 300, height: 200))
+        backgroundColor = UIColor(white: 0.1, alpha: 0.5)
+        setupSubviews()
+    }
+    
+    func setupSubviews() {
+        addSubview(spinner)
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        spinner.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        spinner.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        spinner.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        spinner.heightAnchor.constraint(equalToConstant: 80).isActive = true
+    }
+}

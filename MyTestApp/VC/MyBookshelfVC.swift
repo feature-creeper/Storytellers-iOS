@@ -27,12 +27,16 @@ class MyBookshelfVC: UITableViewController {
 
         tableView.register(MyBookShelfTableCell.self, forCellReuseIdentifier: "cell")
         
-        title = "My Bookshelf"
+        navigationItem.title = "My Bookshelf"
         
     }
 
+    
+
     override func viewWillAppear(_ animated: Bool) {
+        
         fetchSavedBooks()
+        
         
         DispatchQueue.main.async { [weak self] in
             self?.navigationController?.navigationBar.sizeToFit()
@@ -40,6 +44,8 @@ class MyBookshelfVC: UITableViewController {
 
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .always
+        
+       clearsSelectionOnViewWillAppear = true
 
     }
     
@@ -47,8 +53,11 @@ class MyBookshelfVC: UITableViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
         do {
+            
             myBooks = try context.fetch(Book.fetchRequest())
-            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         } catch  {
             
         }
@@ -64,6 +73,7 @@ class MyBookshelfVC: UITableViewController {
 }
 
 extension MyBookshelfVC {
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 130
     }

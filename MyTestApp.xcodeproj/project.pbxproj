@@ -38,6 +38,10 @@
 		69A97F52252C7424006EA658 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69A97F50252C7424006EA658 /* LaunchScreen.storyboard */; };
 		69A97F5D252C7424006EA658 /* MyTestAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A97F5C252C7424006EA658 /* MyTestAppTests.swift */; };
 		69A97F68252C7424006EA658 /* MyTestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A97F67252C7424006EA658 /* MyTestAppUITests.swift */; };
+		69B997422535B9480067969D /* DeepAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B997402535B91E0067969D /* DeepAR.framework */; };
+		69B997432535B9480067969D /* DeepAR.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 69B997402535B91E0067969D /* DeepAR.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		69B997762535CA7C0067969D /* DeepARVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B997742535CA7C0067969D /* DeepARVC.swift */; };
+		69B997772535CA7C0067969D /* DeepARVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69B997752535CA7C0067969D /* DeepARVC.xib */; };
 		A78E4CDDBBB3112CF520940D /* Pods_MyTestAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49583B944960A075E37700B2 /* Pods_MyTestAppTests.framework */; };
 		C13E7B35E85C96E79D988A17 /* Pods_MyTestApp_MyTestAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D918FEBB381A8F42961519 /* Pods_MyTestApp_MyTestAppUITests.framework */; };
 /* End PBXBuildFile section */
@@ -58,6 +62,20 @@
 			remoteInfo = MyTestApp;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		69B99701253593460067969D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				69B997432535B9480067969D /* DeepAR.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0B69272EB54113981127AFC7 /* Pods-MyTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp.debug.xcconfig"; path = "Target Support Files/Pods-MyTestApp/Pods-MyTestApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -99,6 +117,9 @@
 		69A97F63252C7424006EA658 /* MyTestAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTestAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69A97F67252C7424006EA658 /* MyTestAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTestAppUITests.swift; sourceTree = "<group>"; };
 		69A97F69252C7424006EA658 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69B997402535B91E0067969D /* DeepAR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DeepAR.framework; sourceTree = "<group>"; };
+		69B997742535CA7C0067969D /* DeepARVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepARVC.swift; sourceTree = "<group>"; };
+		69B997752535CA7C0067969D /* DeepARVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeepARVC.xib; sourceTree = "<group>"; };
 		7435D7A8075D773A712CD486 /* Pods-MyTestApp-MyTestAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-MyTestAppUITests.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp-MyTestAppUITests/Pods-MyTestApp-MyTestAppUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B0C85D1D28AB024D164D9B88 /* Pods-MyTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp/Pods-MyTestApp.release.xcconfig"; sourceTree = "<group>"; };
 		C4D918FEBB381A8F42961519 /* Pods_MyTestApp_MyTestAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyTestApp_MyTestAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +134,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C87450AF0D8E320E4BBAABA /* Pods_MyTestApp.framework in Frameworks */,
+				69B997422535B9480067969D /* DeepAR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +204,8 @@
 				69380A86252ED96700F2B778 /* TestViewController.swift */,
 				69682CCE253460A100F6A6F7 /* MyBookshelfVC.swift */,
 				69682CD32534788700F6A6F7 /* MyBookDetailVC.swift */,
+				69B997742535CA7C0067969D /* DeepARVC.swift */,
+				69B997752535CA7C0067969D /* DeepARVC.xib */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -233,6 +257,7 @@
 		69A97F44252C7424006EA658 /* MyTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				69B997062535A3A00067969D /* Frameworks */,
 				69380AF6252F422A00F2B778 /* Model */,
 				69380AF0252F3BA800F2B778 /* Services */,
 				694D77B2252DCA760061848B /* VC */,
@@ -270,6 +295,14 @@
 			path = MyTestAppUITests;
 			sourceTree = "<group>";
 		};
+		69B997062535A3A00067969D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				69B997402535B91E0067969D /* DeepAR.framework */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
 		B9A4C0EB6E6FDE2445ADCD00 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,6 +329,7 @@
 				69A97F40252C7424006EA658 /* Resources */,
 				AA34DF4077A13F45AA5894B5 /* [CP] Embed Pods Frameworks */,
 				F5382ABD1902837357A58306 /* [CP] Copy Pods Resources */,
+				69B99701253593460067969D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -400,6 +434,7 @@
 				69A97F52252C7424006EA658 /* LaunchScreen.storyboard in Resources */,
 				6979E08A252F78FD00BD590F /* Heebo-ExtraBold.ttf in Resources */,
 				6979E092252F790100BD590F /* Heebo-Regular.ttf in Resources */,
+				69B997772535CA7C0067969D /* DeepARVC.xib in Resources */,
 				69380A97252F0CE500F2B778 /* GoogleService-Info.plist in Resources */,
 				6979E08E252F78FF00BD590F /* Heebo-Medium.ttf in Resources */,
 				69A97F4F252C7424006EA658 /* Assets.xcassets in Resources */,
@@ -580,6 +615,7 @@
 				695635402533034200F3EBA2 /* BookDetailVM.swift in Sources */,
 				69682CD42534788700F6A6F7 /* MyBookDetailVC.swift in Sources */,
 				69380AF2252F3BC600F2B778 /* API.swift in Sources */,
+				69B997762535CA7C0067969D /* DeepARVC.swift in Sources */,
 				69682CCF253460A100F6A6F7 /* MyBookshelfVC.swift in Sources */,
 				69A97F48252C7424006EA658 /* SceneDelegate.swift in Sources */,
 			);
@@ -688,7 +724,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -743,7 +779,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -761,7 +797,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FUFK25RMK4;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/MyTestApp",
+					"$(PROJECT_DIR)/MyTestApp/Frameworks",
+				);
 				INFOPLIST_FILE = MyTestApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -781,7 +824,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FUFK25RMK4;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/MyTestApp",
+					"$(PROJECT_DIR)/MyTestApp/Frameworks",
+				);
 				INFOPLIST_FILE = MyTestApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

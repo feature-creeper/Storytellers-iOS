@@ -71,6 +71,7 @@ class MyBookDetailVC: UIViewController {
         v.backgroundColor = .orange
         v.translatesAutoresizingMaskIntoConstraints = false
         v.layer.cornerRadius = 9
+        v.addTarget(self, action: #selector(tappedRead), for: .touchUpInside)
         return v
     }()
     
@@ -125,5 +126,12 @@ class MyBookDetailVC: UIViewController {
         topDetailsStack.rightAnchor.constraint(equalTo: view.readableContentGuide.rightAnchor).isActive = true
         
         
+    }
+    
+    @objc
+    func tappedRead() {
+        let vc = DeepARVC(nibName: nil, bundle: nil)
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
     }
 }
