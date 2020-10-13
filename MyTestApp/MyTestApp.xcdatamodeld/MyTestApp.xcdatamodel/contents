@@ -4,11 +4,10 @@
         <attribute name="author" optional="YES" attributeType="String"/>
         <attribute name="content" optional="YES" attributeType="String" valueTransformerName="[String]]"/>
         <attribute name="cover" optional="YES" attributeType="String"/>
-        <attribute name="effect" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="effects" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Book" positionX="-63" positionY="-18" width="128" height="133"/>
+        <element name="Book" positionX="-63" positionY="-18" width="128" height="118"/>
     </elements>
 </model>

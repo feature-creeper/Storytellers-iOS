@@ -73,7 +73,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold, scale: .large)
         
         let largeBoldDoc = UIImage(systemName: "arrow.backward.circle.fill", withConfiguration: largeConfig)
-        button.applyShadow()
+        button.applyShadow(offset: CGSize(width: 1, height: 1), opacity: 0.3, radius: 4.0)
         
         button.setImage(largeBoldDoc, for: .normal)
         button.tintColor = UIColor.white

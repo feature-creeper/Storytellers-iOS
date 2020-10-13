@@ -50,7 +50,6 @@ class MyBookDetailVC: UIViewController {
     let titleLabel : UILabel = {
         let v = UILabel()
         v.font = UIFont(name: "Heebo-Bold", size: 30)
-
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -60,6 +59,14 @@ class MyBookDetailVC: UIViewController {
         v.font = UIFont(name: "Heebo-Medium", size: 20)
 
         v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    let myVideosLabel : UILabel = {
+        let v = UILabel()
+        v.font = UIFont(name: "Heebo-Bold", size: 20)
+        v.textColor = .gray
+        v.text = "My videos"
         return v
     }()
     
@@ -75,6 +82,17 @@ class MyBookDetailVC: UIViewController {
         return v
     }()
     
+    let myVideosCollectionView : UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let collView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        collView.translatesAutoresizingMaskIntoConstraints = false
+        collView.showsHorizontalScrollIndicator = false
+        collView.alwaysBounceHorizontal = true
+        collView.backgroundColor = .white
+        collView.register(MyVideoCell.self, forCellWithReuseIdentifier: "cell")
+        return collView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,6 +100,9 @@ class MyBookDetailVC: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         
         setupViews()
+        
+        myVideosCollectionView.delegate = self
+        myVideosCollectionView.dataSource = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -105,11 +126,14 @@ class MyBookDetailVC: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(coverImageView)
         scrollView.addSubview(topDetailsStack)
+        scrollView.addSubview(myVideosCollectionView)
         topDetailsStack.addArrangedSubview(titleLabel)
         topDetailsStack.addArrangedSubview(authorLabel)
         topDetailsStack.addArrangedSubview(readButton)
+        topDetailsStack.addArrangedSubview(myVideosLabel)
         
         topDetailsStack.setCustomSpacing(40, after: authorLabel)
+        topDetailsStack.setCustomSpacing(25, after: readButton)
         
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -125,13 +149,53 @@ class MyBookDetailVC: UIViewController {
         topDetailsStack.leftAnchor.constraint(equalTo: view.readableContentGuide.leftAnchor).isActive = true
         topDetailsStack.rightAnchor.constraint(equalTo: view.readableContentGuide.rightAnchor).isActive = true
         
+        myVideosCollectionView.topAnchor.constraint(equalTo: topDetailsStack.bottomAnchor, constant: 15).isActive = true
+        myVideosCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        myVideosCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        myVideosCollectionView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        
         
     }
     
     @objc
     func tappedRead() {
         let vc = DeepARVC(nibName: nil, bundle: nil)
+        guard let effects = book?.effects?.getEffectArray() else {return}
+        vc.maskPath = effects.first
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
+    }
+}
+
+extension MyBookDetailVC : UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: 15, height: 15)
+    }
+}
+
+extension MyBookDetailVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 100, height: 140)
+    }
+}
+
+
+class MyVideoCell: UICollectionViewCell {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .systemGray5
+        layer.cornerRadius = 9
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

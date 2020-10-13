@@ -53,6 +53,20 @@ class API {
         let docRef = db.collection("books").document(id)
         
         docRef.getDocument { (snapshot, error) in
+            
+            var _effects : String?
+            
+            if let effects = snapshot?.data()?["effects"]{
+                do {
+                    let e = effects as! [String]
+//                    let data = try JSONSerialization.data(withJSONObject: e, options: [])
+//                    let f = String(data: data, encoding: .utf8)
+                    _effects = e.joined(separator: ",")
+                } catch  {
+                    
+                }
+            }
+            
             do {
                 let bookData = try JSONSerialization.data(withJSONObject: snapshot?.data(), options: [])
                 
@@ -60,12 +74,12 @@ class API {
                 
                 let decoder = JSONDecoder()
                 
-                //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-                
-                //decoder.userInfo[CodingUserInfoKey.managedObjectContext] = context
-                
                 var bookInfo = try decoder.decode(BookInfo.self, from: bookData)
                 bookInfo.id = snapshot?.documentID
+                
+                if let effects = _effects{
+                    bookInfo.effects = effects
+                }
                 
                 completion(bookInfo)
             }
@@ -86,6 +100,17 @@ class API {
             })
             
             completion(content)
+        }
+    }
+    
+    func saveEffectToDocuments(effectName:String, completion: @escaping ()->Void) {
+        let storageRef = Storage.storage().reference().child("Effects/\(effectName)")
+
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0].appendingPathComponent(effectName)
+
+        storageRef.write(toFile: documentsDirectory) { (url, error) in
+            completion()
         }
     }
 }

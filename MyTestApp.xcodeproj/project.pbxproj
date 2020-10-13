@@ -205,7 +205,6 @@
 				69682CCE253460A100F6A6F7 /* MyBookshelfVC.swift */,
 				69682CD32534788700F6A6F7 /* MyBookDetailVC.swift */,
 				69B997742535CA7C0067969D /* DeepARVC.swift */,
-				69B997752535CA7C0067969D /* DeepARVC.xib */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -230,6 +229,16 @@
 			);
 			name = Fonts;
 			path = Fonts/Fonts;
+			sourceTree = "<group>";
+		};
+		697CDB8E253600CD008F1029 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				69B997752535CA7C0067969D /* DeepARVC.xib */,
+				69A97F4B252C7424006EA658 /* Main.storyboard */,
+				69A97F50252C7424006EA658 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
 			sourceTree = "<group>";
 		};
 		69A97F39252C7424006EA658 = {
@@ -265,9 +274,8 @@
 				694D77AE252DCA6E0061848B /* Views */,
 				69A97F45252C7424006EA658 /* AppDelegate.swift */,
 				69A97F47252C7424006EA658 /* SceneDelegate.swift */,
-				69A97F4B252C7424006EA658 /* Main.storyboard */,
 				69A97F4E252C7424006EA658 /* Assets.xcassets */,
-				69A97F50252C7424006EA658 /* LaunchScreen.storyboard */,
+				697CDB8E253600CD008F1029 /* Storyboards */,
 				69A97F53252C7424006EA658 /* Info.plist */,
 				69380A96252F0CE500F2B778 /* GoogleService-Info.plist */,
 				69380A9B252F0E2200F2B778 /* Podfile */,

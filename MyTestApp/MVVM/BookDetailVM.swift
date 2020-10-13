@@ -42,6 +42,12 @@ class BookDetailVM {
         book.cover = bookInfo!.cover
         book.title = title
         
+        if let effects = bookInfo?.effects {
+            book.effects = effects
+            print(effects)
+        }
+        
+        
         let dGroup = DispatchGroup()
         
         dGroup.enter()
@@ -49,7 +55,6 @@ class BookDetailVM {
             saveImage(imagePath: coverPath, imageName: (title.replacingOccurrences(of: " ", with: "_"))) {
                 dGroup.leave()
             }
-//            saveImage(imagePath: coverPath, imageName: (title.replacingOccurrences(of: " ", with: "_")))
         }
         
         dGroup.enter()
@@ -66,10 +71,21 @@ class BookDetailVM {
             }
         }
         
+        dGroup.enter()
+        if let effects = book.effects {
+            API.sharedAPI.saveEffectToDocuments(effectName: effects.getEffectArray().first!) {
+                dGroup.leave()
+            }
+        }
+        
+        
         dGroup.notify( queue: DispatchQueue.main) { [self] in
             do {
                 try context.save()
                 delegate?.addedNewBookToMyBookshelf()
+                
+                DatabaseHelper.shared.browseDocuments()
+                
             } catch  {
                 
             }

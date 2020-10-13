@@ -19,10 +19,16 @@ extension UIImageView{
 }
 
 extension UIView{
-    func applyShadow(){
+    func applyShadow(offset:CGSize,opacity:Float,radius:CGFloat){
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = CGSize(width: 1, height: 1)
-        layer.shadowOpacity = 0.3
-        layer.shadowRadius = 4.0
+        layer.shadowOffset = offset
+        layer.shadowOpacity = opacity
+        layer.shadowRadius = radius
+    }
+}
+
+extension String{
+    func getEffectArray() -> [String] {
+        return self.components(separatedBy: ",")
     }
 }
