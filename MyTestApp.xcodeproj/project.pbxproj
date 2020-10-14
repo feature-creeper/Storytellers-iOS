@@ -38,6 +38,9 @@
 		69A97F52252C7424006EA658 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69A97F50252C7424006EA658 /* LaunchScreen.storyboard */; };
 		69A97F5D252C7424006EA658 /* MyTestAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A97F5C252C7424006EA658 /* MyTestAppTests.swift */; };
 		69A97F68252C7424006EA658 /* MyTestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A97F67252C7424006EA658 /* MyTestAppUITests.swift */; };
+		69B2B22E2536E234001E2917 /* StoryText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B22D2536E234001E2917 /* StoryText.swift */; };
+		69B2B2322536E2A4001E2917 /* PageTurnTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B2312536E2A4001E2917 /* PageTurnTimer.swift */; };
+		69B2B2362536E2E6001E2917 /* VideoCompositor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B2352536E2E6001E2917 /* VideoCompositor.swift */; };
 		69B997422535B9480067969D /* DeepAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B997402535B91E0067969D /* DeepAR.framework */; };
 		69B997432535B9480067969D /* DeepAR.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 69B997402535B91E0067969D /* DeepAR.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		69B997762535CA7C0067969D /* DeepARVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B997742535CA7C0067969D /* DeepARVC.swift */; };
@@ -117,6 +120,9 @@
 		69A97F63252C7424006EA658 /* MyTestAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTestAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69A97F67252C7424006EA658 /* MyTestAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTestAppUITests.swift; sourceTree = "<group>"; };
 		69A97F69252C7424006EA658 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69B2B22D2536E234001E2917 /* StoryText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryText.swift; sourceTree = "<group>"; };
+		69B2B2312536E2A4001E2917 /* PageTurnTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTurnTimer.swift; sourceTree = "<group>"; };
+		69B2B2352536E2E6001E2917 /* VideoCompositor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCompositor.swift; sourceTree = "<group>"; };
 		69B997402535B91E0067969D /* DeepAR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DeepAR.framework; sourceTree = "<group>"; };
 		69B997742535CA7C0067969D /* DeepARVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepARVC.swift; sourceTree = "<group>"; };
 		69B997752535CA7C0067969D /* DeepARVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeepARVC.xib; sourceTree = "<group>"; };
@@ -182,6 +188,9 @@
 			children = (
 				6956353A2532F8FD00F3EBA2 /* BookFeatured.swift */,
 				697BB02D25331AF0001D17EF /* BookInfo.swift */,
+				69B2B22D2536E234001E2917 /* StoryText.swift */,
+				69B2B2312536E2A4001E2917 /* PageTurnTimer.swift */,
+				69B2B2352536E2E6001E2917 /* VideoCompositor.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -610,7 +619,9 @@
 			files = (
 				694D77A5252DC7E90061848B /* BookDetailVC.swift in Sources */,
 				6962B6BD2530D55600BBB81D /* MyTestApp.xcdatamodeld in Sources */,
+				69B2B2362536E2E6001E2917 /* VideoCompositor.swift in Sources */,
 				69A97F4A252C7424006EA658 /* ViewController.swift in Sources */,
+				69B2B22E2536E234001E2917 /* StoryText.swift in Sources */,
 				69380AE6252F1DA500F2B778 /* ProfileVC.swift in Sources */,
 				697BB02E25331AF0001D17EF /* BookInfo.swift in Sources */,
 				6956353B2532F8FD00F3EBA2 /* BookFeatured.swift in Sources */,
@@ -620,6 +631,7 @@
 				697E47B3253089DB00E769A1 /* STButton.swift in Sources */,
 				69682CE12534AF0400F6A6F7 /* Helpers.swift in Sources */,
 				69380A88252ED96700F2B778 /* TestViewController.swift in Sources */,
+				69B2B2322536E2A4001E2917 /* PageTurnTimer.swift in Sources */,
 				695635402533034200F3EBA2 /* BookDetailVM.swift in Sources */,
 				69682CD42534788700F6A6F7 /* MyBookDetailVC.swift in Sources */,
 				69380AF2252F3BC600F2B778 /* API.swift in Sources */,

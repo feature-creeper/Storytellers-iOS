@@ -8,6 +8,8 @@
 import UIKit
 import DeepAR
 
+import AVKit
+
 class DeepARVC: UIViewController {
     
     @IBOutlet weak var arViewContainer: UIView!
@@ -21,6 +23,14 @@ class DeepARVC: UIViewController {
     private var isRecordingInProcess: Bool = false
     
     var maskPath : String!
+    
+    var storyVM : StoryText!
+    
+    var content : String?
+//    var pageTurnTimer = PageTurnTimer()
+    
+    var chapter = 0
+    var page = 0
     
     var exitButton : UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 30, width: 70, height: 70))
@@ -41,16 +51,14 @@ class DeepARVC: UIViewController {
         return v
     }()
     
-    var pageText : UILabel = {
+    var pageLabel : UILabel = {
        let v = UILabel()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.font = UIFont(name: "Heebo-Regular", size: 19)
         v.textColor = UIColor.black
         v.numberOfLines = 0
         v.lineBreakMode = .byWordWrapping
-        v.text = """
- Please help me find my laugh", said Spotty. "I can't find a laugh up here" replied Giraffe.
- """
+//        v.text = story.currentPageText
         return v
     }()
     
@@ -101,6 +109,8 @@ class DeepARVC: UIViewController {
         setupViews()
         
         setMask(name: maskPath)
+        
+        pageLabel.text = storyVM.currentPageText
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -128,46 +138,45 @@ class DeepARVC: UIViewController {
         pageBackgroundView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         pageBackgroundView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         
-        pageBackgroundView.addSubview(pageText)
-        pageText.topAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: 15).isActive = true
-        pageText.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        pageText.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
+        pageBackgroundView.addSubview(pageLabel)
+        pageLabel.topAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: 15).isActive = true
+        pageLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
+        pageLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
 
         safeAreaView.topAnchor.constraint(equalTo: pageBackgroundView.bottomAnchor).isActive = true
         safeAreaView.leftAnchor.constraint(equalTo: pageBackgroundView.leftAnchor).isActive = true
         safeAreaView.rightAnchor.constraint(equalTo: pageBackgroundView.rightAnchor).isActive = true
         safeAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        let pageControlWidth = 50
+        let pageControlWidth : CGFloat = 50
         
         nextPageButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
         nextPageButton.rightAnchor.constraint(equalTo: pageBackgroundView.rightAnchor, constant: -20).isActive = true
-        nextPageButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        nextPageButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        nextPageButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+        nextPageButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
         
         prevPageButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
         prevPageButton.leftAnchor.constraint(equalTo: pageBackgroundView.leftAnchor, constant: 20).isActive = true
-        prevPageButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        prevPageButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        prevPageButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+        prevPageButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
         
         recordButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
         recordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        recordButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        recordButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        recordButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+        recordButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
     }
     
     
     private func setupDeepARAndCamera() {
         
         self.deepAR = DeepAR()
+//        self.deepAR.delegate = self
         self.deepAR.delegate = self
         self.deepAR.setLicenseKey("8a9e4faccf2770ed93d87e4f90ae9ebb7330e30c824c4c8f43c70d242ccd967e0e0c110a57d9088b")
         
         
         cameraController = CameraController()
-        cameraController.deepAR = self.deepAR
-        
-        
+
         
         self.arView = self.deepAR.createARView(withFrame: self.arViewContainer.frame) as! ARView
         self.arView.translatesAutoresizingMaskIntoConstraints = false
@@ -185,30 +194,157 @@ class DeepARVC: UIViewController {
         
     }
     
+//    private func recordPageTurn(){
+//        if isRecordingInProcess {
+//            pageTurnTimer?.turnPageTapped(newPage: story.currentPage)
+//        }
+//    }
+    
     @objc
     func dismissTapped()  {
         self.dismiss(animated: true, completion: nil)
     }
     
+    
     @objc
     func nextPageTapped()  {
-        
+        pageLabel.text = storyVM.nextPage()
     }
     
     @objc
     func prevPageTapped()  {
-        
+        pageLabel.text = storyVM.prevPage()
     }
     
     @objc
     func recordTapped()  {
+        //print("TAPPED RECORD")
         
+        storyVM.tappedRecord()
+        
+        if storyVM.recording {
+            print("END REC")
+            deepAR.finishVideoRecording()
+            storyVM.recording = false
+        }else{
+            print("START REC")
+            let width: Int32 = Int32(deepAR.renderingResolution.width)
+            let height: Int32 =  Int32(deepAR.renderingResolution.height)
+            deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height)
+            storyVM.recording = true
+        }
     }
-
+    
+    func saveAndPlay(videoFilePath:String) {
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        let components = videoFilePath.components(separatedBy: "/")
+        guard let last = components.last else { return }
+        let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
+        
+        print("videoFilePath \(videoFilePath)")
+        
+        
+    
+//        let playerController = AVPlayerViewController()
+//        let player = AVPlayer(url: destination)
+//        playerController.player = player
+//        present(playerController, animated: true) {
+//            player.play()
+//        }
+    }
+    
+    /*
+    @objc
+    private func didTapRecordActionButton() {
+        
+        
+        story.tappedRecord()
+        
+        /*
+        //
+//
+//        if (currentRecordingMode == RecordingMode.photo) {
+//            deepAR.takeScreenshot()
+//            return
+//        }
+        
+        if (isRecordingInProcess) {
+            recordPageTurn()
+            deepAR.finishVideoRecording()
+            isRecordingInProcess = false
+            return
+        }
+        
+        let width: Int32 = Int32(deepAR.renderingResolution.width)
+        let height: Int32 =  Int32(deepAR.renderingResolution.height)
+        
+//        if (currentRecordingMode == RecordingMode.video) {
+            //recordPageTurn()
+            deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height)
+            isRecordingInProcess = true
+            
+            self.pageTurnTimer?.initialise(page: story.currentPage)
+            return
+//        }
+        
+//        if (currentRecordingMode == RecordingMode.lowQualityVideo) {
+//            let videoQuality = 0.1
+//            let bitrate =  1250000
+//            let videoSettings:[AnyHashable : AnyObject] = [
+//                AVVideoQualityKey : (videoQuality as AnyObject),
+//                AVVideoAverageBitRateKey : (bitrate as AnyObject)
+//            ]
+//
+//            let frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+//
+//            deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height, subframe: frame, videoCompressionProperties: videoSettings, recordAudio: true)
+//            isRecordingInProcess = true
+//        }
+        */
+    }*/
+    
 }
 
 extension DeepARVC : DeepARDelegate {
+    
+    
     func didInitialize() {
         print("DID INIT")
+    }
+    
+    func didFinishPreparingForVideoRecording() { }
+        
+        func didStartVideoRecording() {
+            print("START RECORDING Protocol")
+        }
+        
+        func didFinishVideoRecording(_ videoFilePath: String!) {
+                        
+            saveAndPlay(videoFilePath: videoFilePath)
+                        
+            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+            let components = videoFilePath.components(separatedBy: "/")
+            guard let last = components.last else { return }
+            let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
+
+            let videoCompositor = VideoCompositor(view,pageTimes: storyVM.getPageTimes(),storyText: storyVM.story)
+//            let videoCompositor = VideoCompositor(view,pageTimes: pageTurnTimer!.couplet,storyText: story)
+            videoCompositor.composite(url: URL(fileURLWithPath: videoFilePath))
+            
+        }
+}
+
+extension DeepARVC : StoryDelegate{
+    func onFirstPage() {
+        prevPageButton.isHidden = true
+    }
+    
+    func onLastPage() {
+        nextPageButton.isHidden = true
+    }
+    
+    func onMiddlePage() {
+        prevPageButton.isHidden = false
+        nextPageButton.isHidden = false
     }
 }

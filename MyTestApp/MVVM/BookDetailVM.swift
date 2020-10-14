@@ -60,6 +60,10 @@ class BookDetailVM {
         dGroup.enter()
         if let id = bookInfo?.id {
             API.sharedAPI.getBookContent(withBookId: id) { (content) in
+                
+                print("content \(content)")
+                
+                
                 do{
                     let contentData = try JSONSerialization.data(withJSONObject: content, options: [])
                     let contentStringified = String(data: contentData, encoding: String.Encoding.utf8)

@@ -27,10 +27,10 @@ class API {
         var books:[BookFeatured] = []
         
         docRef.getDocuments { (snap, error) in
-            snap?.documents.forEach({ (snapshot) in
+            snap?.documents.forEach({ (document) in
                 
                 do{
-                    var bookData = snapshot.data()
+                    var bookData = document.data()
                     if let date = bookData["added"] as? Timestamp {
                         date.dateValue()
                         bookData.removeValue(forKey: "added")
@@ -94,10 +94,27 @@ class API {
         
         var content: [String:Any] = [:]
         
+        var chapters : [[String]] = []
+        
         docRef.getDocuments { (snap, error) in
             snap?.documents.forEach({ (docSnap) in
-                content[docSnap.documentID] = docSnap.data()
+                
+                if let chapter = docSnap.data()["text"] as? [String]{
+                    chapters.append(chapter)
+                }
+                
+//                if let text = docSnap.data()["text"] as? [String]{
+//                    print("JUST THE TEXT: \(text)")
+//                    let chapterText = text.joined(separator: "_")
+//                    content[docSnap.documentID] = chapterText
+//                }
+                
+//                content[docSnap.documentID] = docSnap.data()
+                
+//                chapters.append(docSnap.data())
             })
+            
+            content["content"] = chapters
             
             completion(content)
         }

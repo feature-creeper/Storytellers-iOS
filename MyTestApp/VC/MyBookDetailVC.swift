@@ -159,8 +159,17 @@ class MyBookDetailVC: UIViewController {
     
     @objc
     func tappedRead() {
+        
         let vc = DeepARVC(nibName: nil, bundle: nil)
         guard let effects = book?.effects?.getEffectArray() else {return}
+        
+        if let content = book?.content {
+            vc.content = content
+            let story = StoryText(rawString: content)
+            story.delegate = vc
+            vc.storyVM = story
+        }
+        
         vc.maskPath = effects.first
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
