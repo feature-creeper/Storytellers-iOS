@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 //import AVKit
 import Photos
+import CoreData
 
 class VideoCompositor {
     
@@ -22,16 +23,18 @@ class VideoCompositor {
     //let storyText:StoryText
     let text:[[String]]
     
+    let bookID:String
+    
 //    init(_ view: UIView, pageTimes: [(Int, Int)],storyText:StoryText) {
 //        self.view = view
 //        self.pageTimes = pageTimes
 //        self.storyText = storyText
 //    }
-    init(_ view: UIView, pageTimes: [(Int, Int)],storyText:[[String]]) {
+    init(_ view: UIView, pageTimes: [(Int, Int)],storyText:[[String]], bookID : String) {
         self.view = view
         self.pageTimes = pageTimes
         self.text = storyText
-        
+        self.bookID = bookID
         print("STORY TEXT: \(storyText)")
     }
     
@@ -110,6 +113,7 @@ class VideoCompositor {
         videolayer.frame = CGRect(x: 0, y: pageHeight, width: size.width, height: size.height - 100)
         
         let parentlayer = CALayer()
+        parentlayer.backgroundColor = UIColor.white.cgColor
         parentlayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         parentlayer.addSublayer(videolayer)
         
@@ -145,7 +149,12 @@ class VideoCompositor {
         //  create new file to receive data
         let dirPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let docsDir = dirPaths[0] as NSString
-        let movieFilePath = docsDir.appendingPathComponent("result.mov")
+        
+        let seconds = String(Date().timeIntervalSince1970)
+        let uniqueFileName = seconds.replacingOccurrences(of: ".", with: "_")
+        let videoFileName = uniqueFileName + ".mov"
+        
+        let movieFilePath = docsDir.appendingPathComponent(videoFileName)
         let movieDestinationUrl = NSURL(fileURLWithPath: movieFilePath)
         
         // use AVAssetExportSession to export video
@@ -157,7 +166,7 @@ class VideoCompositor {
         FileManager.default.removeItemIfExisted(movieDestinationUrl as URL)
         
         assetExport?.outputURL = movieDestinationUrl as URL
-        assetExport?.exportAsynchronously(completionHandler: {
+        assetExport?.exportAsynchronously(completionHandler: { [self] in
             switch assetExport!.status {
             case AVAssetExportSession.Status.failed:
                 print("failed")
@@ -170,19 +179,40 @@ class VideoCompositor {
                 
                 self.myurl = movieDestinationUrl as URL
                 
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: movieDestinationUrl as URL)
-                }) { saved, error in
-                    if saved {
-                        print("Saved")
-                    }
+//                let fetch = NSFetchRequest<Book>(entityName: "Book")
+//                fetch.predicate = NSPredicate(format: "id == %@", bookID)
+//                
+//                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//                let context = appDelegate.persistentContainer.viewContext
+//                
+//                let book : Book = try! context.fetch(fetch).first! as Book
+//                
+//                
+//                let video = VideoMO(context: context)
+//                video.filename = videoFileName
+//                
+//                book.addToVideos(video)
+                
+                DatabaseHelper.shared.createVideoMO(bookID: bookID, videoFileName: videoFileName, videoURL: self.myurl!) {
+                    print("SAVING COMPLETE")
                 }
                 
-//                self.playVideo()
                 
+                
+                
+//                PHPhotoLibrary.shared().performChanges({
+//                    PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: movieDestinationUrl as URL)
+//
+//                }) { saved, error in
+//                    if saved {
+//                        print("Saved")
+//                    }
+//                }
+                
+//                self.playVideo()
+            
             }
-        }
-        )
+        })
     }
     
 //    func playVideo() {

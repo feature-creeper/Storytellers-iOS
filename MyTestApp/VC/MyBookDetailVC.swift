@@ -22,6 +22,8 @@ class MyBookDetailVC: UIViewController {
         }
     }
     
+    var videos : [VideoMO] = []
+    
     let coverImageView : UIImageView = {
         let v = UIImageView()
         v.backgroundColor = .systemGray6
@@ -103,10 +105,13 @@ class MyBookDetailVC: UIViewController {
         
         myVideosCollectionView.delegate = self
         myVideosCollectionView.dataSource = self
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
 //        navigationItem.largeTitleDisplayMode = .never
+        getVideos()
 
     }
     
@@ -114,6 +119,19 @@ class MyBookDetailVC: UIViewController {
         let v = UIView()
         v.backgroundColor = .white
         view = v
+    }
+    
+    func getVideos() {
+        DatabaseHelper.shared.getVideosForBook(bookID: (book?.id)!) { (videos) in
+            var tempVideos : [VideoMO] = []
+            for video in videos {
+                print("VIDEO FOUND: \(video.filename)")
+                tempVideos.append(video)
+            }
+            self.videos = tempVideos
+            
+            self.myVideosCollectionView.reloadData()
+        }
     }
 
     @objc
@@ -170,6 +188,10 @@ class MyBookDetailVC: UIViewController {
             vc.storyVM = story
         }
         
+        if let id = book?.id {
+            vc.bookID = id
+        }
+        
         vc.maskPath = effects.first
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
@@ -178,11 +200,16 @@ class MyBookDetailVC: UIViewController {
 
 extension MyBookDetailVC : UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return videos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyVideoCell
+        if let data = videos[indexPath.item].thumbnail{
+            cell.image = UIImage(data: data)
+        }
+        
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -192,16 +219,83 @@ extension MyBookDetailVC : UICollectionViewDelegate, UICollectionViewDataSource 
 
 extension MyBookDetailVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 140)
+        return CGSize(width: 100, height: 120)
     }
 }
 
 
 class MyVideoCell: UICollectionViewCell {
+    
+    var image : UIImage?
+    {
+        didSet{
+            
+//            let imageLayer = CALayer()
+//            contentView.layer.addSublayer(imageLayer)
+//
+//            imageLayer.contents = image?.cgImage
+//            imageLayer.contentsGravity = .resizeAspectFill
+//            imageLayer.cornerRadius = 10
+            
+            
+            
+//            imageLayer.contentsCenter = CGRect(x: 0.25, y: 0.25, width: 1, height: 0.5)
+            thumbnailImageView.image = image
+//            thumbnailImageView.layer.cornerRadius = 10
+//            mskView.frame = thumbnailImageView.frame
+            //thumbnailImageView.mask = mskView
+            self.setNeedsDisplay()
+        }
+    }
+    
+    let thumbnailImageView : UIImageView = {
+        let v = UIImageView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.contentMode = .scaleAspectFill
+        v.clipsToBounds = true
+        v.layer.cornerRadius = 9
+        v.layer.masksToBounds = true
+        
+        return v
+    }()
+    
+    var mskView : UIView!
+    
     override init(frame: CGRect) {
+        
         super.init(frame: frame)
-        backgroundColor = .systemGray5
-        layer.cornerRadius = 9
+//
+//        mskView = UIView(frame: contentView.frame)
+//
+//        mskView.layer.cornerRadius = 10
+//        backgroundColor = .gray
+//        layer.backgroundColor = UIColor.red.cgColor
+//        layer.cornerRadius = 9
+//        contentView.clipsToBounds = true
+//        contentView.layer.masksToBounds = true
+        
+//        mskView.frame = contentView.frame
+//        contentView.addSubview(mskView)
+        
+        contentView.addSubview(thumbnailImageView)
+//        thumbnailImageView.mask = mskView
+        setupViews()
+        
+    }
+    
+    func setupViews() {
+        
+        thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        thumbnailImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        thumbnailImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
+        
+//        mskView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+//        mskView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+//        mskView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+//        mskView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
+        
+
     }
     
     required init?(coder: NSCoder) {

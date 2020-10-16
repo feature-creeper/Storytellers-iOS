@@ -5,14 +5,64 @@
 //  Created by Joe Kletz on 09/10/2020.
 //
 
-import Foundation
+import UIKit
+import CoreData
 
 class DatabaseHelper {
     public static let shared = DatabaseHelper()
     private init(){}
     
-    func addFile() {
-        print("ADD FILE")
+    
+    func getVideosForBook(bookID:String, completion : @escaping (Set<VideoMO>)->Void) {
+        let fetch = NSFetchRequest<Book>(entityName: "Book")
+        fetch.predicate = NSPredicate(format: "id == %@", bookID)
+        
+        DispatchQueue.main.async {
+           let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            let context = appDelegate.persistentContainer.viewContext
+            
+            let book : Book = try! context.fetch(fetch).first! as Book
+            
+            let videos = book.videos as? Set<VideoMO>
+            
+            completion(videos!)
+        }
+    }
+    
+    func createVideoMO(bookID:String,videoFileName:String, videoURL:URL, completion : @escaping () -> Void) {
+        
+        let fetch = NSFetchRequest<Book>(entityName: "Book")
+        fetch.predicate = NSPredicate(format: "id == %@", bookID)
+        
+        
+        videoURL.imageFromVideoURL(at: 1) { (imageData) in
+            DispatchQueue.main.async {
+               let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                
+                let context = appDelegate.persistentContainer.viewContext
+                
+                let book : Book = try! context.fetch(fetch).first! as Book
+                
+                let video = VideoMO(context: context)
+                video.filename = videoFileName
+                
+                if let data = imageData{
+                    video.thumbnail = data
+                }
+                
+                book.addToVideos(video)
+                
+                try! context.save()
+                
+                print("VIDEO SAVED TO BOOK \(book.title)")
+                
+                completion()
+            }
+        }
+        
+        
+       
     }
     
     func browseDocuments() {

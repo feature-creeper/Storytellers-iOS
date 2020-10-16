@@ -41,6 +41,7 @@ class BookDetailVM {
         book.author = bookInfo!.author
         book.cover = bookInfo!.cover
         book.title = title
+        book.id = bookInfo?.id
         
         if let effects = bookInfo?.effects {
             book.effects = effects

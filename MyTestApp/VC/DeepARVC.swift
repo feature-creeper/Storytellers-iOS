@@ -28,6 +28,7 @@ class DeepARVC: UIViewController {
     
     var content : String?
 //    var pageTurnTimer = PageTurnTimer()
+    var bookID : String!
     
     var chapter = 0
     var page = 0
@@ -228,10 +229,14 @@ class DeepARVC: UIViewController {
             storyVM.recording = false
         }else{
             print("START REC")
-            let width: Int32 = Int32(deepAR.renderingResolution.width)
-            let height: Int32 =  Int32(deepAR.renderingResolution.height)
-            deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height)
-            storyVM.recording = true
+            
+            DispatchQueue.main.async { [self] in
+                let width: Int32 = Int32(deepAR.renderingResolution.width)
+                let height: Int32 =  Int32(deepAR.renderingResolution.height)
+                deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height)
+                storyVM.recording = true
+            }
+            
         }
     }
     
@@ -327,7 +332,7 @@ extension DeepARVC : DeepARDelegate {
             guard let last = components.last else { return }
             let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
 
-            let videoCompositor = VideoCompositor(view,pageTimes: storyVM.getPageTimes(),storyText: storyVM.story)
+            let videoCompositor = VideoCompositor(view,pageTimes: storyVM.getPageTimes(),storyText: storyVM.story, bookID : bookID)
 //            let videoCompositor = VideoCompositor(view,pageTimes: pageTurnTimer!.couplet,storyText: story)
             videoCompositor.composite(url: URL(fileURLWithPath: videoFilePath))
             

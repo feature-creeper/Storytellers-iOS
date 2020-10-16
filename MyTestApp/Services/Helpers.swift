@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import AVFoundation
 
 extension UIImageView{
     func setImage(fromCoreDataNamed imageName: String) {
@@ -30,5 +31,34 @@ extension UIView{
 extension String{
     func getEffectArray() -> [String] {
         return self.components(separatedBy: ",")
+    }
+}
+
+extension URL{
+    public func imageFromVideoURL( at time: TimeInterval, completion: @escaping (Data?) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            let asset = AVURLAsset(url: self)
+
+            let assetIG = AVAssetImageGenerator(asset: asset)
+            assetIG.appliesPreferredTrackTransform = true
+            assetIG.apertureMode = AVAssetImageGenerator.ApertureMode.encodedPixels
+
+            let cmTime = CMTime(seconds: time, preferredTimescale: 60)
+            let thumbnailImageRef: CGImage
+            do {
+                thumbnailImageRef = try assetIG.copyCGImage(at: cmTime, actualTime: nil)
+            } catch let error {
+                print("Error: \(error)")
+                return completion(nil)
+            }
+            
+            let image = UIImage(cgImage: thumbnailImageRef)
+            let jpegData = image.jpegData(compressionQuality: 0.5)
+
+            DispatchQueue.main.async {
+                completion(jpegData)
+                //completion()
+            }
+        }
     }
 }

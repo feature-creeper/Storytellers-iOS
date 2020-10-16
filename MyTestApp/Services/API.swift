@@ -70,8 +70,6 @@ class API {
             do {
                 let bookData = try JSONSerialization.data(withJSONObject: snapshot?.data(), options: [])
                 
-                
-                
                 let decoder = JSONDecoder()
                 
                 var bookInfo = try decoder.decode(BookInfo.self, from: bookData)
@@ -102,16 +100,6 @@ class API {
                 if let chapter = docSnap.data()["text"] as? [String]{
                     chapters.append(chapter)
                 }
-                
-//                if let text = docSnap.data()["text"] as? [String]{
-//                    print("JUST THE TEXT: \(text)")
-//                    let chapterText = text.joined(separator: "_")
-//                    content[docSnap.documentID] = chapterText
-//                }
-                
-//                content[docSnap.documentID] = docSnap.data()
-                
-//                chapters.append(docSnap.data())
             })
             
             content["content"] = chapters
