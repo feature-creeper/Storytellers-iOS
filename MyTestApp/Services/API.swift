@@ -54,6 +54,8 @@ class API {
         
         docRef.getDocument { (snapshot, error) in
             
+            print(snapshot?.data())
+            
             var _effects : String?
             
             if let effects = snapshot?.data()?["effects"]{

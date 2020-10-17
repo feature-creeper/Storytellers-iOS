@@ -38,7 +38,7 @@ class VideoCompositor {
         print("STORY TEXT: \(storyText)")
     }
     
-    func composite(url:URL) {
+    func composite(url:URL, completion: @escaping () -> Void) {
         
         let composition = AVMutableComposition()
         let vidAsset = AVAsset(url: url)
@@ -195,6 +195,8 @@ class VideoCompositor {
                 
                 DatabaseHelper.shared.createVideoMO(bookID: bookID, videoFileName: videoFileName, videoURL: self.myurl!) {
                     print("SAVING COMPLETE")
+                    
+                    completion()
                 }
                 
                 

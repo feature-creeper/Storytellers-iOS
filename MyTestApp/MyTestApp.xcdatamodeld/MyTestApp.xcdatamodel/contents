@@ -10,12 +10,13 @@
         <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Video" inverseName="book" inverseEntity="Video"/>
     </entity>
     <entity name="Video" representedClassName="VideoMO" syncable="YES" codeGenerationType="class">
+        <attribute name="added" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="filename" optional="YES" attributeType="String"/>
         <attribute name="thumbnail" optional="YES" attributeType="Binary"/>
         <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="videos" inverseEntity="Book"/>
     </entity>
     <elements>
         <element name="Book" positionX="-63" positionY="-18" width="128" height="148"/>
-        <element name="Video" positionX="159.2578125" positionY="-3.45703125" width="128" height="88"/>
+        <element name="Video" positionX="159.2578125" positionY="-3.45703125" width="128" height="103"/>
     </elements>
 </model>

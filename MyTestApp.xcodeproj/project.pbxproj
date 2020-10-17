@@ -45,6 +45,7 @@
 		69B997432535B9480067969D /* DeepAR.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 69B997402535B91E0067969D /* DeepAR.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		69B997762535CA7C0067969D /* DeepARVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B997742535CA7C0067969D /* DeepARVC.swift */; };
 		69B997772535CA7C0067969D /* DeepARVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69B997752535CA7C0067969D /* DeepARVC.xib */; };
+		69E93ABB253AFFA60016D9BA /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E93ABA253AFFA60016D9BA /* LoadingView.swift */; };
 		A78E4CDDBBB3112CF520940D /* Pods_MyTestAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49583B944960A075E37700B2 /* Pods_MyTestAppTests.framework */; };
 		C13E7B35E85C96E79D988A17 /* Pods_MyTestApp_MyTestAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D918FEBB381A8F42961519 /* Pods_MyTestApp_MyTestAppUITests.framework */; };
 /* End PBXBuildFile section */
@@ -126,6 +127,7 @@
 		69B997402535B91E0067969D /* DeepAR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DeepAR.framework; sourceTree = "<group>"; };
 		69B997742535CA7C0067969D /* DeepARVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepARVC.swift; sourceTree = "<group>"; };
 		69B997752535CA7C0067969D /* DeepARVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeepARVC.xib; sourceTree = "<group>"; };
+		69E93ABA253AFFA60016D9BA /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		7435D7A8075D773A712CD486 /* Pods-MyTestApp-MyTestAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-MyTestAppUITests.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp-MyTestAppUITests/Pods-MyTestApp-MyTestAppUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B0C85D1D28AB024D164D9B88 /* Pods-MyTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp/Pods-MyTestApp.release.xcconfig"; sourceTree = "<group>"; };
 		C4D918FEBB381A8F42961519 /* Pods_MyTestApp_MyTestAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyTestApp_MyTestAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,6 +202,7 @@
 			children = (
 				694D77A9252DC9E20061848B /* FeaturedRow.swift */,
 				697E47B2253089DB00E769A1 /* STButton.swift */,
+				69E93ABA253AFFA60016D9BA /* LoadingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -620,6 +623,7 @@
 				694D77A5252DC7E90061848B /* BookDetailVC.swift in Sources */,
 				6962B6BD2530D55600BBB81D /* MyTestApp.xcdatamodeld in Sources */,
 				69B2B2362536E2E6001E2917 /* VideoCompositor.swift in Sources */,
+				69E93ABB253AFFA60016D9BA /* LoadingView.swift in Sources */,
 				69A97F4A252C7424006EA658 /* ViewController.swift in Sources */,
 				69B2B22E2536E234001E2917 /* StoryText.swift in Sources */,
 				69380AE6252F1DA500F2B778 /* ProfileVC.swift in Sources */,

@@ -47,6 +47,8 @@ class DatabaseHelper {
                 let video = VideoMO(context: context)
                 video.filename = videoFileName
                 
+                video.added = Date()
+                
                 if let data = imageData{
                     video.thumbnail = data
                 }

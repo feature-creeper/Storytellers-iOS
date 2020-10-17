@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVKit
 
 class MyBookDetailVC: UIViewController {
 
@@ -53,13 +54,14 @@ class MyBookDetailVC: UIViewController {
         let v = UILabel()
         v.font = UIFont(name: "Heebo-Bold", size: 30)
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.textAlignment = .center
         return v
     }()
     
     let authorLabel : UILabel = {
         let v = UILabel()
         v.font = UIFont(name: "Heebo-Medium", size: 20)
-
+        v.textAlignment = .center
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -128,6 +130,7 @@ class MyBookDetailVC: UIViewController {
                 print("VIDEO FOUND: \(video.filename)")
                 tempVideos.append(video)
             }
+            tempVideos.sort{$0.added! > $1.added!}
             self.videos = tempVideos
             
             self.myVideosCollectionView.reloadData()
@@ -145,13 +148,18 @@ class MyBookDetailVC: UIViewController {
         scrollView.addSubview(coverImageView)
         scrollView.addSubview(topDetailsStack)
         scrollView.addSubview(myVideosCollectionView)
+//        scrollView.addSubview(spacerViewA)
         topDetailsStack.addArrangedSubview(titleLabel)
         topDetailsStack.addArrangedSubview(authorLabel)
         topDetailsStack.addArrangedSubview(readButton)
         topDetailsStack.addArrangedSubview(myVideosLabel)
         
+        topDetailsStack.alignment = .center
+        
         topDetailsStack.setCustomSpacing(40, after: authorLabel)
         topDetailsStack.setCustomSpacing(25, after: readButton)
+
+        readButton.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -40).isActive = true
         
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -172,7 +180,7 @@ class MyBookDetailVC: UIViewController {
         myVideosCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         myVideosCollectionView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         
-        
+        scrollView.bottomAnchor.constraint(equalTo: myVideosCollectionView.bottomAnchor, constant: 50).isActive = true
     }
     
     @objc
@@ -195,6 +203,51 @@ class MyBookDetailVC: UIViewController {
         vc.maskPath = effects.first
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
+    }
+    
+    func playVideo(videoURL:URL) {
+        let player = AVPlayer(url: videoURL)
+        let vc = AVPlayerViewController()
+        vc.player = player
+
+        present(vc, animated: true) {
+            vc.player?.play()
+        }
+    }
+    
+    func tappedShare(videoURL:URL) {
+        //guard let data = URL(string: "https://www.zoho.com") else { return }
+        let av = UIActivityViewController(activityItems: [videoURL], applicationActivities: nil)
+        UIApplication.shared.windows.first?.rootViewController?.present(av, animated: true, completion: nil)
+    }
+    
+    func showActionSheet(index:Int) {
+        
+        guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        let videoURL = documentsDirectory.appendingPathComponent(self.videos[index].filename!)
+        
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+         alert.addAction(UIAlertAction(title: "Play", style: .default , handler:{ (UIAlertAction)in
+            
+            self.playVideo(videoURL: videoURL)
+         }))
+
+        alert.addAction(UIAlertAction(title: "Share", style: .default , handler:{ [self] (UIAlertAction)in
+             tappedShare(videoURL: videoURL)
+         }))
+
+         alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ (UIAlertAction)in
+             print("User click Delete button")
+         }))
+        
+        alert.addAction(UIAlertAction(title: "Back", style: .cancel, handler:{ (UIAlertAction)in
+            print("User click Dismiss button")
+        }))
+
+         self.present(alert, animated: true, completion: {
+             print("completion block")
+         })
     }
 }
 
@@ -221,6 +274,10 @@ extension MyBookDetailVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 100, height: 120)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        showActionSheet(index: indexPath.item)
+    }
 }
 
 
@@ -229,33 +286,14 @@ class MyVideoCell: UICollectionViewCell {
     var image : UIImage?
     {
         didSet{
-            
-//            let imageLayer = CALayer()
-//            contentView.layer.addSublayer(imageLayer)
-//
-//            imageLayer.contents = image?.cgImage
-//            imageLayer.contentsGravity = .resizeAspectFill
-//            imageLayer.cornerRadius = 10
-            
-            
-            
-//            imageLayer.contentsCenter = CGRect(x: 0.25, y: 0.25, width: 1, height: 0.5)
             thumbnailImageView.image = image
-//            thumbnailImageView.layer.cornerRadius = 10
-//            mskView.frame = thumbnailImageView.frame
-            //thumbnailImageView.mask = mskView
             self.setNeedsDisplay()
         }
     }
     
     let thumbnailImageView : UIImageView = {
         let v = UIImageView()
-        v.translatesAutoresizingMaskIntoConstraints = false
         v.contentMode = .scaleAspectFill
-        v.clipsToBounds = true
-        v.layer.cornerRadius = 9
-        v.layer.masksToBounds = true
-        
         return v
     }()
     
@@ -264,38 +302,11 @@ class MyVideoCell: UICollectionViewCell {
     override init(frame: CGRect) {
         
         super.init(frame: frame)
-//
-//        mskView = UIView(frame: contentView.frame)
-//
-//        mskView.layer.cornerRadius = 10
-//        backgroundColor = .gray
-//        layer.backgroundColor = UIColor.red.cgColor
-//        layer.cornerRadius = 9
-//        contentView.clipsToBounds = true
-//        contentView.layer.masksToBounds = true
-        
-//        mskView.frame = contentView.frame
-//        contentView.addSubview(mskView)
-        
+        contentView.layer.cornerRadius = 10
         contentView.addSubview(thumbnailImageView)
-//        thumbnailImageView.mask = mskView
-        setupViews()
-        
-    }
-    
-    func setupViews() {
-        
-        thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        thumbnailImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        thumbnailImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        thumbnailImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        
-//        mskView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-//        mskView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-//        mskView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-//        mskView.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
-        
-
+        thumbnailImageView.frame = contentView.frame
+        thumbnailImageView.layer.position = CGPoint(x: thumbnailImageView.layer.position.x, y: thumbnailImageView.layer.position.y + 30)
+        contentView.clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {

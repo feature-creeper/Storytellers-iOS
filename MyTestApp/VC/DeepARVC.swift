@@ -33,6 +33,8 @@ class DeepARVC: UIViewController {
     var chapter = 0
     var page = 0
     
+    var spinner = LoadingView(title: "Creating your video")
+    
     var exitButton : UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 30, width: 70, height: 70))
         button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
@@ -104,6 +106,8 @@ class DeepARVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
                 
         setupDeepARAndCamera()
         
@@ -112,6 +116,8 @@ class DeepARVC: UIViewController {
         setMask(name: maskPath)
         
         pageLabel.text = storyVM.currentPageText
+        
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -128,11 +134,24 @@ class DeepARVC: UIViewController {
     
     func setupViews() {
         arViewContainer.addSubview(exitButton)
+        
+
+        
         view.addSubview(pageBackgroundView)
         view.addSubview(safeAreaView)
         view.addSubview(nextPageButton)
         view.addSubview(prevPageButton)
         view.addSubview(recordButton)
+        
+//        spinner.frame = view.frame
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(spinner)
+        spinner.isHidden = true
+        spinner.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        spinner.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        spinner.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        spinner.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        
         
         pageBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         pageBackgroundView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -240,73 +259,15 @@ class DeepARVC: UIViewController {
         }
     }
     
-    func saveAndPlay(videoFilePath:String) {
-        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-        let components = videoFilePath.components(separatedBy: "/")
-        guard let last = components.last else { return }
-        let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
-        
-        print("videoFilePath \(videoFilePath)")
-        
-        
-    
-//        let playerController = AVPlayerViewController()
-//        let player = AVPlayer(url: destination)
-//        playerController.player = player
-//        present(playerController, animated: true) {
-//            player.play()
-//        }
-    }
-    
-    /*
-    @objc
-    private func didTapRecordActionButton() {
-        
-        
-        story.tappedRecord()
-        
-        /*
-        //
+//    func saveAndPlay(videoFilePath:String) {
+//        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+//        let components = videoFilePath.components(separatedBy: "/")
+//        guard let last = components.last else { return }
+//        let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
 //
-//        if (currentRecordingMode == RecordingMode.photo) {
-//            deepAR.takeScreenshot()
-//            return
-//        }
-        
-        if (isRecordingInProcess) {
-            recordPageTurn()
-            deepAR.finishVideoRecording()
-            isRecordingInProcess = false
-            return
-        }
-        
-        let width: Int32 = Int32(deepAR.renderingResolution.width)
-        let height: Int32 =  Int32(deepAR.renderingResolution.height)
-        
-//        if (currentRecordingMode == RecordingMode.video) {
-            //recordPageTurn()
-            deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height)
-            isRecordingInProcess = true
-            
-            self.pageTurnTimer?.initialise(page: story.currentPage)
-            return
-//        }
-        
-//        if (currentRecordingMode == RecordingMode.lowQualityVideo) {
-//            let videoQuality = 0.1
-//            let bitrate =  1250000
-//            let videoSettings:[AnyHashable : AnyObject] = [
-//                AVVideoQualityKey : (videoQuality as AnyObject),
-//                AVVideoAverageBitRateKey : (bitrate as AnyObject)
-//            ]
+//        print("videoFilePath \(videoFilePath)")
 //
-//            let frame = CGRect(x: 0, y: 0, width: 1, height: 1)
-//
-//            deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height, subframe: frame, videoCompressionProperties: videoSettings, recordAudio: true)
-//            isRecordingInProcess = true
-//        }
-        */
-    }*/
+//    }
     
 }
 
@@ -325,7 +286,9 @@ extension DeepARVC : DeepARDelegate {
         
         func didFinishVideoRecording(_ videoFilePath: String!) {
                         
-            saveAndPlay(videoFilePath: videoFilePath)
+            spinner.isHidden = false
+            
+            //saveAndPlay(videoFilePath: videoFilePath)
                         
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
             let components = videoFilePath.components(separatedBy: "/")
@@ -334,7 +297,13 @@ extension DeepARVC : DeepARDelegate {
 
             let videoCompositor = VideoCompositor(view,pageTimes: storyVM.getPageTimes(),storyText: storyVM.story, bookID : bookID)
 //            let videoCompositor = VideoCompositor(view,pageTimes: pageTurnTimer!.couplet,storyText: story)
-            videoCompositor.composite(url: URL(fileURLWithPath: videoFilePath))
+            videoCompositor.composite(url: URL(fileURLWithPath: videoFilePath)) {
+                
+                DispatchQueue.main.async {
+                    self.spinner.isHidden = true
+                    
+                }
+            }
             
         }
 }
