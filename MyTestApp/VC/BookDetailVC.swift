@@ -19,7 +19,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         didSet{
             titleLabel.text = book?.title
             authorLabel.text = book?.author
-            descriptionLabel.text = book?.description
+            descriptionLabel.text = book?.about
             
             if let readtime = book?.readtime {
                 readtimeLabel.attributedText = getTimeString(readtime: readtime)
@@ -35,7 +35,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Heebo-Bold", size: 40)
+        label.font = UIFont(name: "Heebo-Bold", size: 36)
         return label
     }()
     
@@ -43,7 +43,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Heebo-Medium", size: 28)
+        label.font = UIFont(name: "Heebo-Regular", size: 25)
         return label
     }()
     
@@ -51,7 +51,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Heebo-Medium", size: 22)
+        label.font = UIFont(name: "Heebo-Medium", size: 20)
         return label
     }()
     
@@ -60,6 +60,16 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         label.backgroundColor = .white
         label.numberOfLines = 0
         label.font = UIFont(name: "Heebo-Regular", size: 19)
+        return label
+    }()
+    
+    var aboutLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.numberOfLines = 0
+        label.font = UIFont(name: "Heebo-Bold", size: 19)
+        label.textColor = .gray
+        label.text = "About"
         return label
     }()
     
@@ -112,6 +122,8 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         
         setViewConstraints()
         
+        setupSpinner()
+        
         viewModel.getBook()
     }
     
@@ -153,6 +165,11 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         
         view.addSubview(backButton)
         
+
+        
+    }
+    
+    func setupSpinner() {
         spinner.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(spinner)
         
@@ -162,7 +179,6 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         spinner.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         
         spinner.isHidden = true
-        
     }
     
 
@@ -213,18 +229,17 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         contentStack.addArrangedSubview(titleLabel)
         contentStack.addArrangedSubview(authorLabel)
         contentStack.addArrangedSubview(readtimeLabel)
-        contentStack.addArrangedSubview(descriptionLabel)
         contentStack.addArrangedSubview(buyButton)
+        contentStack.addArrangedSubview(aboutLabel)
+        contentStack.addArrangedSubview(descriptionLabel)
         
+        contentStack.setCustomSpacing(0, after: titleLabel)
+        contentStack.setCustomSpacing(20, after: readtimeLabel)
+        contentStack.setCustomSpacing(20, after: buyButton)
         contentStack.setCustomSpacing(40, after: descriptionLabel)
         
         scrollView.bottomAnchor.constraint(equalTo: contentStack.bottomAnchor, constant: 30).isActive = true
-        
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        spinner.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        spinner.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        spinner.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+
     }
     
     func getTimeString(readtime:String) -> NSMutableAttributedString{

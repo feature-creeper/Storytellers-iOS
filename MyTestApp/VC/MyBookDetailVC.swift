@@ -19,6 +19,9 @@ class MyBookDetailVC: UIViewController {
                 coverImageView.setImage(fromCoreDataNamed: title.replacingOccurrences(of: " ", with: "_"))
             }
             
+            ageLabel.attributedText = getAgeString(age: "4+")
+            durationLabel.attributedText = getDurationString(duration: "15 minutes")
+            
             
         }
     }
@@ -49,6 +52,23 @@ class MyBookDetailVC: UIViewController {
         return v
     }()
     
+    let ageLabel : UILabel = {
+        let v = UILabel()
+        v.font = UIFont(name: "Heebo-Medium", size: 16)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.textAlignment = .center
+        v.textColor = .gray
+        return v
+    }()
+    
+    let durationLabel : UILabel = {
+        let v = UILabel()
+        v.font = UIFont(name: "Heebo-Medium", size: 16)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.textAlignment = .center
+        v.textColor = .gray
+        return v
+    }()
     
     let titleLabel : UILabel = {
         let v = UILabel()
@@ -60,7 +80,7 @@ class MyBookDetailVC: UIViewController {
     
     let authorLabel : UILabel = {
         let v = UILabel()
-        v.font = UIFont(name: "Heebo-Medium", size: 20)
+        v.font = UIFont(name: "Heebo-Regular", size: 24)
         v.textAlignment = .center
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -71,6 +91,7 @@ class MyBookDetailVC: UIViewController {
         v.font = UIFont(name: "Heebo-Bold", size: 20)
         v.textColor = .gray
         v.text = "My videos"
+        v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
     
@@ -147,16 +168,19 @@ class MyBookDetailVC: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(coverImageView)
         scrollView.addSubview(topDetailsStack)
+        scrollView.addSubview(myVideosLabel)
         scrollView.addSubview(myVideosCollectionView)
-//        scrollView.addSubview(spacerViewA)
         topDetailsStack.addArrangedSubview(titleLabel)
         topDetailsStack.addArrangedSubview(authorLabel)
+        topDetailsStack.addArrangedSubview(ageLabel)
+        topDetailsStack.addArrangedSubview(durationLabel)
         topDetailsStack.addArrangedSubview(readButton)
-        topDetailsStack.addArrangedSubview(myVideosLabel)
+//        topDetailsStack.addArrangedSubview(myVideosLabel)
         
         topDetailsStack.alignment = .center
         
-        topDetailsStack.setCustomSpacing(40, after: authorLabel)
+        topDetailsStack.setCustomSpacing(14, after: authorLabel)
+        topDetailsStack.setCustomSpacing(20, after: durationLabel)
         topDetailsStack.setCustomSpacing(25, after: readButton)
 
         readButton.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -40).isActive = true
@@ -175,7 +199,12 @@ class MyBookDetailVC: UIViewController {
         topDetailsStack.leftAnchor.constraint(equalTo: view.readableContentGuide.leftAnchor).isActive = true
         topDetailsStack.rightAnchor.constraint(equalTo: view.readableContentGuide.rightAnchor).isActive = true
         
-        myVideosCollectionView.topAnchor.constraint(equalTo: topDetailsStack.bottomAnchor, constant: 15).isActive = true
+        myVideosLabel.topAnchor.constraint(equalTo: topDetailsStack.bottomAnchor, constant: 25).isActive = true
+        myVideosLabel.leadingAnchor.constraint(equalTo: view.readableContentGuide.leadingAnchor).isActive = true
+        myVideosLabel.trailingAnchor.constraint(equalTo: view.readableContentGuide.trailingAnchor).isActive = true
+        //myVideosLabel.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        
+        myVideosCollectionView.topAnchor.constraint(equalTo: myVideosLabel.bottomAnchor, constant: 15).isActive = true
         myVideosCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         myVideosCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         myVideosCollectionView.heightAnchor.constraint(equalToConstant: 150).isActive = true
@@ -237,17 +266,43 @@ class MyBookDetailVC: UIViewController {
              tappedShare(videoURL: videoURL)
          }))
 
-         alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ (UIAlertAction)in
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive , handler:{ [self] (UIAlertAction)in
              print("User click Delete button")
+            book?.removeFromVideos(videos[index])
+            videos.remove(at: index)
+            myVideosCollectionView.reloadData()
          }))
         
-        alert.addAction(UIAlertAction(title: "Back", style: .cancel, handler:{ (UIAlertAction)in
+        alert.addAction(UIAlertAction(title: "Back", style: .cancel, handler:{ [self] (UIAlertAction)in
+            
+
             print("User click Dismiss button")
         }))
 
          self.present(alert, animated: true, completion: {
              print("completion block")
          })
+    }
+    
+    func getAgeString(age:String) -> NSMutableAttributedString{
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "person.fill")!.withTintColor(.gray)
+
+        let fullString = NSMutableAttributedString()
+        fullString.append(NSAttributedString(attachment: imageAttachment))
+        fullString.append(NSAttributedString(string: " " + age))
+        return fullString
+    }
+    
+    func getDurationString(duration:String) -> NSMutableAttributedString{
+        let timeAttachment = NSTextAttachment()
+        timeAttachment.image = UIImage(systemName: "stopwatch.fill")?.withTintColor(.gray)
+        
+
+        let fullString = NSMutableAttributedString()
+        fullString.append(NSAttributedString(attachment: timeAttachment))
+        fullString.append(NSAttributedString(string: " " + duration))
+        return fullString
     }
 }
 
@@ -303,6 +358,7 @@ class MyVideoCell: UICollectionViewCell {
         
         super.init(frame: frame)
         contentView.layer.cornerRadius = 10
+        contentView.backgroundColor = .systemGray5
         contentView.addSubview(thumbnailImageView)
         thumbnailImageView.frame = contentView.frame
         thumbnailImageView.layer.position = CGPoint(x: thumbnailImageView.layer.position.x, y: thumbnailImageView.layer.position.y + 30)

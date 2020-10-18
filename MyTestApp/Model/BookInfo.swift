@@ -13,14 +13,14 @@ struct BookInfo : Codable {
     var cover : String?
     var id : String?
     var effects : String?
-    var description : String?
+    var about : String?
     var readtime : String?
     
     enum CodingKeys: String, CodingKey {
         case author
         case title
         case cover
-        case description
+        case about
         case readtime
     }
 }
