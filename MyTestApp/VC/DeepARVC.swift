@@ -301,6 +301,7 @@ extension DeepARVC : DeepARDelegate {
                 
                 DispatchQueue.main.async {
                     self.spinner.isHidden = true
+                    self.dismiss(animated: true, completion: nil)
                     
                 }
             }

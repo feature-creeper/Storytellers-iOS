@@ -38,6 +38,11 @@
 		69A97F52252C7424006EA658 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69A97F50252C7424006EA658 /* LaunchScreen.storyboard */; };
 		69A97F5D252C7424006EA658 /* MyTestAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A97F5C252C7424006EA658 /* MyTestAppTests.swift */; };
 		69A97F68252C7424006EA658 /* MyTestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A97F67252C7424006EA658 /* MyTestAppUITests.swift */; };
+		69AAC5FD253ED40400144DD9 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AAC5FC253ED40400144DD9 /* LoginVC.swift */; };
+		69AAC603253F01A800144DD9 /* HelpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AAC602253F01A800144DD9 /* HelpVC.swift */; };
+		69AAC614253F3BBA00144DD9 /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69AAC611253F3BB900144DD9 /* Rubik-Medium.ttf */; };
+		69AAC615253F3BBA00144DD9 /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69AAC612253F3BBA00144DD9 /* Rubik-SemiBold.ttf */; };
+		69AAC616253F3BBA00144DD9 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69AAC613253F3BBA00144DD9 /* Rubik-Regular.ttf */; };
 		69B2B22E2536E234001E2917 /* StoryText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B22D2536E234001E2917 /* StoryText.swift */; };
 		69B2B2322536E2A4001E2917 /* PageTurnTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B2312536E2A4001E2917 /* PageTurnTimer.swift */; };
 		69B2B2362536E2E6001E2917 /* VideoCompositor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B2352536E2E6001E2917 /* VideoCompositor.swift */; };
@@ -121,6 +126,11 @@
 		69A97F63252C7424006EA658 /* MyTestAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTestAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69A97F67252C7424006EA658 /* MyTestAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTestAppUITests.swift; sourceTree = "<group>"; };
 		69A97F69252C7424006EA658 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		69AAC5FC253ED40400144DD9 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		69AAC602253F01A800144DD9 /* HelpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpVC.swift; sourceTree = "<group>"; };
+		69AAC611253F3BB900144DD9 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Medium.ttf"; sourceTree = "<group>"; };
+		69AAC612253F3BBA00144DD9 /* Rubik-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-SemiBold.ttf"; sourceTree = "<group>"; };
+		69AAC613253F3BBA00144DD9 /* Rubik-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Regular.ttf"; sourceTree = "<group>"; };
 		69B2B22D2536E234001E2917 /* StoryText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryText.swift; sourceTree = "<group>"; };
 		69B2B2312536E2A4001E2917 /* PageTurnTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTurnTimer.swift; sourceTree = "<group>"; };
 		69B2B2352536E2E6001E2917 /* VideoCompositor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCompositor.swift; sourceTree = "<group>"; };
@@ -210,13 +220,15 @@
 		694D77B2252DCA760061848B /* VC */ = {
 			isa = PBXGroup;
 			children = (
-				694D77A4252DC7E90061848B /* BookDetailVC.swift */,
+				69AAC5FC253ED40400144DD9 /* LoginVC.swift */,
 				69A97F49252C7424006EA658 /* ViewController.swift */,
-				69380AE5252F1DA500F2B778 /* ProfileVC.swift */,
+				694D77A4252DC7E90061848B /* BookDetailVC.swift */,
 				69380A86252ED96700F2B778 /* TestViewController.swift */,
 				69682CCE253460A100F6A6F7 /* MyBookshelfVC.swift */,
 				69682CD32534788700F6A6F7 /* MyBookDetailVC.swift */,
+				69380AE5252F1DA500F2B778 /* ProfileVC.swift */,
 				69B997742535CA7C0067969D /* DeepARVC.swift */,
+				69AAC602253F01A800144DD9 /* HelpVC.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -232,6 +244,9 @@
 		6979E084252F786800BD590F /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				69AAC611253F3BB900144DD9 /* Rubik-Medium.ttf */,
+				69AAC613253F3BBA00144DD9 /* Rubik-Regular.ttf */,
+				69AAC612253F3BBA00144DD9 /* Rubik-SemiBold.ttf */,
 				69380AFE252F758600F2B778 /* Heebo-Black.ttf */,
 				69380B02252F758600F2B778 /* Heebo-Bold.ttf */,
 				69380AFD252F758600F2B778 /* Heebo-ExtraBold.ttf */,
@@ -453,9 +468,12 @@
 				6979E089252F78FB00BD590F /* Heebo-Bold.ttf in Resources */,
 				69A97F52252C7424006EA658 /* LaunchScreen.storyboard in Resources */,
 				6979E08A252F78FD00BD590F /* Heebo-ExtraBold.ttf in Resources */,
+				69AAC615253F3BBA00144DD9 /* Rubik-SemiBold.ttf in Resources */,
 				6979E092252F790100BD590F /* Heebo-Regular.ttf in Resources */,
+				69AAC614253F3BBA00144DD9 /* Rubik-Medium.ttf in Resources */,
 				69B997772535CA7C0067969D /* DeepARVC.xib in Resources */,
 				69380A97252F0CE500F2B778 /* GoogleService-Info.plist in Resources */,
+				69AAC616253F3BBA00144DD9 /* Rubik-Regular.ttf in Resources */,
 				6979E08E252F78FF00BD590F /* Heebo-Medium.ttf in Resources */,
 				69A97F4F252C7424006EA658 /* Assets.xcassets in Resources */,
 				69A97F4D252C7424006EA658 /* Main.storyboard in Resources */,
@@ -629,6 +647,7 @@
 				69380AE6252F1DA500F2B778 /* ProfileVC.swift in Sources */,
 				697BB02E25331AF0001D17EF /* BookInfo.swift in Sources */,
 				6956353B2532F8FD00F3EBA2 /* BookFeatured.swift in Sources */,
+				69AAC603253F01A800144DD9 /* HelpVC.swift in Sources */,
 				697E47B825308C7E00E769A1 /* DatabaseHelper.swift in Sources */,
 				694D77AA252DC9E20061848B /* FeaturedRow.swift in Sources */,
 				69A97F46252C7424006EA658 /* AppDelegate.swift in Sources */,
@@ -642,6 +661,7 @@
 				69B997762535CA7C0067969D /* DeepARVC.swift in Sources */,
 				69682CCF253460A100F6A6F7 /* MyBookshelfVC.swift in Sources */,
 				69A97F48252C7424006EA658 /* SceneDelegate.swift in Sources */,
+				69AAC5FD253ED40400144DD9 /* LoginVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

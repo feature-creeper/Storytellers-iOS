@@ -270,6 +270,14 @@ class MyBookDetailVC: UIViewController {
              print("User click Delete button")
             book?.removeFromVideos(videos[index])
             videos.remove(at: index)
+            
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.persistentContainer.viewContext
+            
+            try? context.save()
+            
+            
             myVideosCollectionView.reloadData()
          }))
         

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import FirebaseUI
+import FirebaseAuth
 
 class ProfileVC: UIViewController {
     
@@ -67,24 +67,15 @@ class ProfileVC: UIViewController {
         setupNavBar()
         
         setupViews()
-        
-//        let height = collectionView.collectionViewLayout.collectionViewContentSize.height
-//        heightConstraint.constant = height
-//        self.view.setNeedsLayout() Or self.view.layoutIfNeeded()
-        
-//        collectionView.heightAnchor.constraint(equalToConstant: collViewHeight).isActive = true
-//        view.setNeedsLayout()
     }
-    
 
-    
-//    override func viewDidLayoutSubviews() {
-//        collectionView.heightAnchor.constraint(equalToConstant: collViewHeight).isActive = true
-//    }
     
     func setupNavBar() {
         let logout = UIBarButtonItem(image: UIImage(systemName: "arrow.right.square"), style: .plain, target: self, action: #selector(logoutTapped))
         navigationItem.rightBarButtonItems = [logout]
+        
+        let help = UIBarButtonItem(image: UIImage(systemName: "questionmark.circle"), style: .plain, target: self, action: #selector(helpTapped))
+        navigationItem.leftBarButtonItems = [help]
     }
     
     
@@ -118,11 +109,23 @@ class ProfileVC: UIViewController {
         
     }
     
-    @objc
-    func logoutTapped(){
-        print("LOGOUT")
+    func fitHeight() {
         collectionView.heightAnchor.constraint(equalToConstant: collViewHeight).isActive = true
         view.setNeedsLayout()
+    }
+    
+    @objc
+    func logoutTapped(){
+        try? Auth.auth().signOut()
+    }
+    
+    @objc
+    func helpTapped(){
+        print("TAPPED HELP")
+        
+        let vc = HelpVC()
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
     }
     
     @objc

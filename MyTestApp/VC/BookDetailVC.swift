@@ -35,7 +35,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Heebo-Bold", size: 36)
+        label.font = UIFont(name: "Rubik-SemiBold", size: 36)
         return label
     }()
     
@@ -43,7 +43,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Heebo-Regular", size: 25)
+        label.font = UIFont(name: "Rubik-Regular", size: 25)
         return label
     }()
     
@@ -51,7 +51,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Heebo-Medium", size: 20)
+        label.font = UIFont(name: "Rubik-Medium", size: 20)
         return label
     }()
     
@@ -59,7 +59,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Heebo-Regular", size: 19)
+        label.font = UIFont(name: "Rubik-Regular", size: 19)
         return label
     }()
     
@@ -67,7 +67,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Heebo-Bold", size: 19)
+        label.font = UIFont(name: "Rubik-SemiBold", size: 19)
         label.textColor = .gray
         label.text = "About"
         return label
@@ -233,7 +233,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         contentStack.addArrangedSubview(aboutLabel)
         contentStack.addArrangedSubview(descriptionLabel)
         
-        contentStack.setCustomSpacing(0, after: titleLabel)
+//        contentStack.setCustomSpacing(0, after: titleLabel)
         contentStack.setCustomSpacing(20, after: readtimeLabel)
         contentStack.setCustomSpacing(20, after: buyButton)
         contentStack.setCustomSpacing(40, after: descriptionLabel)

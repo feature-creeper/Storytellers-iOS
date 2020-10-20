@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -17,6 +18,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+        
+        let handle = Auth.auth().addStateDidChangeListener { [self] (auth, user) in
+            print("AUTH \(auth.settings)")
+            print("USER \(user?.uid)")
+            
+            if user != nil{
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let tabVC = storyboard.instantiateViewController(identifier: "STTabBar")
+                window?.rootViewController = tabVC
+                window?.makeKeyAndVisible()
+            }else{
+                let vc = LoginVC()
+                window?.rootViewController = vc
+                window?.makeKeyAndVisible()
+            }
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -37,8 +54,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
+        
+        
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {

@@ -33,6 +33,9 @@
 	<string>App requires photo library</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Rubik-Regular.ttf</string>
+		<string>Rubik-SemiBold.ttf</string>
+		<string>Rubik-Medium.ttf</string>
 		<string>Heebo-Black.ttf</string>
 		<string>Heebo-Bold.ttf</string>
 		<string>Heebo-ExtraBold.ttf</string>
