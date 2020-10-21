@@ -14,12 +14,12 @@ class MyBookshelfVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let navbarFont = UIFont(name: "Heebo-Medium", size: 17) ?? UIFont.systemFont(ofSize: 17)
+        let navbarFont = UIFont(name: Globals.mediumWeight, size: 17) ?? UIFont.systemFont(ofSize: 17)
         navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedString.Key.font: navbarFont,
         ]
 
-        let navbarFontLarge = UIFont(name: "Heebo-Bold", size: 35) ?? UIFont.systemFont(ofSize: 17)
+        let navbarFontLarge = UIFont(name: Globals.boldWeight, size: 35) ?? UIFont.systemFont(ofSize: 17)
         navigationController?.navigationBar.largeTitleTextAttributes = [
             NSAttributedString.Key.font: navbarFontLarge,
 //            NSAttributedString.Key.foregroundColor: UIColor.red
@@ -27,7 +27,7 @@ class MyBookshelfVC: UITableViewController {
 
         tableView.register(MyBookShelfTableCell.self, forCellReuseIdentifier: "cell")
         
-        navigationItem.title = "My Bookshelf"
+        navigationItem.title = "My Library"
         
     }
 
@@ -120,14 +120,14 @@ class MyBookShelfTableCell: UITableViewCell {
     
     let titleLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Heebo-Bold", size: 22)
+        label.font = UIFont(name: Globals.semiboldWeight, size: 22)
         label.numberOfLines = 2
         return label
     }()
     
     let authorLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "Heebo-Regular", size: 16)
+        label.font = UIFont(name: Globals.regularWeight, size: 16)
         return label
     }()
     

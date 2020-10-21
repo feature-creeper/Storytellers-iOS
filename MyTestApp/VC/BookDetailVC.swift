@@ -35,7 +35,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Rubik-SemiBold", size: 36)
+        label.font = UIFont(name: Globals.semiboldWeight, size: 36)
         return label
     }()
     
@@ -43,7 +43,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Rubik-Regular", size: 25)
+        label.font = UIFont(name: Globals.subheading, size: 28)
         return label
     }()
     
@@ -51,7 +51,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Rubik-Medium", size: 20)
+        label.font = UIFont(name: Globals.boldWeight, size: 20)
         return label
     }()
     
@@ -59,7 +59,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Rubik-Regular", size: 19)
+        label.font = UIFont(name: Globals.regularWeight, size: 19)
         return label
     }()
     
@@ -67,7 +67,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         let label = UILabel()
         label.backgroundColor = .white
         label.numberOfLines = 0
-        label.font = UIFont(name: "Rubik-SemiBold", size: 19)
+        label.font = UIFont(name: Globals.mediumWeight, size: 19)
         label.textColor = .gray
         label.text = "About"
         return label
@@ -89,7 +89,8 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
     var buyButton : UIButton = {
         let buyButton = STButton(frame: CGRect(x: 0, y: 0, width: 400, height: 50),fontSize: 22)
         buyButton.backgroundColor = .orange
-        buyButton.setTitle("Get this book", for: .normal)
+        buyButton.setTitle("Add to library", for: .normal)
+        buyButton.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 25)
         buyButton.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         buyButton.layer.cornerRadius = 10
         buyButton.addTarget(self, action: #selector(tappedGetBook), for: .touchUpInside)
@@ -254,8 +255,9 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
     
     @objc
     func tappedGetBook(){
-        spinner.isHidden = false
-        viewModel.getBookContent()
+        
+        viewModel.tappedGetBook()
+
     }
     
     fileprivate func setCoverImage() {
@@ -276,6 +278,14 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
 }
 
 extension BookDetailVC : BookDetailDelegate {
+    func bookAlreadyOwned() {
+        showDialogue(message: "You already own this book", title: "Error")
+    }
+    
+    func fetchingBook() {
+        spinner.isHidden = false
+    }
+    
     
     func receivedBookInfo(book: BookInfo) {
         self.book = book
@@ -287,6 +297,7 @@ extension BookDetailVC : BookDetailDelegate {
     
     func addedNewBookToMyBookshelf(){
         spinner.isHidden = true
+        dismiss(animated: true, completion: nil)
     }
         
 }

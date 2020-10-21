@@ -57,7 +57,7 @@ class DeepARVC: UIViewController {
     var pageLabel : UILabel = {
        let v = UILabel()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.font = UIFont(name: "Heebo-Regular", size: 19)
+        v.font = UIFont(name: Globals.easyRead, size: 19)
         v.textColor = UIColor.black
         v.numberOfLines = 0
         v.lineBreakMode = .byWordWrapping

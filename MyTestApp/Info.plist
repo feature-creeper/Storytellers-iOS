@@ -16,6 +16,17 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.496444326788-9njv1cuat9cipu6b1ncgflk3tgj4eqah</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -33,6 +44,24 @@
 	<string>App requires photo library</string>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Poppins-Bold.ttf</string>
+		<string>Poppins-Medium.ttf</string>
+		<string>Poppins-Regular.ttf</string>
+		<string>Poppins-SemiBold.ttf</string>
+		<string>Catamaran-Bold.ttf</string>
+		<string>Catamaran-ExtraBold.ttf</string>
+		<string>WorkSans-Bold.ttf</string>
+		<string>WorkSans-Medium.ttf</string>
+		<string>WorkSans-Regular.ttf</string>
+		<string>WorkSans-SemiBold.ttf</string>
+		<string>Epilogue-Bold.ttf</string>
+		<string>Epilogue-Medium.ttf</string>
+		<string>Epilogue-Regular.ttf</string>
+		<string>Epilogue-SemiBold.ttf</string>
+		<string>Inter-Bold-slnt=0.ttf</string>
+		<string>Inter-Regular-slnt=0.ttf</string>
+		<string>Inter-Medium-slnt=0.ttf</string>
+		<string>ABeeZee-Regular.ttf</string>
 		<string>Rubik-Regular.ttf</string>
 		<string>Rubik-SemiBold.ttf</string>
 		<string>Rubik-Medium.ttf</string>

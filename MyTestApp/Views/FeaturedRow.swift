@@ -41,7 +41,7 @@ class FeaturedBooksCell: UITableViewCell {
         
         
         addSubview(rowLabel)
-        rowLabel.font = UIFont(name: "Rubik-SemiBold", size: 30)
+        rowLabel.font = UIFont(name: Globals.boldWeight, size: 30)
         rowLabel.text = rowName
         rowLabel.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         rowLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor, constant:  7).isActive = true
@@ -191,7 +191,7 @@ class MyCell: UICollectionViewCell {
         if let title = book?.title{
         contentView.addSubview(bookTitleLabel)
         bookTitleLabel.text  = title
-        bookTitleLabel.font = UIFont(name: "Rubik-SemiBold", size: 19.0)
+            bookTitleLabel.font = UIFont(name: Globals.boldWeight, size: 19.0)
         bookTitleLabel.numberOfLines = 2
         bookTitleLabel.topAnchor.constraint(equalTo: coverImageView.bottomAnchor,constant: 6).isActive = true
         bookTitleLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor).isActive = true
@@ -200,7 +200,7 @@ class MyCell: UICollectionViewCell {
         
         if let author = book?.author {
             authorLabel.text = author
-            authorLabel.font = UIFont(name: "Rubik-Regular", size: 15.0)
+            authorLabel.font = UIFont(name: Globals.regularWeight, size: 15.0)
             contentView.addSubview(authorLabel)
             authorLabel.topAnchor.constraint(equalTo: bookTitleLabel.bottomAnchor, constant: -3).isActive = true
             authorLabel.leftAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leftAnchor).isActive = true

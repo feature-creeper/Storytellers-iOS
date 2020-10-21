@@ -54,7 +54,7 @@ class MyBookDetailVC: UIViewController {
     
     let ageLabel : UILabel = {
         let v = UILabel()
-        v.font = UIFont(name: "Heebo-Medium", size: 16)
+        v.font = UIFont(name: Globals.semiboldWeight, size: 16)
         v.translatesAutoresizingMaskIntoConstraints = false
         v.textAlignment = .center
         v.textColor = .gray
@@ -63,7 +63,7 @@ class MyBookDetailVC: UIViewController {
     
     let durationLabel : UILabel = {
         let v = UILabel()
-        v.font = UIFont(name: "Heebo-Medium", size: 16)
+        v.font = UIFont(name: Globals.semiboldWeight, size: 16)
         v.translatesAutoresizingMaskIntoConstraints = false
         v.textAlignment = .center
         v.textColor = .gray
@@ -72,7 +72,7 @@ class MyBookDetailVC: UIViewController {
     
     let titleLabel : UILabel = {
         let v = UILabel()
-        v.font = UIFont(name: "Heebo-Bold", size: 30)
+        v.font = UIFont(name: Globals.semiboldWeight, size: 30)
         v.translatesAutoresizingMaskIntoConstraints = false
         v.textAlignment = .center
         return v
@@ -80,7 +80,7 @@ class MyBookDetailVC: UIViewController {
     
     let authorLabel : UILabel = {
         let v = UILabel()
-        v.font = UIFont(name: "Heebo-Regular", size: 24)
+        v.font = UIFont(name: Globals.mediumWeight, size: 24)
         v.textAlignment = .center
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -88,7 +88,7 @@ class MyBookDetailVC: UIViewController {
     
     let myVideosLabel : UILabel = {
         let v = UILabel()
-        v.font = UIFont(name: "Heebo-Bold", size: 20)
+        v.font = UIFont(name: Globals.mediumWeight, size: 20)
         v.textColor = .gray
         v.text = "My videos"
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -97,7 +97,7 @@ class MyBookDetailVC: UIViewController {
     
     let readButton : UIButton = {
         let v = UIButton()
-        v.titleLabel?.font = UIFont(name: "Heebo-Bold", size: 25)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 25)
         v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         v.setTitle("Let's read!", for: .normal)
         v.backgroundColor = .orange

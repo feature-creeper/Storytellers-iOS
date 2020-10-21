@@ -37,7 +37,7 @@ class ProfileVC: UIViewController {
     var myVideosLabel : UILabel = {
         let v = UILabel()
         v.text = "My Videos"
-        v.font = UIFont(name: "Heebo-Medium", size: 25)
+        v.font = UIFont(name: Globals.semiboldWeight, size: 25)
         v.translatesAutoresizingMaskIntoConstraints = false
         v.textAlignment = .center
         v.textColor = .black

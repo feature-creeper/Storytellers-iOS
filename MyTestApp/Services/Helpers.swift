@@ -9,6 +9,15 @@ import Foundation
 import UIKit
 import AVFoundation
 
+extension UIViewController{
+    func showDialogue(message:String, title:String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+
+        self.present(alert, animated: true)
+    }
+}
+
 extension UIImageView{
     func setImage(fromCoreDataNamed imageName: String) {
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }

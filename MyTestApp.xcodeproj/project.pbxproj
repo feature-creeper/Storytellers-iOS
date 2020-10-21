@@ -50,6 +50,25 @@
 		69B997432535B9480067969D /* DeepAR.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 69B997402535B91E0067969D /* DeepAR.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		69B997762535CA7C0067969D /* DeepARVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B997742535CA7C0067969D /* DeepARVC.swift */; };
 		69B997772535CA7C0067969D /* DeepARVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 69B997752535CA7C0067969D /* DeepARVC.xib */; };
+		69C865672540267500C3819E /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69C865662540267500C3819E /* Globals.swift */; };
+		69C8656B2540285800C3819E /* ABeeZee-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8656A2540285800C3819E /* ABeeZee-Regular.ttf */; };
+		69C8657125402A3500C3819E /* Inter-Regular-slnt=0.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8656E25402A3500C3819E /* Inter-Regular-slnt=0.ttf */; };
+		69C8657225402A3500C3819E /* Inter-Medium-slnt=0.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8656F25402A3500C3819E /* Inter-Medium-slnt=0.ttf */; };
+		69C8657325402A3500C3819E /* Inter-Bold-slnt=0.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8657025402A3500C3819E /* Inter-Bold-slnt=0.ttf */; };
+		69C865812540316E00C3819E /* Epilogue-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8657D2540316E00C3819E /* Epilogue-Medium.ttf */; };
+		69C865822540316E00C3819E /* Epilogue-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8657E2540316E00C3819E /* Epilogue-Bold.ttf */; };
+		69C865832540316E00C3819E /* Epilogue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8657F2540316E00C3819E /* Epilogue-Regular.ttf */; };
+		69C865842540316E00C3819E /* Epilogue-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C865802540316E00C3819E /* Epilogue-SemiBold.ttf */; };
+		69C8658B2540388700C3819E /* WorkSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C865872540388700C3819E /* WorkSans-Medium.ttf */; };
+		69C8658C2540388700C3819E /* WorkSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C865882540388700C3819E /* WorkSans-Regular.ttf */; };
+		69C8658D2540388700C3819E /* WorkSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C865892540388700C3819E /* WorkSans-Bold.ttf */; };
+		69C8658E2540388700C3819E /* WorkSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8658A2540388700C3819E /* WorkSans-SemiBold.ttf */; };
+		69C8659225403F3F00C3819E /* Catamaran-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8659125403F3F00C3819E /* Catamaran-Bold.ttf */; };
+		69C8659625403FDD00C3819E /* Catamaran-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8659525403FDD00C3819E /* Catamaran-ExtraBold.ttf */; };
+		69C8659D254042AC00C3819E /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C86599254042AC00C3819E /* Poppins-Bold.ttf */; };
+		69C8659E254042AC00C3819E /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8659A254042AC00C3819E /* Poppins-Medium.ttf */; };
+		69C8659F254042AC00C3819E /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8659B254042AC00C3819E /* Poppins-Regular.ttf */; };
+		69C865A0254042AC00C3819E /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8659C254042AC00C3819E /* Poppins-SemiBold.ttf */; };
 		69E93ABB253AFFA60016D9BA /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E93ABA253AFFA60016D9BA /* LoadingView.swift */; };
 		A78E4CDDBBB3112CF520940D /* Pods_MyTestAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49583B944960A075E37700B2 /* Pods_MyTestAppTests.framework */; };
 		C13E7B35E85C96E79D988A17 /* Pods_MyTestApp_MyTestAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D918FEBB381A8F42961519 /* Pods_MyTestApp_MyTestAppUITests.framework */; };
@@ -137,6 +156,25 @@
 		69B997402535B91E0067969D /* DeepAR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DeepAR.framework; sourceTree = "<group>"; };
 		69B997742535CA7C0067969D /* DeepARVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepARVC.swift; sourceTree = "<group>"; };
 		69B997752535CA7C0067969D /* DeepARVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeepARVC.xib; sourceTree = "<group>"; };
+		69C865662540267500C3819E /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		69C8656A2540285800C3819E /* ABeeZee-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ABeeZee-Regular.ttf"; sourceTree = "<group>"; };
+		69C8656E25402A3500C3819E /* Inter-Regular-slnt=0.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular-slnt=0.ttf"; sourceTree = "<group>"; };
+		69C8656F25402A3500C3819E /* Inter-Medium-slnt=0.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium-slnt=0.ttf"; sourceTree = "<group>"; };
+		69C8657025402A3500C3819E /* Inter-Bold-slnt=0.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold-slnt=0.ttf"; sourceTree = "<group>"; };
+		69C8657D2540316E00C3819E /* Epilogue-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Epilogue-Medium.ttf"; sourceTree = "<group>"; };
+		69C8657E2540316E00C3819E /* Epilogue-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Epilogue-Bold.ttf"; sourceTree = "<group>"; };
+		69C8657F2540316E00C3819E /* Epilogue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Epilogue-Regular.ttf"; sourceTree = "<group>"; };
+		69C865802540316E00C3819E /* Epilogue-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Epilogue-SemiBold.ttf"; sourceTree = "<group>"; };
+		69C865872540388700C3819E /* WorkSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WorkSans-Medium.ttf"; sourceTree = "<group>"; };
+		69C865882540388700C3819E /* WorkSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WorkSans-Regular.ttf"; sourceTree = "<group>"; };
+		69C865892540388700C3819E /* WorkSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WorkSans-Bold.ttf"; sourceTree = "<group>"; };
+		69C8658A2540388700C3819E /* WorkSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WorkSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		69C8659125403F3F00C3819E /* Catamaran-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Catamaran-Bold.ttf"; sourceTree = "<group>"; };
+		69C8659525403FDD00C3819E /* Catamaran-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Catamaran-ExtraBold.ttf"; sourceTree = "<group>"; };
+		69C86599254042AC00C3819E /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		69C8659A254042AC00C3819E /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
+		69C8659B254042AC00C3819E /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		69C8659C254042AC00C3819E /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		69E93ABA253AFFA60016D9BA /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		7435D7A8075D773A712CD486 /* Pods-MyTestApp-MyTestAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-MyTestAppUITests.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp-MyTestAppUITests/Pods-MyTestApp-MyTestAppUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B0C85D1D28AB024D164D9B88 /* Pods-MyTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp/Pods-MyTestApp.release.xcconfig"; sourceTree = "<group>"; };
@@ -203,6 +241,7 @@
 				69B2B22D2536E234001E2917 /* StoryText.swift */,
 				69B2B2312536E2A4001E2917 /* PageTurnTimer.swift */,
 				69B2B2352536E2E6001E2917 /* VideoCompositor.swift */,
+				69C865662540267500C3819E /* Globals.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -244,6 +283,24 @@
 		6979E084252F786800BD590F /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				69C86599254042AC00C3819E /* Poppins-Bold.ttf */,
+				69C8659A254042AC00C3819E /* Poppins-Medium.ttf */,
+				69C8659B254042AC00C3819E /* Poppins-Regular.ttf */,
+				69C8659C254042AC00C3819E /* Poppins-SemiBold.ttf */,
+				69C8659525403FDD00C3819E /* Catamaran-ExtraBold.ttf */,
+				69C8659125403F3F00C3819E /* Catamaran-Bold.ttf */,
+				69C865892540388700C3819E /* WorkSans-Bold.ttf */,
+				69C865872540388700C3819E /* WorkSans-Medium.ttf */,
+				69C865882540388700C3819E /* WorkSans-Regular.ttf */,
+				69C8658A2540388700C3819E /* WorkSans-SemiBold.ttf */,
+				69C8657E2540316E00C3819E /* Epilogue-Bold.ttf */,
+				69C8657D2540316E00C3819E /* Epilogue-Medium.ttf */,
+				69C8657F2540316E00C3819E /* Epilogue-Regular.ttf */,
+				69C865802540316E00C3819E /* Epilogue-SemiBold.ttf */,
+				69C8657025402A3500C3819E /* Inter-Bold-slnt=0.ttf */,
+				69C8656F25402A3500C3819E /* Inter-Medium-slnt=0.ttf */,
+				69C8656E25402A3500C3819E /* Inter-Regular-slnt=0.ttf */,
+				69C8656A2540285800C3819E /* ABeeZee-Regular.ttf */,
 				69AAC611253F3BB900144DD9 /* Rubik-Medium.ttf */,
 				69AAC613253F3BBA00144DD9 /* Rubik-Regular.ttf */,
 				69AAC612253F3BBA00144DD9 /* Rubik-SemiBold.ttf */,
@@ -466,17 +523,35 @@
 				6979E085252F78F800BD590F /* Heebo-Black.ttf in Resources */,
 				69380A9C252F0E2200F2B778 /* Podfile in Resources */,
 				6979E089252F78FB00BD590F /* Heebo-Bold.ttf in Resources */,
+				69C8658C2540388700C3819E /* WorkSans-Regular.ttf in Resources */,
 				69A97F52252C7424006EA658 /* LaunchScreen.storyboard in Resources */,
 				6979E08A252F78FD00BD590F /* Heebo-ExtraBold.ttf in Resources */,
+				69C8659D254042AC00C3819E /* Poppins-Bold.ttf in Resources */,
 				69AAC615253F3BBA00144DD9 /* Rubik-SemiBold.ttf in Resources */,
+				69C865812540316E00C3819E /* Epilogue-Medium.ttf in Resources */,
 				6979E092252F790100BD590F /* Heebo-Regular.ttf in Resources */,
 				69AAC614253F3BBA00144DD9 /* Rubik-Medium.ttf in Resources */,
 				69B997772535CA7C0067969D /* DeepARVC.xib in Resources */,
+				69C865832540316E00C3819E /* Epilogue-Regular.ttf in Resources */,
+				69C8659E254042AC00C3819E /* Poppins-Medium.ttf in Resources */,
 				69380A97252F0CE500F2B778 /* GoogleService-Info.plist in Resources */,
+				69C8658B2540388700C3819E /* WorkSans-Medium.ttf in Resources */,
 				69AAC616253F3BBA00144DD9 /* Rubik-Regular.ttf in Resources */,
+				69C8659225403F3F00C3819E /* Catamaran-Bold.ttf in Resources */,
+				69C8657125402A3500C3819E /* Inter-Regular-slnt=0.ttf in Resources */,
 				6979E08E252F78FF00BD590F /* Heebo-Medium.ttf in Resources */,
 				69A97F4F252C7424006EA658 /* Assets.xcassets in Resources */,
+				69C8657325402A3500C3819E /* Inter-Bold-slnt=0.ttf in Resources */,
+				69C8659F254042AC00C3819E /* Poppins-Regular.ttf in Resources */,
+				69C865A0254042AC00C3819E /* Poppins-SemiBold.ttf in Resources */,
+				69C865822540316E00C3819E /* Epilogue-Bold.ttf in Resources */,
+				69C865842540316E00C3819E /* Epilogue-SemiBold.ttf in Resources */,
 				69A97F4D252C7424006EA658 /* Main.storyboard in Resources */,
+				69C8658D2540388700C3819E /* WorkSans-Bold.ttf in Resources */,
+				69C8658E2540388700C3819E /* WorkSans-SemiBold.ttf in Resources */,
+				69C8657225402A3500C3819E /* Inter-Medium-slnt=0.ttf in Resources */,
+				69C8656B2540285800C3819E /* ABeeZee-Regular.ttf in Resources */,
+				69C8659625403FDD00C3819E /* Catamaran-ExtraBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,6 +726,7 @@
 				697E47B825308C7E00E769A1 /* DatabaseHelper.swift in Sources */,
 				694D77AA252DC9E20061848B /* FeaturedRow.swift in Sources */,
 				69A97F46252C7424006EA658 /* AppDelegate.swift in Sources */,
+				69C865672540267500C3819E /* Globals.swift in Sources */,
 				697E47B3253089DB00E769A1 /* STButton.swift in Sources */,
 				69682CE12534AF0400F6A6F7 /* Helpers.swift in Sources */,
 				69380A88252ED96700F2B778 /* TestViewController.swift in Sources */,

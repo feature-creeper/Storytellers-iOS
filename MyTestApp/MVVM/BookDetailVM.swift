@@ -8,10 +8,13 @@
 import Foundation
 import UIKit
 import FirebaseStorage
+import CoreData
 
 
 protocol BookDetailDelegate {
     func receivedBookInfo(book : BookInfo)
+    func bookAlreadyOwned()
+    func fetchingBook()
     func saved()
     func addedNewBookToMyBookshelf()
 }
@@ -20,9 +23,45 @@ class BookDetailVM {
     
     var bookFeatured: BookFeatured?
     
-    var bookInfo:BookInfo?
+    var bookInfo:BookInfo?{
+        didSet{
+            checkIfOwnedAlready()
+        }
+    }
     
     var delegate : BookDetailDelegate?
+    
+    var bookOwned = false
+    
+    func checkIfOwnedAlready() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        
+        guard let id = bookInfo?.id else {return}
+        
+        do {
+            let fetch = NSFetchRequest<Book>(entityName: "Book")
+            fetch.predicate = NSPredicate(format: "id == %@", id)
+            let book : Book? = try (context.fetch(fetch).first ?? nil) as Book?
+            
+            
+            if book != nil  {
+                bookOwned = true
+            }
+            
+        } catch  {
+            
+        }
+    }
+    
+    func tappedGetBook(){
+        if !bookOwned {
+            delegate?.fetchingBook()
+            getBookContent()
+        }else{
+            delegate?.bookAlreadyOwned()
+        }
+    }
     
     
     func getBookContent() {
