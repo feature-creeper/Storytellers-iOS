@@ -20,7 +20,7 @@ class DeepARVC: UIViewController {
     
     private var cameraController: CameraController!
     
-    private var isRecordingInProcess: Bool = false
+//    private var isRecordingInProcess: Bool = false
     
     var maskPath : String!
     
@@ -105,6 +105,7 @@ class DeepARVC: UIViewController {
         return v
     }()
     
+    /*
     var nextPageButton : UIButton = {
        let button = UIButton()
         button.addTarget(self, action: #selector(nextPageTapped), for: .touchUpInside)
@@ -121,15 +122,16 @@ class DeepARVC: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isHidden = true
         return button
-    }()
+    }()*/
     
+    /*
     var startButton : UIButton = {
        let button = UIButton()
         button.addTarget(self, action: #selector(prevPageTapped), for: .touchUpInside)
         button.setImage(#imageLiteral(resourceName: "PagePrev"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
-    }()
+    }()*/
     
     var endRecordingButton : UIButton = {
        let button = UIButton()
@@ -184,8 +186,8 @@ class DeepARVC: UIViewController {
         
         view.addSubview(pageBackgroundView)
         view.addSubview(safeAreaView)
-        view.addSubview(nextPageButton)
-        view.addSubview(prevPageButton)
+//        view.addSubview(nextPageButton)
+//        view.addSubview(prevPageButton)
         view.addSubview(endRecordingButton)
         
         view.addSubview(startRecordingButton)
@@ -225,15 +227,15 @@ class DeepARVC: UIViewController {
         
         let pageControlWidth : CGFloat = 50
         
-        nextPageButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
-        nextPageButton.rightAnchor.constraint(equalTo: pageBackgroundView.rightAnchor, constant: -20).isActive = true
-        nextPageButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-        nextPageButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-        
-        prevPageButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
-        prevPageButton.leftAnchor.constraint(equalTo: pageBackgroundView.leftAnchor, constant: 20).isActive = true
-        prevPageButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-        prevPageButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+//        nextPageButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
+//        nextPageButton.rightAnchor.constraint(equalTo: pageBackgroundView.rightAnchor, constant: -20).isActive = true
+//        nextPageButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+//        nextPageButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+//
+//        prevPageButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
+//        prevPageButton.leftAnchor.constraint(equalTo: pageBackgroundView.leftAnchor, constant: 20).isActive = true
+//        prevPageButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+//        prevPageButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
         
         endRecordingButton.bottomAnchor.constraint(equalTo: pageIndicatorLabel.topAnchor, constant: -20).isActive = true
         endRecordingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -254,6 +256,13 @@ class DeepARVC: UIViewController {
         self.arView.translatesAutoresizingMaskIntoConstraints = false
         self.arViewContainer.addSubview(self.arView)
         
+        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft))
+        swipeLeftGesture.direction = .left
+        self.arViewContainer.addGestureRecognizer(swipeLeftGesture)
+        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipedRight))
+        swipeRightGesture.direction = .right
+        self.arViewContainer.addGestureRecognizer(swipeRightGesture)
+        
         cameraController.arview = arView
         
         self.arView.leftAnchor.constraint(equalTo: self.arViewContainer.leftAnchor, constant: 0).isActive = true
@@ -266,6 +275,22 @@ class DeepARVC: UIViewController {
     }
     
     @objc
+    func swipedRight(){
+        if storyVM.recording {
+            pageLabel.text = storyVM.prevPage()
+        }
+        
+    }
+    
+    @objc
+    func swipedLeft(){
+        if storyVM.recording {
+            pageLabel.text = storyVM.nextPage()
+        }
+        
+    }
+    
+    @objc
     func startRecordTapped()  {
         
         timerBGView.setImage(UIImage(systemName: "circlebadge.fill"), for: .normal)
@@ -274,8 +299,8 @@ class DeepARVC: UIViewController {
         pageBackgroundView.isHidden = false
         endRecordingButton.isHidden = false
         pageIndicatorLabel.isHidden = false
-        nextPageButton.isHidden = false
-        prevPageButton.isHidden = false
+//        nextPageButton.isHidden = false
+//        prevPageButton.isHidden = false
         
         storyVM.tappedRecord()
         storyVM.startTimer()
@@ -294,7 +319,7 @@ class DeepARVC: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    
+    /*
     @objc
     func nextPageTapped()  {
         pageLabel.text = storyVM.nextPage()
@@ -304,7 +329,7 @@ class DeepARVC: UIViewController {
     @objc
     func prevPageTapped()  {
         pageLabel.text = storyVM.prevPage()
-    }
+    }*/
     
     @objc
     func endRecordingTapped()  {
@@ -359,14 +384,14 @@ extension DeepARVC : StoryDelegate{
         pageIndicatorLabel.text = "\(index + 1)/\(totalPages)"
         
         if index == 0 {
-            prevPageButton.isHidden = true
+//            prevPageButton.isHidden = true
             endRecordingButton.isHidden = true
         } else if index == (totalPages - 1){
-            nextPageButton.isHidden = true
+//            nextPageButton.isHidden = true
             endRecordingButton.isHidden = false
         }else{
-            prevPageButton.isHidden = false
-            nextPageButton.isHidden = false
+//            prevPageButton.isHidden = false
+//            nextPageButton.isHidden = false
             endRecordingButton.isHidden = true
         }
     }
