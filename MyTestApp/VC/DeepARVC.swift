@@ -60,11 +60,10 @@ class DeepARVC: UIViewController {
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
         v.setTitle("00:00:00", for: .normal)
-        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
-        v.backgroundColor = .white
+        v.contentEdgeInsets = UIEdgeInsets(top: 6, left: 15, bottom: 6, right: 15)
+        v.backgroundColor = UIColor.white.withAlphaComponent(0.6)
         v.layer.cornerRadius = 10
         v.setTitleColor(.black, for: .normal)
-        
         v.imageView?.tintColor = .red
         v.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 15)
         return v
