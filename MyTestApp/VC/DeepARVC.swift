@@ -24,7 +24,7 @@ class DeepARVC: UIViewController {
     
     var maskPath : String!
     
-    var storyVM : StoryText!
+    var storyVM : DeepARVM!
     
     var content : String?
 //    var pageTurnTimer = PageTurnTimer()
@@ -39,10 +39,10 @@ class DeepARVC: UIViewController {
         let button = UIButton(frame: CGRect(x: 0, y: 30, width: 70, height: 70))
         button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
         let largeConfig = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold, scale: .medium)
-        
         let largeBoldDoc = UIImage(systemName: "clear.fill", withConfiguration: largeConfig)
         button.setImage(largeBoldDoc, for: .normal)
         button.tintColor = UIColor.white
+        button.applyShadow(offset: CGSize(width: 1, height: 1), opacity: 0.3, radius: 4.0)
         return button
     }()
     
@@ -51,6 +51,40 @@ class DeepARVC: UIViewController {
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
         v.applyShadow(offset: CGSize.zero, opacity: 0.4, radius: 6.0)
+        v.isHidden = true
+        return v
+    }()
+    
+    var timerBGView : UIButton = {
+       let v = UIButton()
+        v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.setTitle("00:00:00", for: .normal)
+        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
+        v.backgroundColor = .white
+        v.layer.cornerRadius = 10
+        v.setTitleColor(.black, for: .normal)
+        
+        v.imageView?.tintColor = .red
+        v.imageEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 15)
+        return v
+    }()
+    
+    var startRecordingButton : UIButton = {
+       let v = UIButton()
+        v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.setTitle("Start", for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 30)
+        v.setTitleColor(.white, for: .normal)
+        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 30, bottom: 10, right: 30)
+        v.backgroundColor = .green
+        v.addTarget(self, action: #selector(startRecordTapped), for: .touchUpInside)
+        v.layer.cornerRadius = 30
+//        v.setTitleColor(.black, for: .normal)
+        v.setImage(UIImage(named: "RecordIcon"), for: .normal)
+        v.imageView?.contentMode = .scaleAspectFit
+        v.imageEdgeInsets = UIEdgeInsets(top: 10, left: -14, bottom: 10, right: 0)
         return v
     }()
     
@@ -61,7 +95,7 @@ class DeepARVC: UIViewController {
         v.textColor = UIColor.black
         v.numberOfLines = 0
         v.lineBreakMode = .byWordWrapping
-//        v.text = story.currentPageText
+//        v.isHidden = true
         return v
     }()
     
@@ -77,6 +111,7 @@ class DeepARVC: UIViewController {
         button.addTarget(self, action: #selector(nextPageTapped), for: .touchUpInside)
         button.setImage(#imageLiteral(resourceName: "PageNext"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isHidden = true
         return button
     }()
     
@@ -85,6 +120,7 @@ class DeepARVC: UIViewController {
         button.addTarget(self, action: #selector(prevPageTapped), for: .touchUpInside)
         button.setImage(#imageLiteral(resourceName: "PagePrev"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isHidden = true
         return button
     }()
     
@@ -96,19 +132,29 @@ class DeepARVC: UIViewController {
         return button
     }()
     
-    var recordButton : UIButton = {
+    var endRecordingButton : UIButton = {
        let button = UIButton()
-        button.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(endRecordingTapped), for: .touchUpInside)
         button.setImage(#imageLiteral(resourceName: "Record"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.isHidden = true
         return button
+    }()
+    
+    let pageIndicatorLabel : UILabel = {
+        let v = UILabel()
+        v.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.textAlignment = .center
+        v.textColor = .white
+        v.text = "0/10"
+        v.isHidden = true
+        return v
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-                
         setupDeepARAndCamera()
         
         setupViews()
@@ -116,7 +162,6 @@ class DeepARVC: UIViewController {
         setMask(name: maskPath)
         
         pageLabel.text = storyVM.currentPageText
-        
         
     }
     
@@ -135,15 +180,17 @@ class DeepARVC: UIViewController {
     func setupViews() {
         arViewContainer.addSubview(exitButton)
         
-
+        view.addSubview(timerBGView)
+        view.addSubview(pageIndicatorLabel)
         
         view.addSubview(pageBackgroundView)
         view.addSubview(safeAreaView)
         view.addSubview(nextPageButton)
         view.addSubview(prevPageButton)
-        view.addSubview(recordButton)
+        view.addSubview(endRecordingButton)
         
-//        spinner.frame = view.frame
+        view.addSubview(startRecordingButton)
+        
         spinner.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(spinner)
         spinner.isHidden = true
@@ -152,6 +199,15 @@ class DeepARVC: UIViewController {
         spinner.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         spinner.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         
+        timerBGView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        timerBGView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        pageIndicatorLabel.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -15).isActive = true
+        pageIndicatorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        startRecordingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60).isActive = true
+        startRecordingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        startRecordingButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
         
         pageBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         pageBackgroundView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -180,23 +236,20 @@ class DeepARVC: UIViewController {
         prevPageButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
         prevPageButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
         
-        recordButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
-        recordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        recordButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-        recordButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+        endRecordingButton.bottomAnchor.constraint(equalTo: pageIndicatorLabel.topAnchor, constant: -20).isActive = true
+        endRecordingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        endRecordingButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+        endRecordingButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
     }
     
     
     private func setupDeepARAndCamera() {
         
         self.deepAR = DeepAR()
-//        self.deepAR.delegate = self
         self.deepAR.delegate = self
         self.deepAR.setLicenseKey("8a9e4faccf2770ed93d87e4f90ae9ebb7330e30c824c4c8f43c70d242ccd967e0e0c110a57d9088b")
         
-        
         cameraController = CameraController()
-
         
         self.arView = self.deepAR.createARView(withFrame: self.arViewContainer.frame) as! ARView
         self.arView.translatesAutoresizingMaskIntoConstraints = false
@@ -211,17 +264,34 @@ class DeepARVC: UIViewController {
         
         cameraController.startCamera()
         
-        
     }
     
-//    private func recordPageTurn(){
-//        if isRecordingInProcess {
-//            pageTurnTimer?.turnPageTapped(newPage: story.currentPage)
-//        }
-//    }
+    @objc
+    func startRecordTapped()  {
+        
+        timerBGView.setImage(UIImage(systemName: "circlebadge.fill"), for: .normal)
+        
+        startRecordingButton.isHidden = true
+        pageBackgroundView.isHidden = false
+        endRecordingButton.isHidden = false
+        pageIndicatorLabel.isHidden = false
+        nextPageButton.isHidden = false
+        prevPageButton.isHidden = false
+        
+        storyVM.tappedRecord()
+        storyVM.startTimer()
+        
+        DispatchQueue.main.async { [self] in
+            let width: Int32 = Int32(deepAR.renderingResolution.width)
+            let height: Int32 =  Int32(deepAR.renderingResolution.height)
+            deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height)
+            storyVM.recording = true
+        }
+    }
     
     @objc
     func dismissTapped()  {
+        storyVM.tappedEndRecord()
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -229,6 +299,7 @@ class DeepARVC: UIViewController {
     @objc
     func nextPageTapped()  {
         pageLabel.text = storyVM.nextPage()
+        
     }
     
     @objc
@@ -237,37 +308,11 @@ class DeepARVC: UIViewController {
     }
     
     @objc
-    func recordTapped()  {
-        //print("TAPPED RECORD")
-        
+    func endRecordingTapped()  {
         storyVM.tappedRecord()
-        
-        if storyVM.recording {
-            print("END REC")
-            deepAR.finishVideoRecording()
-            storyVM.recording = false
-        }else{
-            print("START REC")
-            
-            DispatchQueue.main.async { [self] in
-                let width: Int32 = Int32(deepAR.renderingResolution.width)
-                let height: Int32 =  Int32(deepAR.renderingResolution.height)
-                deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height)
-                storyVM.recording = true
-            }
-            
-        }
+        deepAR.finishVideoRecording()
+        storyVM.recording = false
     }
-    
-//    func saveAndPlay(videoFilePath:String) {
-//        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-//        let components = videoFilePath.components(separatedBy: "/")
-//        guard let last = components.last else { return }
-//        let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
-//
-//        print("videoFilePath \(videoFilePath)")
-//
-//    }
     
 }
 
@@ -286,6 +331,7 @@ extension DeepARVC : DeepARDelegate {
         
         func didFinishVideoRecording(_ videoFilePath: String!) {
                         
+            storyVM.tappedEndRecord()
             spinner.isHidden = false
             
             //saveAndPlay(videoFilePath: videoFilePath)
@@ -310,16 +356,23 @@ extension DeepARVC : DeepARDelegate {
 }
 
 extension DeepARVC : StoryDelegate{
-    func onFirstPage() {
-        prevPageButton.isHidden = true
+    func changedPage(index: Int, totalPages: Int) {
+        pageIndicatorLabel.text = "\(index + 1)/\(totalPages)"
+        
+        if index == 0 {
+            prevPageButton.isHidden = true
+            endRecordingButton.isHidden = true
+        } else if index == (totalPages - 1){
+            nextPageButton.isHidden = true
+            endRecordingButton.isHidden = false
+        }else{
+            prevPageButton.isHidden = false
+            nextPageButton.isHidden = false
+            endRecordingButton.isHidden = true
+        }
     }
     
-    func onLastPage() {
-        nextPageButton.isHidden = true
-    }
-    
-    func onMiddlePage() {
-        prevPageButton.isHidden = false
-        nextPageButton.isHidden = false
+    func timerAddedSecond(formatted: String) {
+        timerBGView.setTitle(formatted, for: .normal)
     }
 }

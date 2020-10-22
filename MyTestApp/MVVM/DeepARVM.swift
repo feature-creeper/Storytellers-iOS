@@ -1,16 +1,17 @@
 import Foundation
 import DeepAR
 
-class StoryText : NSObject{
+class DeepARVM : NSObject{
     
     var delegate : StoryDelegate?
     
     var pageTurnTimer = PageTurnTimer()
     
     var story : [[String]] = []
-//
-//    private var deepAR: DeepAR!
-//
+    
+    var timer = Timer()
+    var start = Date()
+
     private var currChapter : Int = 0
     private var currentPage : Int = 0
     
@@ -19,16 +20,6 @@ class StoryText : NSObject{
     var currentPageText : String{
         get{
             
-            let totalChapters = story.count - 1
-            
-            if currChapter == 0 && currentPage == 0 {
-                delegate?.onFirstPage()
-            } else if currChapter == totalChapters && currentPage == (story[totalChapters].count - 1) {
-                delegate?.onLastPage()
-            } else {
-                delegate?.onMiddlePage()
-            }
-            
             return story[currChapter][currentPage]
         }
     }
@@ -36,8 +27,6 @@ class StoryText : NSObject{
     init(rawString:String) {
         super.init()
         rawToStory(raw: rawString)
-//        self.deepAR = deepAR
-        
     }
     
     func getPageTimes() -> [(Int, Int)] {
@@ -59,6 +48,7 @@ class StoryText : NSObject{
             pageTurnTimer.turnPageTapped(newPage: currentPage)
         }else{
             pageTurnTimer.initialise(page: currentPage)
+            turnedPage()
         }
     }
     
@@ -73,8 +63,10 @@ class StoryText : NSObject{
             if recording {
                 pageTurnTimer.turnPageTapped(newPage: currentPage)
             }
-            
         }
+        
+        turnedPage()
+        
         return currentPageText
     }
     
@@ -86,16 +78,56 @@ class StoryText : NSObject{
                 pageTurnTimer.turnPageTapped(newPage: currentPage)
             }
         }
+        
+        turnedPage()
+        
         return currentPageText
+    }
+    
+    func turnedPage() {
+        delegate?.changedPage(index: currentPage, totalPages: story[0].count)
+    }
+    
+    func tappedEndRecord() {
+        timer.invalidate()
+    }
+    
+    func startTimer() {
+        start = Date()
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
+
+        
+    }
+    
+ 
+    
+    @objc private func fire()
+    {
+        let currentTime = Date()
+        let interval = currentTime.timeIntervalSince(start)
+
+//        print(interval.format(using: [.minute, .second]))
+        print(stringFromTimeInterval(interval: interval))
+        
+//        let formatted = interval.format(using: [.minute, .second])
+        let formatted = stringFromTimeInterval(interval: interval)
+        delegate?.timerAddedSecond(formatted: formatted)
+    }
+    
+    func stringFromTimeInterval(interval: TimeInterval) -> String {
+        let interval = Int(interval)
+        let seconds = interval % 60
+        let minutes = (interval / 60) % 60
+        let hours = (interval / 3600)
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
     }
 }
 
 
 
 protocol StoryDelegate {
-    func onFirstPage()
-    func onLastPage()
-    func onMiddlePage()
+    func changedPage(index:Int, totalPages: Int)
+    func timerAddedSecond(formatted:String)
 }
 
 let dummyData = ["Spotty the Hyena is very sad, he has lost his laugh. ","""

@@ -220,7 +220,7 @@ class MyBookDetailVC: UIViewController {
         
         if let content = book?.content {
             vc.content = content
-            let story = StoryText(rawString: content)
+            let story = DeepARVM(rawString: content)
             story.delegate = vc
             vc.storyVM = story
         }

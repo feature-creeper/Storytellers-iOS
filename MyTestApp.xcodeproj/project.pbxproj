@@ -43,7 +43,7 @@
 		69AAC614253F3BBA00144DD9 /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69AAC611253F3BB900144DD9 /* Rubik-Medium.ttf */; };
 		69AAC615253F3BBA00144DD9 /* Rubik-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69AAC612253F3BBA00144DD9 /* Rubik-SemiBold.ttf */; };
 		69AAC616253F3BBA00144DD9 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69AAC613253F3BBA00144DD9 /* Rubik-Regular.ttf */; };
-		69B2B22E2536E234001E2917 /* StoryText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B22D2536E234001E2917 /* StoryText.swift */; };
+		69B2B22E2536E234001E2917 /* DeepARVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B22D2536E234001E2917 /* DeepARVM.swift */; };
 		69B2B2322536E2A4001E2917 /* PageTurnTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B2312536E2A4001E2917 /* PageTurnTimer.swift */; };
 		69B2B2362536E2E6001E2917 /* VideoCompositor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B2B2352536E2E6001E2917 /* VideoCompositor.swift */; };
 		69B997422535B9480067969D /* DeepAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69B997402535B91E0067969D /* DeepAR.framework */; };
@@ -150,7 +150,7 @@
 		69AAC611253F3BB900144DD9 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Medium.ttf"; sourceTree = "<group>"; };
 		69AAC612253F3BBA00144DD9 /* Rubik-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-SemiBold.ttf"; sourceTree = "<group>"; };
 		69AAC613253F3BBA00144DD9 /* Rubik-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Regular.ttf"; sourceTree = "<group>"; };
-		69B2B22D2536E234001E2917 /* StoryText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryText.swift; sourceTree = "<group>"; };
+		69B2B22D2536E234001E2917 /* DeepARVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepARVM.swift; sourceTree = "<group>"; };
 		69B2B2312536E2A4001E2917 /* PageTurnTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageTurnTimer.swift; sourceTree = "<group>"; };
 		69B2B2352536E2E6001E2917 /* VideoCompositor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCompositor.swift; sourceTree = "<group>"; };
 		69B997402535B91E0067969D /* DeepAR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DeepAR.framework; sourceTree = "<group>"; };
@@ -238,7 +238,6 @@
 			children = (
 				6956353A2532F8FD00F3EBA2 /* BookFeatured.swift */,
 				697BB02D25331AF0001D17EF /* BookInfo.swift */,
-				69B2B22D2536E234001E2917 /* StoryText.swift */,
 				69B2B2312536E2A4001E2917 /* PageTurnTimer.swift */,
 				69B2B2352536E2E6001E2917 /* VideoCompositor.swift */,
 				69C865662540267500C3819E /* Globals.swift */,
@@ -276,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				6956353F2533034200F3EBA2 /* BookDetailVM.swift */,
+				69B2B22D2536E234001E2917 /* DeepARVM.swift */,
 			);
 			path = MVVM;
 			sourceTree = "<group>";
@@ -718,7 +718,7 @@
 				69B2B2362536E2E6001E2917 /* VideoCompositor.swift in Sources */,
 				69E93ABB253AFFA60016D9BA /* LoadingView.swift in Sources */,
 				69A97F4A252C7424006EA658 /* ViewController.swift in Sources */,
-				69B2B22E2536E234001E2917 /* StoryText.swift in Sources */,
+				69B2B22E2536E234001E2917 /* DeepARVM.swift in Sources */,
 				69380AE6252F1DA500F2B778 /* ProfileVC.swift in Sources */,
 				697BB02E25331AF0001D17EF /* BookInfo.swift in Sources */,
 				6956353B2532F8FD00F3EBA2 /* BookFeatured.swift in Sources */,
