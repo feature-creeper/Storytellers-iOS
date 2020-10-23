@@ -20,14 +20,12 @@ class DeepARVC: UIViewController {
     
     private var cameraController: CameraController!
     
-//    private var isRecordingInProcess: Bool = false
-    
     var maskPath : String!
     
     var storyVM : DeepARVM!
     
     var content : String?
-//    var pageTurnTimer = PageTurnTimer()
+
     var bookID : String!
     
     var chapter = 0
@@ -46,8 +44,8 @@ class DeepARVC: UIViewController {
         return button
     }()
     
-    var pageBackgroundView : UIView = {
-       let v = UIView()
+    var pageBackgroundView : PassthroughView = {
+       let v = PassthroughView()
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
         v.applyShadow(offset: CGSize.zero, opacity: 0.4, radius: 6.0)
@@ -71,7 +69,6 @@ class DeepARVC: UIViewController {
     
     var startRecordingButton : UIButton = {
        let v = UIButton()
-        v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
         v.setTitle("Start", for: .normal)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 30)
@@ -80,21 +77,56 @@ class DeepARVC: UIViewController {
         v.backgroundColor = .green
         v.addTarget(self, action: #selector(startRecordTapped), for: .touchUpInside)
         v.layer.cornerRadius = 30
-//        v.setTitleColor(.black, for: .normal)
+
         v.setImage(UIImage(named: "RecordIcon"), for: .normal)
+        v.adjustsImageWhenHighlighted = false
+        
         v.imageView?.contentMode = .scaleAspectFit
         v.imageEdgeInsets = UIEdgeInsets(top: 10, left: -14, bottom: 10, right: 0)
         return v
     }()
     
-    var pageLabel : UILabel = {
-       let v = UILabel()
+    var endRecordingButton : UIButton = {
+       let v = UIButton()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.setTitle("Finish", for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 30)
+        v.setTitleColor(.white, for: .normal)
+        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 30, bottom: 10, right: 30)
+        v.backgroundColor = .red
+        v.addTarget(self, action: #selector(endRecordingTapped), for: .touchUpInside)
+        v.layer.cornerRadius = 30
+        v.isHidden = true
+        return v
+    }()
+    
+    var pageLabel : PassthroughLabel = {
+       let v = PassthroughLabel()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.font = UIFont(name: Globals.easyRead, size: 19)
         v.textColor = UIColor.black
         v.numberOfLines = 0
         v.lineBreakMode = .byWordWrapping
-//        v.isHidden = true
+        return v
+    }()
+    
+    var instructionLabelContainer : PassthroughView = {
+        let v = PassthroughView()
+        v.backgroundColor = UIColor.systemBlue
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.layer.cornerRadius = 10
+        v.isHidden = true
+        return v
+    }()
+    
+    var popupInstructionLabel : PassthroughLabel = {
+        let v = PassthroughLabel()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.font = UIFont(name: Globals.popupText, size: 22)
+        v.textColor = UIColor.white
+        v.numberOfLines = 0
+        v.lineBreakMode = .byWordWrapping
+        v.text = "Swipe to change page"
         return v
     }()
     
@@ -105,43 +137,6 @@ class DeepARVC: UIViewController {
         return v
     }()
     
-    /*
-    var nextPageButton : UIButton = {
-       let button = UIButton()
-        button.addTarget(self, action: #selector(nextPageTapped), for: .touchUpInside)
-        button.setImage(#imageLiteral(resourceName: "PageNext"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.isHidden = true
-        return button
-    }()
-    
-    var prevPageButton : UIButton = {
-       let button = UIButton()
-        button.addTarget(self, action: #selector(prevPageTapped), for: .touchUpInside)
-        button.setImage(#imageLiteral(resourceName: "PagePrev"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.isHidden = true
-        return button
-    }()*/
-    
-    /*
-    var startButton : UIButton = {
-       let button = UIButton()
-        button.addTarget(self, action: #selector(prevPageTapped), for: .touchUpInside)
-        button.setImage(#imageLiteral(resourceName: "PagePrev"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()*/
-    
-    var endRecordingButton : UIButton = {
-       let button = UIButton()
-        button.addTarget(self, action: #selector(endRecordingTapped), for: .touchUpInside)
-        button.setImage(#imageLiteral(resourceName: "Record"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.isHidden = true
-        return button
-    }()
-    
     let pageIndicatorLabel : UILabel = {
         let v = UILabel()
         v.font = UIFont(name: Globals.semiboldWeight, size: 20)
@@ -150,6 +145,13 @@ class DeepARVC: UIViewController {
         v.textColor = .white
         v.text = "0/10"
         v.isHidden = true
+        return v
+    }()
+    
+    let detailStack : PassthroughStack = {
+        let v = PassthroughStack()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.alignment = .center
         return v
     }()
 
@@ -182,15 +184,29 @@ class DeepARVC: UIViewController {
         arViewContainer.addSubview(exitButton)
         
         view.addSubview(timerBGView)
-        view.addSubview(pageIndicatorLabel)
         
-        view.addSubview(pageBackgroundView)
-        view.addSubview(safeAreaView)
-//        view.addSubview(nextPageButton)
-//        view.addSubview(prevPageButton)
+        view.addSubview(pageIndicatorLabel)
         view.addSubview(endRecordingButton)
         
+        view.addSubview(detailStack)
+        view.addSubview(pageBackgroundView)
+        view.addSubview(safeAreaView)
         view.addSubview(startRecordingButton)
+        
+        
+        detailStack.axis = .vertical
+        detailStack.spacing = 15
+        detailStack.addArrangedSubview(instructionLabelContainer)
+        detailStack.addArrangedSubview(pageIndicatorLabel)
+        detailStack.addArrangedSubview(endRecordingButton)
+        
+        instructionLabelContainer.addSubview(popupInstructionLabel)
+        popupInstructionLabel.topAnchor.constraint(equalTo: instructionLabelContainer.topAnchor, constant: 15).isActive = true
+        popupInstructionLabel.leadingAnchor.constraint(equalTo: instructionLabelContainer.leadingAnchor, constant: 15).isActive = true
+        popupInstructionLabel.trailingAnchor.constraint(equalTo: instructionLabelContainer.trailingAnchor, constant: -15).isActive = true
+        instructionLabelContainer.bottomAnchor.constraint(equalTo: popupInstructionLabel.bottomAnchor, constant: 15).isActive = true
+    
+        
         
         spinner.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(spinner)
@@ -202,9 +218,6 @@ class DeepARVC: UIViewController {
         
         timerBGView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
         timerBGView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        pageIndicatorLabel.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -15).isActive = true
-        pageIndicatorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         startRecordingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60).isActive = true
         startRecordingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -225,22 +238,9 @@ class DeepARVC: UIViewController {
         safeAreaView.rightAnchor.constraint(equalTo: pageBackgroundView.rightAnchor).isActive = true
         safeAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        let pageControlWidth : CGFloat = 50
-        
-//        nextPageButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
-//        nextPageButton.rightAnchor.constraint(equalTo: pageBackgroundView.rightAnchor, constant: -20).isActive = true
-//        nextPageButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-//        nextPageButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-//
-//        prevPageButton.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -20).isActive = true
-//        prevPageButton.leftAnchor.constraint(equalTo: pageBackgroundView.leftAnchor, constant: 20).isActive = true
-//        prevPageButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-//        prevPageButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-        
-        endRecordingButton.bottomAnchor.constraint(equalTo: pageIndicatorLabel.topAnchor, constant: -20).isActive = true
-        endRecordingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        endRecordingButton.widthAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
-        endRecordingButton.heightAnchor.constraint(equalToConstant: pageControlWidth).isActive = true
+        detailStack.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -15).isActive = true
+        detailStack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
+        detailStack.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor).isActive = true
     }
     
     
@@ -274,6 +274,20 @@ class DeepARVC: UIViewController {
         
     }
     
+    private func showExitDialogue(message:String, title:String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Save and quit", style: .default, handler: { (action) in
+            self.endRecordingTapped()
+        }))
+        alert.addAction(UIAlertAction(title: "Quit without saving", style: .destructive, handler: { [self] (action) in
+            storyVM.invalidateTimer()
+            self.dismiss(animated: true, completion: nil)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        self.present(alert, animated: true)
+    }
+    
     @objc
     func swipedRight(){
         if storyVM.recording {
@@ -299,9 +313,7 @@ class DeepARVC: UIViewController {
         pageBackgroundView.isHidden = false
         endRecordingButton.isHidden = false
         pageIndicatorLabel.isHidden = false
-//        nextPageButton.isHidden = false
-//        prevPageButton.isHidden = false
-        
+
         storyVM.tappedRecord()
         storyVM.startTimer()
         
@@ -315,21 +327,14 @@ class DeepARVC: UIViewController {
     
     @objc
     func dismissTapped()  {
-        storyVM.tappedEndRecord()
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    /*
-    @objc
-    func nextPageTapped()  {
-        pageLabel.text = storyVM.nextPage()
+        if storyVM.recording {
+            showExitDialogue(message: "Are you sure?", title: "Quit recording")
+        }else{
+            storyVM.invalidateTimer()
+            self.dismiss(animated: true, completion: nil)
+        }
         
     }
-    
-    @objc
-    func prevPageTapped()  {
-        pageLabel.text = storyVM.prevPage()
-    }*/
     
     @objc
     func endRecordingTapped()  {
@@ -355,11 +360,9 @@ extension DeepARVC : DeepARDelegate {
         
         func didFinishVideoRecording(_ videoFilePath: String!) {
                         
-            storyVM.tappedEndRecord()
+            storyVM.invalidateTimer()
             spinner.isHidden = false
-            
-            //saveAndPlay(videoFilePath: videoFilePath)
-                        
+                      
             let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
             let components = videoFilePath.components(separatedBy: "/")
             guard let last = components.last else { return }
@@ -383,20 +386,41 @@ extension DeepARVC : StoryDelegate{
     func changedPage(index: Int, totalPages: Int) {
         pageIndicatorLabel.text = "\(index + 1)/\(totalPages)"
         
+        instructionLabelContainer.isHidden = true
+        
         if index == 0 {
-//            prevPageButton.isHidden = true
             endRecordingButton.isHidden = true
+            instructionLabelContainer.isHidden = false
         } else if index == (totalPages - 1){
-//            nextPageButton.isHidden = true
             endRecordingButton.isHidden = false
         }else{
-//            prevPageButton.isHidden = false
-//            nextPageButton.isHidden = false
             endRecordingButton.isHidden = true
         }
     }
     
     func timerAddedSecond(formatted: String) {
         timerBGView.setTitle(formatted, for: .normal)
+    }
+}
+
+
+class PassthroughView: UIView {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        return view == self ? nil : view
+    }
+}
+
+class PassthroughLabel: UILabel {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        return view == self ? nil : view
+    }
+}
+
+class PassthroughStack: UIStackView {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+        return view == self ? nil : view
     }
 }

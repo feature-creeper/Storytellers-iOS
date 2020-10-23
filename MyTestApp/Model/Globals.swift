@@ -15,4 +15,6 @@ struct Globals {
     static let regularWeight : String = "WorkSans-Regular"//"ABeeZee-Regular"
     
     static let easyRead : String = "ABeeZee-Regular"
+    
+    static let popupText : String = "Epilogue-Medium"
 }

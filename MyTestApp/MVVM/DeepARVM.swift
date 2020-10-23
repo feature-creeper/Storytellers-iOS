@@ -88,7 +88,7 @@ class DeepARVM : NSObject{
         delegate?.changedPage(index: currentPage, totalPages: story[0].count)
     }
     
-    func tappedEndRecord() {
+    func invalidateTimer() {
         timer.invalidate()
     }
     

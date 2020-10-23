@@ -9,21 +9,10 @@ import Foundation
 import UIKit
 import AVFoundation
 
-//extension TimeInterval {
-//    func format(using units: NSCalendar.Unit) -> String? {
-//        let formatter = DateComponentsFormatter()
-//        formatter.allowedUnits = units
-//        formatter.unitsStyle = .positional
-//        formatter.zeroFormattingBehavior = .pad
-//
-//        return formatter.string(from: self)
-//    }
-//}
-
 extension UIViewController{
     func showDialogue(message:String, title:String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", style: .cancel))
 
         self.present(alert, animated: true)
     }
