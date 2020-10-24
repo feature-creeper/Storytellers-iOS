@@ -7,33 +7,12 @@
 
 import UIKit
 import FirebaseAuth
+import CoreData
 
 class ProfileVC: UIViewController {
     
-    var logoutButton : UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 25, width: 100, height: 100))
-        button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
-        let largeConfig = UIImage.SymbolConfiguration(pointSize: 40, weight: .bold, scale: .large)
-        let largeBoldDoc = UIImage(systemName: "arrow.backward.circle.fill", withConfiguration: largeConfig)
-        button.setImage(largeBoldDoc, for: .normal)
-        button.tintColor = #colorLiteral(red: 0.2709999979, green: 0.4429999888, blue: 1, alpha: 1)
-        return button
-    }()
-    
-    var scrollView : UIScrollView = {
-        let scroll = UIScrollView()
-        scroll.translatesAutoresizingMaskIntoConstraints = false
-        scroll.alwaysBounceVertical = true
-        return scroll
-    }()
-    
-    var circleView : CircleView = {
-        let v = CircleView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.layer.cornerRadius = v.bounds.width / 2
-        return v
-    }()
-    
+    var myVideos : [VideoMO] = []
+
     var myVideosLabel : UILabel = {
         let v = UILabel()
         v.text = "My Videos"
@@ -49,6 +28,8 @@ class ProfileVC: UIViewController {
         let collV = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         collV.translatesAutoresizingMaskIntoConstraints = false
         collV.register(MyVideoCell.self, forCellWithReuseIdentifier: "cell")
+        collV.register(ProfileFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer")
+        collV.register(ProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         collV.backgroundColor = .white
         return collV
     }()
@@ -67,6 +48,8 @@ class ProfileVC: UIViewController {
         setupNavBar()
         
         setupViews()
+        
+        fetchSavedVideos()
     }
 
     
@@ -80,38 +63,26 @@ class ProfileVC: UIViewController {
     
     
     func setupViews() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(circleView)
-        scrollView.addSubview(myVideosLabel)
-        scrollView.addSubview(collectionView)
-        
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        
-        circleView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 35).isActive = true
-        circleView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        circleView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        circleView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        
-        myVideosLabel.topAnchor.constraint(equalTo: circleView.bottomAnchor, constant: 30).isActive = true
-        myVideosLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        view.addSubview(collectionView)
 
-        collectionView.topAnchor.constraint(equalTo: myVideosLabel.bottomAnchor, constant: 20).isActive = true
-        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 4).isActive = true
-        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -4).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: 800).isActive = true
-        
-//      collectionView.heightAnchor.constraint(equalToConstant: 800).isActive = true
-        
-        scrollView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor).isActive = true
-        
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5).isActive = true
+        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    func fitHeight() {
-        collectionView.heightAnchor.constraint(equalToConstant: collViewHeight).isActive = true
-        view.setNeedsLayout()
+    func fetchSavedVideos() {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        do {
+            
+            myVideos = try context.fetch(VideoMO.fetchRequest())
+            collectionView.reloadData()
+
+        } catch  {
+            
+        }
+
     }
     
     @objc
@@ -121,8 +92,6 @@ class ProfileVC: UIViewController {
     
     @objc
     func helpTapped(){
-        print("TAPPED HELP")
-        
         let vc = HelpVC()
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
@@ -130,7 +99,6 @@ class ProfileVC: UIViewController {
     
     @objc
     func dismissTapped()  {
-        print("TAPPED LOGIN")
         let delegate = UIApplication.shared.delegate as! AppDelegate
         let authUI = delegate.authUI
         let authViewController = authUI!.authViewController()
@@ -141,18 +109,49 @@ class ProfileVC: UIViewController {
 
 extension ProfileVC : UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return myVideos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyVideoCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyVideoCell
+        if let data = myVideos[indexPath.item].thumbnail{
+            cell.image = UIImage(data: data)
+        }
+        
+        return cell
     }
-   
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: 300, height: 425)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return CGSize(width: 300, height: 60)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        
+        case UICollectionView.elementKindSectionHeader:
+
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath as IndexPath)
+            return headerView
+
+        case UICollectionView.elementKindSectionFooter:
+            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath as IndexPath)
+            return footerView
+
+        default:
+            return UICollectionReusableView()
+        }
+    }
 }
 
 extension ProfileVC: UICollectionViewDelegateFlowLayout {
+    
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.bounds.width/3 - 4
+        let width = view.bounds.width/3 - 6
         return CGSize(width: width, height: width * 1.3)
     }
     
@@ -197,5 +196,102 @@ class CircleView: UIView {
 //        shapeLayer.lineWidth = desiredLineWidth
         
         layer.addSublayer(shapeLayer)
+    }
+}
+
+
+class ProfileHeader: UICollectionReusableView {
+    var myVideosLabel : UILabel = {
+        let v = UILabel()
+        v.text = "My Videos"
+        v.font = UIFont(name: Globals.semiboldWeight, size: 25)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.textAlignment = .center
+        v.textColor = .black
+        return v
+    }()
+    
+    var privacyButton : UIButton = {
+        let v = UIButton()
+        v.setTitle("Privacy", for: .normal)
+        v.setTitleColor(.gray, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        return v
+    }()
+    
+    var childSafetyButton : UIButton = {
+        let v = UIButton()
+        v.setTitle("Child safety", for: .normal)
+        v.setTitleColor(.gray, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        return v
+    }()
+    
+    var contactButton : UIButton = {
+        let v = UIButton()
+        v.setTitle("Speak to us", for: .normal)
+        v.setTitleColor(.gray, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        
+        return v
+    }()
+    
+    var aStack : UIStackView = {
+        let v = UIStackView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.axis = .vertical
+        v.spacing = 10
+        v.alignment = .leading
+        return v
+    }()
+    
+    var circleView : CircleView = {
+        let v = CircleView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.layer.cornerRadius = v.bounds.width / 2
+        return v
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        
+        
+        self.addSubview(aStack)
+        self.addSubview(circleView)
+        
+       
+        circleView.topAnchor.constraint(equalTo: self.topAnchor, constant: 35).isActive = true
+        circleView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        circleView.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        circleView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+       
+        aStack.topAnchor.constraint(equalTo: circleView.bottomAnchor, constant: 20).isActive = true
+        aStack.leftAnchor.constraint(equalTo: self.layoutMarginsGuide.leftAnchor, constant: 15).isActive = true
+        aStack.rightAnchor.constraint(equalTo: self.layoutMarginsGuide.rightAnchor, constant: 15).isActive = true
+        
+        aStack.addArrangedSubview(privacyButton)
+        aStack.addArrangedSubview(childSafetyButton)
+        aStack.addArrangedSubview(contactButton)
+        aStack.addArrangedSubview(myVideosLabel)
+        
+        aStack.setCustomSpacing(20, after: contactButton)
+
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class ProfileFooter: UICollectionReusableView {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
