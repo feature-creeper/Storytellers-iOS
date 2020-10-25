@@ -11,45 +11,161 @@ import CoreData
 
 class ProfileVC: UIViewController {
     
-    var myVideos : [VideoMO] = []
+    var currentLanguage = "English"
+    
+    var myVideosButton : UIButton = {
+        let v = UIButton()
+        v.setTitleColor(.gray, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        
+        let myVideos = "See all"
+        let startString = "My Videos  "
+        let totalString = startString + myVideos
+        
+        let fullString = NSMutableAttributedString(string: totalString)
 
-    var myVideosLabel : UILabel = {
-        let v = UILabel()
-        v.text = "My Videos"
-        v.font = UIFont(name: Globals.semiboldWeight, size: 25)
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.textAlignment = .center
-        v.textColor = .black
+        var startRange = (totalString as NSString).range(of: startString)
+        var range = (totalString as NSString).range(of: myVideos)
+        
+        fullString.addAttribute(NSAttributedString.Key.foregroundColor, value: #colorLiteral(red: 0.2709999979, green: 0.4429999888, blue: 1, alpha: 1) , range: range)
+        fullString.addAttribute(NSAttributedString.Key.font, value: UIFont(name: Globals.semiboldWeight, size: 30), range: startRange)
+        
+        v.setAttributedTitle(fullString, for: .normal)
+        
+        v.addTarget(self, action: #selector(tappedAllVideos), for: .touchUpInside)
+        
+        v.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
         return v
     }()
     
-    var collectionView : UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let collV = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        collV.translatesAutoresizingMaskIntoConstraints = false
-        collV.register(MyVideoCell.self, forCellWithReuseIdentifier: "cell")
-        collV.register(ProfileFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer")
-        collV.register(ProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
-        collV.backgroundColor = .white
-        return collV
+    var privacyButton : UIButton = {
+        let v = UIButton()
+        v.setTitleColor(.gray, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "chevron.forward")
+        let fullString = NSMutableAttributedString(string: "Privacy ")
+        fullString.append(NSAttributedString(attachment: imageAttachment))
+        v.setAttributedTitle(fullString, for: .normal)
+        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return v
     }()
     
-    var collViewHeight : CGFloat {
+    var childSafetyButton : UIButton = {
+        let v = UIButton()
+        v.setTitleColor(.gray, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
         
-        return collectionView.collectionViewLayout.collectionViewContentSize.height
-    }
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "chevron.forward")
+        let fullString = NSMutableAttributedString(string: "Child safety ")
+        fullString.append(NSAttributedString(attachment: imageAttachment))
+
+        v.setAttributedTitle(fullString, for: .normal)
+        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return v
+    }()
+    
+    var contactButton : UIButton = {
+        let v = UIButton()
+        v.setTitleColor(.gray, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "chevron.forward")
+        let fullString = NSMutableAttributedString(string: "Speak to us ")
+        fullString.append(NSAttributedString(attachment: imageAttachment))
+        v.setAttributedTitle(fullString, for: .normal)
+        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return v
+    }()
+    
+    var languageButton : UIButton = {
+        let v = UIButton()
+        v.setTitleColor(.gray, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        
+//        let language = "English"
+
+        v.addTarget(self, action: #selector(tappedLanguage), for: .touchUpInside)
+        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        return v
+    }()
+    
+    var aStack : UIStackView = {
+        let v = UIStackView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.axis = .vertical
+        v.spacing = 10
+        v.alignment = .leading
+        return v
+    }()
+    
+    var circleView : CircleView = {
+        let v = CircleView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.layer.cornerRadius = v.bounds.width / 2
+        return v
+    }()
+    
+    let scroll : UIScrollView = {
+        let v = UIScrollView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
         setupNavBar()
+        
+        view.addSubview(scroll)
         
         setupViews()
         
-        fetchSavedVideos()
+        setLanguageButton()
+
+    }
+    
+    func setupViews(){
+        scroll.addSubview(aStack)
+        aStack.addSubview(circleView)
+        
+        scroll.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scroll.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        scroll.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        circleView.topAnchor.constraint(equalTo:scroll.topAnchor, constant: 20).isActive = true
+        circleView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        circleView.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        circleView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+       
+        aStack.topAnchor.constraint(equalTo: circleView.bottomAnchor, constant: 20).isActive = true
+        aStack.leftAnchor.constraint(equalTo: scroll.leftAnchor, constant: 10).isActive = true
+        aStack.rightAnchor.constraint(equalTo: scroll.rightAnchor, constant: 10).isActive = true
+        aStack.bottomAnchor.constraint(equalTo: scroll.bottomAnchor).isActive = true
+        
+        aStack.addArrangedSubview(languageButton)
+        aStack.addArrangedSubview(privacyButton)
+        aStack.addArrangedSubview(childSafetyButton)
+        aStack.addArrangedSubview(contactButton)
+        aStack.addArrangedSubview(myVideosButton)
+        
+        aStack.setCustomSpacing(20, after: contactButton)
+    }
+    
+    
+    func setLanguageButton() {
+        let totalString = "Language  \(currentLanguage)"
+        
+        let fullString = NSMutableAttributedString(string: totalString)
+        var range = (totalString as NSString).range(of: currentLanguage)
+        fullString.addAttribute(NSAttributedString.Key.foregroundColor, value: #colorLiteral(red: 0.2709999979, green: 0.4429999888, blue: 1, alpha: 1) , range: range)
+        
+        languageButton.setAttributedTitle(fullString, for: .normal)
     }
 
     
@@ -62,27 +178,21 @@ class ProfileVC: UIViewController {
     }
     
     
-    func setupViews() {
-        view.addSubview(collectionView)
 
-        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5).isActive = true
-        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5).isActive = true
-        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    
+    @objc
+    func tappedLanguage() {
+        let vc = LanguageSelectVC()
+        vc.delegate = self
+        present(vc, animated: true, completion: nil)
     }
     
-    func fetchSavedVideos() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        do {
-            
-            myVideos = try context.fetch(VideoMO.fetchRequest())
-            collectionView.reloadData()
-
-        } catch  {
-            
-        }
-
+    @objc
+    func tappedAllVideos() {
+        let vc = AllMyVideosVC()
+//        vc.delegate = self
+//        present(vc, animated: true, completion: nil)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc
@@ -107,69 +217,13 @@ class ProfileVC: UIViewController {
 
 }
 
-extension ProfileVC : UICollectionViewDelegate, UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return myVideos.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! MyVideoCell
-        if let data = myVideos[indexPath.item].thumbnail{
-            cell.image = UIImage(data: data)
-        }
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 300, height: 425)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: 300, height: 60)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        
-        case UICollectionView.elementKindSectionHeader:
-
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath as IndexPath)
-            return headerView
-
-        case UICollectionView.elementKindSectionFooter:
-            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Footer", for: indexPath as IndexPath)
-            return footerView
-
-        default:
-            return UICollectionReusableView()
-        }
+extension ProfileVC : LanguageDelegate{
+    func selectedLanguage(language:String) {
+        currentLanguage = language
+        setLanguageButton()
     }
 }
 
-extension ProfileVC: UICollectionViewDelegateFlowLayout {
-    
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.bounds.width/3 - 6
-        return CGSize(width: width, height: width * 1.3)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 2
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 2
-    }
-
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        showActionSheet(index: indexPath.item)
-    }
-    
-    
-}
 
 /// A special UIView displayed as a ring of color
 class CircleView: UIView {
@@ -199,99 +253,3 @@ class CircleView: UIView {
     }
 }
 
-
-class ProfileHeader: UICollectionReusableView {
-    var myVideosLabel : UILabel = {
-        let v = UILabel()
-        v.text = "My Videos"
-        v.font = UIFont(name: Globals.semiboldWeight, size: 25)
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.textAlignment = .center
-        v.textColor = .black
-        return v
-    }()
-    
-    var privacyButton : UIButton = {
-        let v = UIButton()
-        v.setTitle("Privacy", for: .normal)
-        v.setTitleColor(.gray, for: .normal)
-        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
-        return v
-    }()
-    
-    var childSafetyButton : UIButton = {
-        let v = UIButton()
-        v.setTitle("Child safety", for: .normal)
-        v.setTitleColor(.gray, for: .normal)
-        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
-        return v
-    }()
-    
-    var contactButton : UIButton = {
-        let v = UIButton()
-        v.setTitle("Speak to us", for: .normal)
-        v.setTitleColor(.gray, for: .normal)
-        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
-        
-        return v
-    }()
-    
-    var aStack : UIStackView = {
-        let v = UIStackView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.axis = .vertical
-        v.spacing = 10
-        v.alignment = .leading
-        return v
-    }()
-    
-    var circleView : CircleView = {
-        let v = CircleView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.layer.cornerRadius = v.bounds.width / 2
-        return v
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        
-        
-        self.addSubview(aStack)
-        self.addSubview(circleView)
-        
-       
-        circleView.topAnchor.constraint(equalTo: self.topAnchor, constant: 35).isActive = true
-        circleView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        circleView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        circleView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-       
-        aStack.topAnchor.constraint(equalTo: circleView.bottomAnchor, constant: 20).isActive = true
-        aStack.leftAnchor.constraint(equalTo: self.layoutMarginsGuide.leftAnchor, constant: 15).isActive = true
-        aStack.rightAnchor.constraint(equalTo: self.layoutMarginsGuide.rightAnchor, constant: 15).isActive = true
-        
-        aStack.addArrangedSubview(privacyButton)
-        aStack.addArrangedSubview(childSafetyButton)
-        aStack.addArrangedSubview(contactButton)
-        aStack.addArrangedSubview(myVideosLabel)
-        
-        aStack.setCustomSpacing(20, after: contactButton)
-
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class ProfileFooter: UICollectionReusableView {
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}

@@ -32,21 +32,33 @@ class LoginVC: UIViewController {
     let emailLoginButton : UIButton = {
         let v = UIButton()
         v.setTitle("Login ", for: .normal)
-        v.backgroundColor = .blue
-        v.addTarget(self, action: #selector(signInWithEmail), for: .touchUpInside)
+        v.backgroundColor = .systemBlue
+        v.addTarget(self, action: #selector(tappedLoginWithEmail), for: .touchUpInside)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
         v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         v.layer.cornerRadius = 10
         return v
     }()
     
-    
+    let emailSignupButton : UIButton = {
+        let v = UIButton()
+        v.setTitle("Signup with email", for: .normal)
+        v.setTitleColor(.systemBlue, for: .normal)
+        v.backgroundColor = .white
+        v.addTarget(self, action: #selector(tappedEmailSignup), for: .touchUpInside)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        v.layer.cornerRadius = 10
+        v.layer.borderColor = UIColor.systemBlue.cgColor
+        v.layer.borderWidth = 1.0
+        return v
+    }()
     
     let FacebookLoginButton : UIButton = {
         let v = UIButton()
         v.setTitle("Continue with Facebook", for: .normal)
         v.backgroundColor = #colorLiteral(red: 0.07319874316, green: 0.4660471082, blue: 0.9370654821, alpha: 1)
-        v.addTarget(self, action: #selector(signInWithEmail), for: .touchUpInside)
+        //v.addTarget(self, action: #selector(signInWithEmail), for: .touchUpInside)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
         v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         v.layer.cornerRadius = 10
@@ -90,11 +102,8 @@ class LoginVC: UIViewController {
         super.viewDidLoad()
         
         GIDSignIn.sharedInstance()?.presentingViewController = self
-//        GIDSignIn.sharedInstance().signIn()
         GIDSignIn.sharedInstance().delegate = self
-//        GIDSignIn.sharedInstance().uidelegate
 
-        
         emailTextField.delegate = self
         passwordTextField.delegate = self
         
@@ -112,14 +121,14 @@ class LoginVC: UIViewController {
         bottomStackView.addArrangedSubview(emailTextField)
         bottomStackView.addArrangedSubview(passwordTextField)
         bottomStackView.addArrangedSubview(emailLoginButton)
+        bottomStackView.addArrangedSubview(emailSignupButton)
         bottomStackView.addArrangedSubview(FacebookLoginButton)
         bottomStackView.addArrangedSubview(googleLoginButton)
         
         bottomStackView.spacing = 10
         
         bottomStackView.setCustomSpacing(20, after: passwordTextField)
-        bottomStackView.setCustomSpacing(45, after: logoImageView)
-        bottomStackView.setCustomSpacing(30, after: emailLoginButton)
+        bottomStackView.setCustomSpacing(35, after: emailSignupButton)
         
         logoImageView.heightAnchor.constraint(equalToConstant: 90).isActive = true
     }
@@ -131,17 +140,23 @@ class LoginVC: UIViewController {
     //        self.present(alert, animated: true)
     //    }
     
-    
-    //poop123
     @objc
-    func signInWithEmail() {
+    func tappedEmailSignup() {
+        let vc = EmailSignupVC()
+//        vc.modalPresentationStyle = .fullScreen
+//        let nvc = UINavigationController(rootViewController: vc)
+        present(vc, animated: true)
+    }
+    
+    @objc
+    func emailLogin() {
+        guard let email = emailTextField.text else {return}
+        guard let password = passwordTextField.text else {return}
         
-        guard let email = emailTextField.text else {
-            //Show dialogue
-            return
-        }
+        print("EMAIL: \(email)")
+        print("PASSWORD: \(password)")
         
-        Auth.auth().signIn(withEmail: email, password: "poop123") { [weak self] authResult, error in
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             
             if error == nil{
                 //self!.goToTabBar()
@@ -159,9 +174,8 @@ class LoginVC: UIViewController {
     }
     
     @objc
-    func tappedLogin() {
-        
-        signInWithEmail()
+    func tappedLoginWithEmail() {
+        emailLogin()
     }
     
     
