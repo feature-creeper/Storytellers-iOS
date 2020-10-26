@@ -15,7 +15,7 @@ class ProfileVC: UIViewController {
     
     var myVideosButton : UIButton = {
         let v = UIButton()
-        v.setTitleColor(.gray, for: .normal)
+//        v.setTitleColor(.gray, for: .normal)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
         
         let myVideos = "See all"
@@ -50,7 +50,11 @@ class ProfileVC: UIViewController {
         let fullString = NSMutableAttributedString(string: "Privacy ")
         fullString.append(NSAttributedString(attachment: imageAttachment))
         v.setAttributedTitle(fullString, for: .normal)
-        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        v.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        
+        v.setImage(UIImage(named: "PrivacyIcon"), for: .normal)
+        v.imageView?.contentMode = .scaleAspectFit
+        v.imageEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 15)
         return v
     }()
     
@@ -64,9 +68,12 @@ class ProfileVC: UIViewController {
         imageAttachment.image = UIImage(systemName: "chevron.forward")!.withTintColor(.gray)
         let fullString = NSMutableAttributedString(string: "Child safety ")
         fullString.append(NSAttributedString(attachment: imageAttachment))
-
         v.setAttributedTitle(fullString, for: .normal)
-        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        v.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        
+        v.setImage(UIImage(named: "SafetyIcon"), for: .normal)
+        v.imageView?.contentMode = .scaleAspectFit
+        v.imageEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 15)
         return v
     }()
     
@@ -81,13 +88,17 @@ class ProfileVC: UIViewController {
         let fullString = NSMutableAttributedString(string: "Speak to us ")
         fullString.append(NSAttributedString(attachment: imageAttachment))
         v.setAttributedTitle(fullString, for: .normal)
-        v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        v.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        
+        v.setImage(UIImage(named: "ContactIcon"), for: .normal)
+        v.imageView?.contentMode = .scaleAspectFit
+        v.imageEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 15)
         return v
     }()
     
     var languageButton : UIButton = {
         let v = UIButton()
-        v.setTitleColor(.gray, for: .normal)
+//        v.setTitleColor(.gray, for: .normal)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
         
         v.addTarget(self, action: #selector(tappedLanguage), for: .touchUpInside)
@@ -99,17 +110,17 @@ class ProfileVC: UIViewController {
         let v = UIStackView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.axis = .vertical
-        v.spacing = 10
+        v.spacing = 5
         v.alignment = .leading
         return v
     }()
     
-    var circleView : CircleView = {
-        let v = CircleView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.layer.cornerRadius = v.bounds.width / 2
-        return v
+
+    let profileImage : UIImageView = {
+       let imageView = UIImageView(image: UIImage(named: "Portrait1"))
+        return imageView
     }()
+    
     
     let scroll : UIScrollView = {
         let v = UIScrollView()
@@ -132,19 +143,19 @@ class ProfileVC: UIViewController {
     
     func setupViews(){
         scroll.addSubview(aStack)
-        aStack.addSubview(circleView)
+        aStack.addSubview(profileImage)
         
         scroll.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         scroll.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         scroll.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        circleView.topAnchor.constraint(equalTo:scroll.topAnchor, constant: 20).isActive = true
-        circleView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        circleView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        circleView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        profileImage.topAnchor.constraint(equalTo:scroll.topAnchor, constant: 20).isActive = true
+        profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        profileImage.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        profileImage.heightAnchor.constraint(equalToConstant: 180).isActive = true
        
-        aStack.topAnchor.constraint(equalTo: circleView.bottomAnchor, constant: 20).isActive = true
+        aStack.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 20).isActive = true
         aStack.leftAnchor.constraint(equalTo: scroll.leftAnchor, constant: 10).isActive = true
         aStack.rightAnchor.constraint(equalTo: scroll.rightAnchor, constant: 10).isActive = true
         aStack.bottomAnchor.constraint(equalTo: scroll.bottomAnchor).isActive = true
@@ -156,6 +167,17 @@ class ProfileVC: UIViewController {
         aStack.addArrangedSubview(myVideosButton)
         
         aStack.setCustomSpacing(20, after: contactButton)
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        setProfileImage()
+    }
+    
+    func setProfileImage() {
+        profileImage.layer.cornerRadius = profileImage.bounds.width / 2
+        profileImage.translatesAutoresizingMaskIntoConstraints = false
+        profileImage.clipsToBounds = true
     }
     
     
@@ -238,33 +260,3 @@ extension ProfileVC : LanguageDelegate{
         setLanguageButton()
     }
 }
-
-
-/// A special UIView displayed as a ring of color
-class CircleView: UIView {
-    override func draw(_ rect: CGRect) {
-        drawRingFittingInsideView()
-    }
-    
-    internal func drawRingFittingInsideView() -> () {
-        let halfSize:CGFloat = min( bounds.size.width/2, bounds.size.height/2)
-        let desiredLineWidth:CGFloat = 1 // your desired value
-            
-        let circlePath = UIBezierPath(
-                arcCenter: CGPoint(x:halfSize,y:halfSize),
-                radius: CGFloat( halfSize - (desiredLineWidth/2) ),
-                startAngle: CGFloat(0),
-            endAngle:CGFloat(Double.pi * 2),
-            clockwise: true)
-        
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.path = circlePath.cgPath
-        
-        shapeLayer.fillColor = UIColor.orange.cgColor
-//        shapeLayer.strokeColor = UIColor.orange.cgColor
-//        shapeLayer.lineWidth = desiredLineWidth
-        
-        layer.addSublayer(shapeLayer)
-    }
-}
-

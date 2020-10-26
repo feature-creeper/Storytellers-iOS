@@ -23,7 +23,7 @@ class LoginVC: UIViewController {
     let logoImageView : UIImageView = {
         let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.image = #imageLiteral(resourceName: "Logo Purple")
+        v.image = #imageLiteral(resourceName: "LogoCircle")
         v.contentMode = .scaleAspectFit
         
         return v
@@ -127,10 +127,11 @@ class LoginVC: UIViewController {
         
         bottomStackView.spacing = 10
         
-        bottomStackView.setCustomSpacing(20, after: passwordTextField)
-        bottomStackView.setCustomSpacing(35, after: emailSignupButton)
+        bottomStackView.setCustomSpacing(20, after: logoImageView)
+//        bottomStackView.setCustomSpacing(20, after: passwordTextField)
+        bottomStackView.setCustomSpacing(45, after: emailSignupButton)
         
-        logoImageView.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        logoImageView.heightAnchor.constraint(equalToConstant: 120).isActive = true
     }
     
     //    func showDialogue(message:String) {
