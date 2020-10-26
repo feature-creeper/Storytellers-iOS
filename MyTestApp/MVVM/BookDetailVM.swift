@@ -65,11 +65,7 @@ class BookDetailVM {
     
     
     func getBookContent() {
-        
-        //Start Loading
-        
-        //Create a queue to execute all in serial - Perhaps QueueGroup?
-        
+
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
 
@@ -81,6 +77,10 @@ class BookDetailVM {
         book.cover = bookInfo!.cover
         book.title = title
         book.id = bookInfo?.id
+        
+        if let synopsis = bookInfo?.about{
+            book.synopsis = synopsis
+        }
         
         if let effects = bookInfo?.effects {
             book.effects = effects

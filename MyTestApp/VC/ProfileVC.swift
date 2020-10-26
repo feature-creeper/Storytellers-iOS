@@ -43,9 +43,10 @@ class ProfileVC: UIViewController {
         let v = UIButton()
         v.setTitleColor(.gray, for: .normal)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        v.addTarget(self, action: #selector(tappedPrivacy), for: .touchUpInside)
         
         let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(systemName: "chevron.forward")
+        imageAttachment.image = UIImage(systemName: "chevron.forward")!.withTintColor(.gray)
         let fullString = NSMutableAttributedString(string: "Privacy ")
         fullString.append(NSAttributedString(attachment: imageAttachment))
         v.setAttributedTitle(fullString, for: .normal)
@@ -57,9 +58,10 @@ class ProfileVC: UIViewController {
         let v = UIButton()
         v.setTitleColor(.gray, for: .normal)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        v.addTarget(self, action: #selector(tappedPrivacy), for: .touchUpInside)
         
         let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(systemName: "chevron.forward")
+        imageAttachment.image = UIImage(systemName: "chevron.forward")!.withTintColor(.gray)
         let fullString = NSMutableAttributedString(string: "Child safety ")
         fullString.append(NSAttributedString(attachment: imageAttachment))
 
@@ -72,9 +74,10 @@ class ProfileVC: UIViewController {
         let v = UIButton()
         v.setTitleColor(.gray, for: .normal)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
+        v.addTarget(self, action: #selector(tappedPrivacy), for: .touchUpInside)
         
         let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(systemName: "chevron.forward")
+        imageAttachment.image = UIImage(systemName: "chevron.forward")!.withTintColor(.gray)
         let fullString = NSMutableAttributedString(string: "Speak to us ")
         fullString.append(NSAttributedString(attachment: imageAttachment))
         v.setAttributedTitle(fullString, for: .normal)
@@ -87,8 +90,6 @@ class ProfileVC: UIViewController {
         v.setTitleColor(.gray, for: .normal)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
         
-//        let language = "English"
-
         v.addTarget(self, action: #selector(tappedLanguage), for: .touchUpInside)
         v.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return v
@@ -170,14 +171,23 @@ class ProfileVC: UIViewController {
 
     
     func setupNavBar() {
-        let logout = UIBarButtonItem(image: UIImage(systemName: "arrow.right.square"), style: .plain, target: self, action: #selector(logoutTapped))
+        let logout = UIBarButtonItem(image: UIImage(systemName: "arrow.right.square"), style: .plain, target: self, action: #selector(showLogoutDialogue))
         navigationItem.rightBarButtonItems = [logout]
         
         let help = UIBarButtonItem(image: UIImage(systemName: "questionmark.circle"), style: .plain, target: self, action: #selector(helpTapped))
         navigationItem.leftBarButtonItems = [help]
     }
     
-    
+    @objc
+    func showLogoutDialogue() {
+        let alert = UIAlertController(title: "Logout", message: "Are you sure?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { [self] (alert) in
+            logoutTapped()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        self.present(alert, animated: true)
+    }
 
     
     @objc
@@ -188,6 +198,12 @@ class ProfileVC: UIViewController {
     }
     
     @objc
+    func tappedPrivacy() {
+        let vc = PrivacyVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc
     func tappedAllVideos() {
         let vc = AllMyVideosVC()
 //        vc.delegate = self
@@ -195,7 +211,6 @@ class ProfileVC: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    @objc
     func logoutTapped(){
         try? Auth.auth().signOut()
     }

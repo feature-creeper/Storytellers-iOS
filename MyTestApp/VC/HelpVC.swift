@@ -13,7 +13,7 @@ class HelpVC: UIPageViewController, UIPageViewControllerDelegate, UIPageViewCont
     
     var vcA : HelpContentVC = {
         let vc = HelpContentVC()
-        vc.labelTitle = "AAAA"
+        vc.labelTitle = "First select one of our books.\nWe have loads of good ones!"
         return vc
     }()
     
@@ -135,14 +135,31 @@ class HelpContentVC: UIViewController {
         let v  = UILabel()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.textColor = .black
+        v.textAlignment = .center
+        v.numberOfLines = 0
+        v.font = UIFont(name: Globals.regularWeight, size: 20)
+        return v
+    }()
+    
+    let stack : UIStackView = {
+        let v  = UIStackView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.axis = .vertical
+        return v
+    }()
+    
+    let mainImage : UIImageView = {
+        let v  = UIImageView(image: UIImage(named: "Reading"))
+        v.contentMode = .scaleAspectFit
+        v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
     
     let dismissButton : UIButton = {
         let v  = UIButton()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.titleLabel?.font = UIFont(name: "Rubik-SemiBold", size: 25)
-        v.setTitle("YO", for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 26)
+        v.setTitle("Continue", for: .normal)
         v.backgroundColor = .orange
         v.layer.cornerRadius = 10
         v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
@@ -165,11 +182,18 @@ class HelpContentVC: UIViewController {
     
     func setupViews() {
 
-        view.addSubview(label)
+        view.addSubview(stack)
         
+        stack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
+        stack.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor).isActive = true
+        stack.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         
-        label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stack.addArrangedSubview(mainImage)
+        stack.addArrangedSubview(label)
+        
+        mainImage.widthAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+        mainImage.heightAnchor.constraint(equalTo: stack.widthAnchor).isActive = true
+        
         label.text = labelTitle
         
         if showButton {

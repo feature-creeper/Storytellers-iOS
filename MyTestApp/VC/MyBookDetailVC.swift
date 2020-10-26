@@ -19,6 +19,10 @@ class MyBookDetailVC: UIViewController {
                 coverImageView.setImage(fromCoreDataNamed: title.replacingOccurrences(of: " ", with: "_"))
             }
             
+            if let synopsis = book?.synopsis {
+                self.aboutContentsLabel.text = synopsis
+            }
+            
             ageLabel.attributedText = getAgeString(age: "4+")
             durationLabel.attributedText = getDurationString(duration: "15 minutes")
             
@@ -27,6 +31,9 @@ class MyBookDetailVC: UIViewController {
     }
     
     var videos : [VideoMO] = []
+    
+    var videoHeight : CGFloat = 0
+    var videosHeightConstraint: NSLayoutConstraint?
     
     let coverImageView : UIImageView = {
         let v = UIImageView()
@@ -49,6 +56,14 @@ class MyBookDetailVC: UIViewController {
         let v = UIStackView()
         v.axis = .vertical
         v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    let lowerDetailsStack : UIStackView = {
+        let v = UIStackView()
+        v.axis = .vertical
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.alignment = .leading
         return v
     }()
     
@@ -89,9 +104,46 @@ class MyBookDetailVC: UIViewController {
     let myVideosLabel : UILabel = {
         let v = UILabel()
         v.font = UIFont(name: Globals.mediumWeight, size: 20)
-        v.textColor = .gray
+        v.textColor = .black
         v.text = "My videos"
         v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    let aboutLabel : UILabel = {
+        let v = UILabel()
+        v.font = UIFont(name: Globals.mediumWeight, size: 20)
+        v.textColor = .black
+        v.text = "About"
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    let aboutContentsLabel : UILabel = {
+        let v = UILabel()
+        v.font = UIFont(name: Globals.regularWeight, size: 18)
+        v.textColor = .black
+        v.numberOfLines = 0
+        v.lineBreakMode = .byWordWrapping
+        v.text = "About"
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    var copyrightButton : UIButton = {
+        let v = UIButton()
+        v.setTitleColor(UIColor.systemBlue, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 18)
+        v.addTarget(self, action: #selector(copyrightTapped), for: .touchUpInside)
+        
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "chevron.forward")?.withTintColor(.systemBlue)
+        let fullString = NSMutableAttributedString(string: "Copyright ")
+        fullString.append(NSAttributedString(attachment: imageAttachment))
+
+        v.setAttributedTitle(fullString, for: .normal)
+        
+        v.contentEdgeInsets = UIEdgeInsets(top: 25, left: 0, bottom: 15, right: 10)
         return v
     }()
     
@@ -145,14 +197,24 @@ class MyBookDetailVC: UIViewController {
     }
     
     func getVideos() {
-        DatabaseHelper.shared.getVideosForBook(bookID: (book?.id)!) { (videos) in
+        DatabaseHelper.shared.getVideosForBook(bookID: (book?.id)!) { [self] (videos) in
             var tempVideos : [VideoMO] = []
             for video in videos {
-                print("VIDEO FOUND: \(video.filename)")
                 tempVideos.append(video)
             }
             tempVideos.sort{$0.added! > $1.added!}
             self.videos = tempVideos
+            
+            if self.videos.count > 0 {
+                videosHeightConstraint?.constant = 150
+                videosHeightConstraint?.isActive = true
+                myVideosLabel.text = "My videos"
+                myVideosLabel.textColor = .black
+                self.view.layoutIfNeeded()
+            } else{
+                myVideosLabel.text = "No videos yet"
+                myVideosLabel.textColor = .systemGray4
+            }
             
             self.myVideosCollectionView.reloadData()
         }
@@ -170,12 +232,17 @@ class MyBookDetailVC: UIViewController {
         scrollView.addSubview(topDetailsStack)
         scrollView.addSubview(myVideosLabel)
         scrollView.addSubview(myVideosCollectionView)
+        scrollView.addSubview(lowerDetailsStack)
+        
         topDetailsStack.addArrangedSubview(titleLabel)
         topDetailsStack.addArrangedSubview(authorLabel)
         topDetailsStack.addArrangedSubview(ageLabel)
         topDetailsStack.addArrangedSubview(durationLabel)
         topDetailsStack.addArrangedSubview(readButton)
-//        topDetailsStack.addArrangedSubview(myVideosLabel)
+
+        lowerDetailsStack.addArrangedSubview(aboutLabel)
+        lowerDetailsStack.addArrangedSubview(aboutContentsLabel)
+        lowerDetailsStack.addArrangedSubview(copyrightButton)
         
         topDetailsStack.alignment = .center
         
@@ -204,12 +271,24 @@ class MyBookDetailVC: UIViewController {
         myVideosLabel.trailingAnchor.constraint(equalTo: view.readableContentGuide.trailingAnchor).isActive = true
         //myVideosLabel.heightAnchor.constraint(equalToConstant: 150).isActive = true
         
+        
         myVideosCollectionView.topAnchor.constraint(equalTo: myVideosLabel.bottomAnchor, constant: 15).isActive = true
         myVideosCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         myVideosCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        myVideosCollectionView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        videosHeightConstraint = NSLayoutConstraint(item: myVideosCollectionView, attribute: .height, relatedBy: .equal, toItem: myVideosCollectionView, attribute: .height, multiplier: 0, constant: 0)
+        videosHeightConstraint?.isActive = true
         
-        scrollView.bottomAnchor.constraint(equalTo: myVideosCollectionView.bottomAnchor, constant: 50).isActive = true
+        lowerDetailsStack.topAnchor.constraint(equalTo: myVideosCollectionView.bottomAnchor, constant: 20).isActive = true
+        lowerDetailsStack.leftAnchor.constraint(equalTo: view.readableContentGuide.leftAnchor).isActive = true
+        lowerDetailsStack.rightAnchor.constraint(equalTo: view.readableContentGuide.rightAnchor).isActive = true
+        
+        scrollView.bottomAnchor.constraint(equalTo: lowerDetailsStack.bottomAnchor, constant: 50).isActive = true
+    }
+    
+    @objc
+    func copyrightTapped() {
+        let vc = PrivacyVC()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc

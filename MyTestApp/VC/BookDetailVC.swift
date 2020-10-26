@@ -83,6 +83,7 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
        let i = UIStackView()
         i.translatesAutoresizingMaskIntoConstraints = false
         i.axis = .vertical
+//        i.alignment = .leading
         return i
     }()
     
@@ -112,6 +113,22 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         return button
     }()
     
+    var copyrightButton : UIButton = {
+        let v = UIButton()
+        v.setTitleColor(UIColor.systemBlue, for: .normal)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 18)
+        v.addTarget(self, action: #selector(copyrightTapped), for: .touchUpInside)
+        
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "chevron.forward")?.withTintColor(.systemBlue)
+        let fullString = NSMutableAttributedString(string: "Copyright ")
+        fullString.append(NSAttributedString(attachment: imageAttachment))
+
+        v.setAttributedTitle(fullString, for: .normal)
+        
+        v.contentEdgeInsets = UIEdgeInsets(top: 25, left: 0, bottom: 15, right: 10)
+        return v
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,7 +145,11 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         viewModel.getBook()
     }
     
-
+    @objc
+    func copyrightTapped() {
+        let vc = PrivacyVC()
+        navigationController?.pushViewController(vc, animated: true)
+    }
     
     @objc
     func dismissTapped()  {
@@ -233,11 +254,12 @@ class BookDetailVC: UIViewController, UIScrollViewDelegate {
         contentStack.addArrangedSubview(buyButton)
         contentStack.addArrangedSubview(aboutLabel)
         contentStack.addArrangedSubview(descriptionLabel)
+        contentStack.addArrangedSubview(copyrightButton)
         
 //        contentStack.setCustomSpacing(0, after: titleLabel)
         contentStack.setCustomSpacing(20, after: readtimeLabel)
         contentStack.setCustomSpacing(20, after: buyButton)
-        contentStack.setCustomSpacing(40, after: descriptionLabel)
+        contentStack.setCustomSpacing(25, after: descriptionLabel)
         
         scrollView.bottomAnchor.constraint(equalTo: contentStack.bottomAnchor, constant: 30).isActive = true
 

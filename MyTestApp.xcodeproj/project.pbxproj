@@ -73,6 +73,7 @@
 		69C865A0254042AC00C3819E /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 69C8659C254042AC00C3819E /* Poppins-SemiBold.ttf */; };
 		69D1AC162545938200FDA1D1 /* EmailSignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D1AC152545938200FDA1D1 /* EmailSignupVC.swift */; };
 		69E93ABB253AFFA60016D9BA /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E93ABA253AFFA60016D9BA /* LoadingView.swift */; };
+		69FB1A612546C59100042FAA /* PrivacyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FB1A602546C59100042FAA /* PrivacyVC.swift */; };
 		A78E4CDDBBB3112CF520940D /* Pods_MyTestAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49583B944960A075E37700B2 /* Pods_MyTestAppTests.framework */; };
 		C13E7B35E85C96E79D988A17 /* Pods_MyTestApp_MyTestAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D918FEBB381A8F42961519 /* Pods_MyTestApp_MyTestAppUITests.framework */; };
 /* End PBXBuildFile section */
@@ -182,6 +183,7 @@
 		69C8659C254042AC00C3819E /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		69D1AC152545938200FDA1D1 /* EmailSignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailSignupVC.swift; sourceTree = "<group>"; };
 		69E93ABA253AFFA60016D9BA /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		69FB1A602546C59100042FAA /* PrivacyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyVC.swift; sourceTree = "<group>"; };
 		7435D7A8075D773A712CD486 /* Pods-MyTestApp-MyTestAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-MyTestAppUITests.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp-MyTestAppUITests/Pods-MyTestApp-MyTestAppUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B0C85D1D28AB024D164D9B88 /* Pods-MyTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp/Pods-MyTestApp.release.xcconfig"; sourceTree = "<group>"; };
 		C4D918FEBB381A8F42961519 /* Pods_MyTestApp_MyTestAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyTestApp_MyTestAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -276,6 +278,7 @@
 				69AAC602253F01A800144DD9 /* HelpVC.swift */,
 				69882DBF254475C500833B96 /* AllMyVideosVC.swift */,
 				69882DC32544781600833B96 /* LanguageSelectVC.swift */,
+				69FB1A602546C59100042FAA /* PrivacyVC.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -741,6 +744,7 @@
 				697E47B3253089DB00E769A1 /* STButton.swift in Sources */,
 				69682CE12534AF0400F6A6F7 /* Helpers.swift in Sources */,
 				69380A88252ED96700F2B778 /* TestViewController.swift in Sources */,
+				69FB1A612546C59100042FAA /* PrivacyVC.swift in Sources */,
 				69B2B2322536E2A4001E2917 /* PageTurnTimer.swift in Sources */,
 				695635402533034200F3EBA2 /* BookDetailVM.swift in Sources */,
 				69682CD42534788700F6A6F7 /* MyBookDetailVC.swift in Sources */,
