@@ -18,7 +18,7 @@ import CoreData
 
 class VideoCompositor {
     
-    var pageTimes : [(Int, Int)]
+    var pageTimes : [(Int, TimeInterval,Bool)]
     
     var myurl: URL?
     
@@ -28,7 +28,7 @@ class VideoCompositor {
     
     let bookID:String
     
-    init(_ view: UIView, pageTimes: [(Int, Int)],storyText:[[String]], bookID : String) {
+    init(_ view: UIView, pageTimes: [(Int, TimeInterval,Bool)],storyText:[[String]], bookID : String) {
         self.view = view
         self.pageTimes = pageTimes
         self.text = storyText
@@ -171,15 +171,111 @@ class VideoCompositor {
     
     func createTextLayers(parentLayer:CALayer, pageHeight : CGFloat, size : CGSize) {
         
+//        Create a page for every page.
+//        Add the animations onto them.
         
-        //for page in pageTimes {
+        var pageIndex = 0
         
+        for page in text[0] {
+            let pageLayer = makePage(pageHeight: pageHeight, size: size, pageText: page)
+            
+            for pageData in pageTimes {
+                
+                let pageNumber = pageData.0
+                let pageTimeInterval = pageData.1
+                let pageNext = pageData.2
+                
+                if pageNumber == pageIndex {
+                    if pageNext == true { // Next page
+                        let anim = nextPageAnimation(pageLayer: pageLayer, begin: pageTimeInterval)
+                        pageLayer.add(anim, forKey: nil)
+                    }else{
+                        //Show prev page animation
+                        let anim = prevPageAnimation(pageLayer: pageLayer, begin: pageTimeInterval)
+                        pageLayer.add(anim, forKey: nil)
+                    }
+                }
+            }
+            
+            parentLayer.insertSublayer(pageLayer, at: 1)
+            
+            pageIndex += 1
+        }
+        
+  
+        /*
+        for page in pageTimes {
+            
+            let pageText = text[0][page.0]
+            
+            let pageLayer = makePage(pageHeight: pageHeight, size: size, pageText: pageText)
+
+            parentLayer.insertSublayer(pageLayer, at: 1)
+            
+            
+            if page.2 == true { // Next page
+                let anim = nextPageAnimation(pageLayer: pageLayer, begin: page.1)
+                pageLayer.add(anim, forKey: nil)
+            }else{
+                //Show prev page animation
+                let anim = prevPageAnimation(pageLayer: pageLayer, begin: page.1)
+                pageLayer.add(anim, forKey: nil)
+            }
+            
+            
+
+        }*/
+      
+    }
+    
+    func nextPageAnimation(pageLayer:CALayer, begin: TimeInterval) -> CAAnimationGroup {
+        let groupAnimation = CAAnimationGroup()
+        groupAnimation.beginTime = begin
+        groupAnimation.duration = 0.7
+        
+        
+        let position = CABasicAnimation(keyPath: "position")
+        //position.fromValue = pageLayer.position
+        position.toValue = [-(pageLayer.bounds.width * 1.5) ,  pageLayer.position.y]
+        let rotate = CABasicAnimation(keyPath: "transform.rotation")
+        //rotate.fromValue = 0.0
+        rotate.toValue = .pi/180.0 * 20
+        
+        groupAnimation.isRemovedOnCompletion = false
+        groupAnimation.fillMode = .forwards
+        
+        groupAnimation.animations = [position,rotate]
+        
+        return groupAnimation
+    }
+    
+    func prevPageAnimation(pageLayer:CALayer, begin: TimeInterval) -> CAAnimationGroup {
+        let groupAnimation = CAAnimationGroup()
+        groupAnimation.beginTime = begin
+        groupAnimation.duration = 0.7
+        
+        
+        let position = CABasicAnimation(keyPath: "position")
+        position.toValue = pageLayer.position
+        position.fromValue = [-(pageLayer.bounds.width * 1.5) ,  pageLayer.position.y]
+        let rotate = CABasicAnimation(keyPath: "transform.rotation")
+        rotate.toValue = 0.0
+        rotate.fromValue = .pi/180.0 * 20
+        
+        groupAnimation.isRemovedOnCompletion = false
+        groupAnimation.fillMode = .forwards
+        
+        groupAnimation.animations = [position,rotate]
+        
+        return groupAnimation
+    }
+    
+    func makePage(pageHeight : CGFloat, size : CGSize, pageText:String) -> CALayer {
         let pageBackgroundLayer = CALayer()
         pageBackgroundLayer.backgroundColor = UIColor.white.cgColor
         pageBackgroundLayer.frame = CGRect(x: 0, y: 0, width: size.width * 2, height: pageHeight * 2)
         
-//        pageBackgroundLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-//        pageBackgroundLayer.anchorPoint = CGPoint(x: 0, y: 0)
+
         pageBackgroundLayer.position = CGPoint(x: 0, y: 0)
         
         pageBackgroundLayer.shadowColor = UIColor.black.cgColor
@@ -191,15 +287,13 @@ class VideoCompositor {
         
         let textLayer = CATextLayer()
         textLayer.backgroundColor = UIColor.white.cgColor
-        textLayer.string = "TEST PAGE ASDFAF ASDG ASDASD S GSGS GGSD GG G SGTEST PAGE ASDFAF ASDG ASDASD S GSGS GGSD GG G SGTEST PAGE ASDFAF ASDG ASDASD S GSGS GGSD GG G SGTEST PAGE ASDFAF ASDG ASDASD"//text[0][page.0]
+        textLayer.string = pageText
         textLayer.font = UIFont(name: Globals.easyRead, size: 0)
-        textLayer.fontSize = 45
+        textLayer.fontSize = 35
         textLayer.foregroundColor = UIColor.black.cgColor
         textLayer.alignmentMode = CATextLayerAlignmentMode.left
         
         textLayer.anchorPoint = CGPoint(x: 0, y: 0)
-        //IGNORE FRAME X, Y
-        //textLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: pageHeight)
         textLayer.position = CGPoint(x: size.width + textBorder, y: pageHeight + textBorder)
         textLayer.isWrapped = true
         textLayer.bounds.size.width = size.width - (textBorder * 2)
@@ -208,44 +302,9 @@ class VideoCompositor {
 
         
         pageBackgroundLayer.addSublayer(textLayer)
-        parentLayer.addSublayer(pageBackgroundLayer)
         
-        //CREATE TIME FROM BEGINNING OF SESSION
-        
-        //            var outTime : Double = 0;
-        //            for item in pageTimes {
-        //                if item.0 <= page.0 {
-        //                    outTime += Double(item.1)
-        //                }
-        //            }
-        //            let startTimeMilliseconds = outTime / 1000
-        
-        print("STARTTIME")
-        //print(startTimeMilliseconds)
-        
-        
-        let groupAnimation = CAAnimationGroup()
-        groupAnimation.beginTime = 1
-        groupAnimation.duration = 0.7
-        
-//        let animation = CABasicAnimation(keyPath: "position")
-//        animation.fromValue = pageBackgroundLayer.position
-//        animation.toValue = [-(pageBackgroundLayer.bounds.width * 1.5) ,  pageBackgroundLayer.position.y]
-//        animation.duration = 1
-//        animation.beginTime = 1
-        //animation.fillMode = CAMediaTimingFillMode.forwards;
-        
-        let position = CABasicAnimation(keyPath: "position")
-        position.fromValue = pageBackgroundLayer.position
-        position.toValue = [-(pageBackgroundLayer.bounds.width * 1.5) ,  pageBackgroundLayer.position.y]
-        let rotate = CABasicAnimation(keyPath: "transform.rotation")
-        rotate.fromValue = 0.0
-        rotate.toValue = .pi/180.0 * 20
-        
-        //animation.isRemovedOnCompletion = false
-        groupAnimation.animations = [position,rotate]
-        pageBackgroundLayer.add(groupAnimation, forKey: nil)
-        //}
+        return pageBackgroundLayer
+//        parentLayer.addSublayer(pageBackgroundLayer)
     }
 }
 

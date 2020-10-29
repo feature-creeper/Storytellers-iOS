@@ -4,41 +4,42 @@ import Foundation
 
 class PageTurnTimer : NSObject{
     
-    var couplet : [(Int, Int)] = []
+    var pageAndTime : [(Int, TimeInterval, Bool)] = []
     
     private var page = 0
-    private var timeStart : Double = 0
-    private var secondsPassed = 0
-    
+    private var dateStart : Date!
+    private var nextPage = true
     
     func initialise(page:Int) {
         self.page = page
         startTimer()
     }
     
-    func turnPageTapped(newPage:Int) {
-        endTimer()
+    func turnNextPageTapped(newPage:Int) {
+        nextPage = true
+        incrementTime()
         page = newPage
-        startTimer()
+    }
+    
+    func turnPrevPageTapped(newPage:Int) {
+        nextPage = false
+        page = newPage
+        incrementTime()
     }
     
     private func startTimer() {
-        let startInterval = Date().timeIntervalSince1970
-        timeStart = startInterval * 1000
+        dateStart = Date()
     }
     
-    private func endTimer() {
-        let endInterval = Date().timeIntervalSince1970
-        let endMillis = endInterval * 1000
-        let timeInMillis = Int(endMillis - timeStart)
+    private func incrementTime() {
+        let interval = Date().timeIntervalSince(dateStart)
         
-        insertPageIntoArray(milliseconds: timeInMillis)
+        insertPageIntoArray(milliseconds: interval)
         
-        print("timeInMillis \(timeInMillis)")
     }
     
-    private func insertPageIntoArray(milliseconds:Int) {
-        couplet.append((page, milliseconds))
+    private func insertPageIntoArray(milliseconds:TimeInterval) {
+        pageAndTime.append((page, milliseconds, nextPage))
     }
     
 }

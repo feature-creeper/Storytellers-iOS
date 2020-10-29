@@ -29,8 +29,8 @@ class DeepARVM : NSObject{
         rawToStory(raw: rawString)
     }
     
-    func getPageTimes() -> [(Int, Int)] {
-        return pageTurnTimer.couplet
+    func getPageTimes() -> [(Int, TimeInterval,Bool)] {
+        return pageTurnTimer.pageAndTime
     }
     
     func rawToStory(raw:String) {
@@ -45,7 +45,7 @@ class DeepARVM : NSObject{
     
     func tappedRecord() {
         if recording {
-            pageTurnTimer.turnPageTapped(newPage: currentPage)
+            pageTurnTimer.turnNextPageTapped(newPage: currentPage)
         }else{
             pageTurnTimer.initialise(page: currentPage)
             turnedPage()
@@ -61,7 +61,7 @@ class DeepARVM : NSObject{
             currentPage += 1
             
             if recording {
-                pageTurnTimer.turnPageTapped(newPage: currentPage)
+                pageTurnTimer.turnNextPageTapped(newPage: currentPage)
             }
         }
         
@@ -75,7 +75,7 @@ class DeepARVM : NSObject{
             currentPage -= 1
             
             if recording {
-                pageTurnTimer.turnPageTapped(newPage: currentPage)
+                pageTurnTimer.turnPrevPageTapped(newPage: currentPage)
             }
         }
         
