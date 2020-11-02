@@ -162,10 +162,16 @@ class DeepARVC: UIViewController {
         
         setupViews()
         
-        setMask(name: maskPath)
+        setMask()
         
         pageLabel.text = storyVM.currentPageText
         
+    }
+    
+    func setMask() {
+        storyVM.setCurrentMask()
+        maskPath = storyVM.currentMask
+        setMask(name: maskPath!)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -384,6 +390,10 @@ extension DeepARVC : DeepARDelegate {
 
 extension DeepARVC : StoryDelegate{
     func changedPage(index: Int, totalPages: Int) {
+        
+        
+        setMask()
+        
         pageIndicatorLabel.text = "\(index + 1)/\(totalPages)"
         
         instructionLabelContainer.isHidden = true

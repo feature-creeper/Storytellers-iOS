@@ -82,9 +82,12 @@ class BookDetailVM {
             book.synopsis = synopsis
         }
         
-        if let effects = bookInfo?.effects {
-            book.effects = effects
-            print(effects)
+        if let effectSequence = bookInfo?.effectSequence {
+            book.effects = effectSequence
+//            book.effects = effects
+            print("EFFECTS")
+            print(effectSequence)
+            
         }
         
         
@@ -115,11 +118,18 @@ class BookDetailVM {
             }
         }
         
-        dGroup.enter()
-        if let effects = book.effects {
-            API.sharedAPI.saveEffectToDocuments(effectName: effects.getEffectArray().first!) {
-                dGroup.leave()
+        
+        if let effects = bookInfo?.effects {
+            
+            let effectNames = effects.getEffectArray()
+            
+            for name in effectNames {
+                dGroup.enter()
+                API.sharedAPI.saveEffectToDocuments(effectName: name) {
+                    dGroup.leave()
+                }
             }
+           
         }
         
         

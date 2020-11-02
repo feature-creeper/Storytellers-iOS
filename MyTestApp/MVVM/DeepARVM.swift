@@ -9,6 +9,8 @@ class DeepARVM : NSObject{
     
     var story : [[String]] = []
     
+    var effects : [[String:Any]] = []
+    
     var timer = Timer()
     var start = Date()
 
@@ -16,6 +18,8 @@ class DeepARVM : NSObject{
     private var currentPage : Int = 0
     
     var recording = false
+    
+    var currentMask : String?
     
     var currentPageText : String{
         get{
@@ -84,7 +88,20 @@ class DeepARVM : NSObject{
         return currentPageText
     }
     
+    func setCurrentMask(){
+        
+        for item in effects {
+            
+            guard let pageNumber = item["page"] as? Int else {return}
+            
+            if currentPage == pageNumber {
+                currentMask = item["effect"] as! String
+            }
+        }
+    }
+    
     func turnedPage() {
+        setCurrentMask()
         delegate?.changedPage(index: currentPage, totalPages: story[0].count)
     }
     

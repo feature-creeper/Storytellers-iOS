@@ -295,20 +295,26 @@ class MyBookDetailVC: UIViewController {
     func tappedRead() {
         
         let vc = DeepARVC(nibName: nil, bundle: nil)
-        guard let effects = book?.effects?.getEffectArray() else {return}
+        
+        guard let effects = book?.effects else {return}
+        
+        let effectSequence : [[String:Any]] = effects.getEffectSequenceArray()
+        
+        //guard let effects = book?.effects?.getEffectArray() else {return}
         
         if let content = book?.content {
             vc.content = content
             let story = DeepARVM(rawString: content)
             story.delegate = vc
+            story.effects = effectSequence
             vc.storyVM = story
         }
-        
+
         if let id = book?.id {
             vc.bookID = id
         }
         
-        vc.maskPath = effects.first
+        //vc.maskPath = effects.first
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
     }

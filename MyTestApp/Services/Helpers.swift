@@ -64,6 +64,24 @@ extension String{
     func getEffectArray() -> [String] {
         return self.components(separatedBy: ",")
     }
+    
+    func getEffectSequenceArray() -> [[String:Any]]{
+        let effectSequenceSeperated = self.split(separator: "}")
+        
+        var effectSequence : [[String:Any]] = []
+        effectSequenceSeperated.forEach { (effectString) in
+            var item : String = String(effectString)
+            item.append("}")
+            
+            let json = try? JSONSerialization.jsonObject(with: item.data(using: .utf8)!, options: []) as! [String:Any]
+            
+            if let effectJson = json{
+                effectSequence.append(effectJson)
+            }
+        }
+        
+        return effectSequence
+    }
 }
 
 extension URL{

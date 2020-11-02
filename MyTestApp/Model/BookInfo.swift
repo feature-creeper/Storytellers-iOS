@@ -15,6 +15,7 @@ struct BookInfo : Codable {
     var effects : String?
     var about : String?
     var readtime : String?
+    var effectSequence : String?
     
     enum CodingKeys: String, CodingKey {
         case author

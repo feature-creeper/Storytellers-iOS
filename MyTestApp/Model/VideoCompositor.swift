@@ -8,13 +8,13 @@
 
 import UIKit
 import AVFoundation
-//import AVKit
 import Photos
 import CoreData
 
 //PROBABLY COULD MAKE COMPOSITION EASIER IF APPLIED TO PARENT
-//        textLayer.isGeometryFlipped = true
+//textLayer.isGeometryFlipped = true
 
+//Make only a few pages, do not load all pages as layers
 
 class VideoCompositor {
     
@@ -171,9 +171,6 @@ class VideoCompositor {
     
     func createTextLayers(parentLayer:CALayer, pageHeight : CGFloat, size : CGSize) {
         
-//        Create a page for every page.
-//        Add the animations onto them.
-        
         var pageIndex = 0
         
         for page in text[0] {
@@ -189,8 +186,7 @@ class VideoCompositor {
                     if pageNext == true { // Next page
                         let anim = nextPageAnimation(pageLayer: pageLayer, begin: pageTimeInterval)
                         pageLayer.add(anim, forKey: nil)
-                    }else{
-                        //Show prev page animation
+                    }else{ //Show prev page animation
                         let anim = prevPageAnimation(pageLayer: pageLayer, begin: pageTimeInterval)
                         pageLayer.add(anim, forKey: nil)
                     }
@@ -201,30 +197,6 @@ class VideoCompositor {
             
             pageIndex += 1
         }
-        
-  
-        /*
-        for page in pageTimes {
-            
-            let pageText = text[0][page.0]
-            
-            let pageLayer = makePage(pageHeight: pageHeight, size: size, pageText: pageText)
-
-            parentLayer.insertSublayer(pageLayer, at: 1)
-            
-            
-            if page.2 == true { // Next page
-                let anim = nextPageAnimation(pageLayer: pageLayer, begin: page.1)
-                pageLayer.add(anim, forKey: nil)
-            }else{
-                //Show prev page animation
-                let anim = prevPageAnimation(pageLayer: pageLayer, begin: page.1)
-                pageLayer.add(anim, forKey: nil)
-            }
-            
-            
-
-        }*/
       
     }
     
@@ -288,8 +260,8 @@ class VideoCompositor {
         let textLayer = CATextLayer()
         textLayer.backgroundColor = UIColor.white.cgColor
         textLayer.string = pageText
-        textLayer.font = UIFont(name: Globals.easyRead, size: 0)
-        textLayer.fontSize = 35
+        textLayer.font = UIFont(name: Globals.easyRead, size: 35)
+        textLayer.fontSize = 70
         textLayer.foregroundColor = UIColor.black.cgColor
         textLayer.alignmentMode = CATextLayerAlignmentMode.left
         
@@ -304,7 +276,6 @@ class VideoCompositor {
         pageBackgroundLayer.addSublayer(textLayer)
         
         return pageBackgroundLayer
-//        parentLayer.addSublayer(pageBackgroundLayer)
     }
 }
 
@@ -321,88 +292,3 @@ extension FileManager {
     }
 }
 
-
-/*
- //OLD FADE ANIMATED PAGES
- func createTextLayers(parentLayer:CALayer, pageHeight : CGFloat, size : CGSize) {
- 
- 
- for page in pageTimes {
- 
- print("PAGE ------------>")
- 
- print(text[0][page.0])
- 
- let animationParentLayer = CALayer()
- animationParentLayer.opacity = 0
- animationParentLayer.backgroundColor = UIColor.white.cgColor
- animationParentLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: pageHeight)
- 
- let titleLayer = CATextLayer()
- 
- titleLayer.backgroundColor = UIColor.white.cgColor
- 
- titleLayer.string = text[0][page.0]
- titleLayer.font = UIFont(name: "Helvetica", size: 56)
- titleLayer.foregroundColor = UIColor.black.cgColor
- titleLayer.shadowOpacity = 0.5
- titleLayer.alignmentMode = CATextLayerAlignmentMode.left
- titleLayer.frame = CGRect(x: 0, y: 0, width: size.width, height: pageHeight)
- titleLayer.isWrapped = true
- titleLayer.fontSize = 70
- titleLayer.shadowOpacity = 0
- titleLayer.bounds.size.width = size.width - 70
- titleLayer.bounds.size.height = pageHeight - 70
- 
- animationParentLayer.addSublayer(titleLayer)
- parentLayer.addSublayer(animationParentLayer)
- 
- 
- //Fade in animation
- 
- var startTime : Double = 0.1;
- for item in pageTimes {
- if item.0 < page.0 {
- startTime += Double(item.1)
- }
- }
- 
- let startTimeMilliseconds = startTime / 1000
- 
- 
- 
- let animation = CABasicAnimation(keyPath: "opacity")
- animation.fromValue = 0
- animation.toValue = 1
- animation.duration = 1
- animation.beginTime = CFTimeInterval(floatLiteral: startTimeMilliseconds)//CFTimeInterval(exactly: 5)!//AVCoreAnimationBeginTimeAtZero//
- animation.fillMode = CAMediaTimingFillMode.forwards;
- animation.isRemovedOnCompletion = false
- animationParentLayer.add(animation, forKey: "opacity")
- 
- 
- //Fade out animation
- 
- var outTime : Double = 0;
- for item in pageTimes {
- if item.0 <= page.0 {
- outTime += Double(item.1)
- }
- }
- 
- let outTimeMilliseconds = outTime / 1000 - 1
- 
- let fadeOutAnimation = CABasicAnimation(keyPath: "opacity")
- fadeOutAnimation.fromValue = 1
- fadeOutAnimation.toValue = 0
- fadeOutAnimation.duration = 1
- fadeOutAnimation.beginTime = CFTimeInterval(floatLiteral: outTimeMilliseconds)//CFTimeInterval(exactly: 5)!//AVCoreAnimationBeginTimeAtZero//
- fadeOutAnimation.fillMode = CAMediaTimingFillMode.forwards;
- fadeOutAnimation.isRemovedOnCompletion = false
- 
- titleLayer.add(fadeOutAnimation, forKey: "opacity")
- 
- 
- print("PAGE \(page.0) IN \(startTimeMilliseconds) OUT \(outTimeMilliseconds)")
- }
- */

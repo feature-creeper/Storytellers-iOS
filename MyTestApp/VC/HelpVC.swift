@@ -9,23 +9,25 @@ import UIKit
 
 class HelpVC: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
-    
-    
     var vcA : HelpContentVC = {
         let vc = HelpContentVC()
+        vc.pageIndex = 1
         vc.labelTitle = "First select one of our books.\nWe have loads of good ones!"
         return vc
     }()
     
     var vcB : HelpContentVC = {
         let vc = HelpContentVC()
-        vc.labelTitle = "BBBB"
+        vc.pageIndex = 2
+        vc.labelTitle = "Learn to read and even learn a new language"
         return vc
     }()
     
     var vcC : HelpContentVC = {
         let vc = HelpContentVC()
-        vc.showButton = true
+        
+        vc.pageIndex = 3
+//        vc.showButton = true
         vc.labelTitle = "CCCC"
         return vc
     }()
@@ -129,7 +131,9 @@ class HelpContentVC: UIViewController {
     
     var delegate : HelpVCDelegate?
     
-    var showButton : Bool = false
+    var pageIndex = 0
+    
+//    var showButton : Bool = false
     
     let label : UILabel = {
         let v  = UILabel()
@@ -149,7 +153,7 @@ class HelpContentVC: UIViewController {
     }()
     
     let mainImage : UIImageView = {
-        let v  = UIImageView(image: UIImage(named: "Reading"))
+        let v  = UIImageView()
         v.contentMode = .scaleAspectFit
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
@@ -196,7 +200,20 @@ class HelpContentVC: UIViewController {
         
         label.text = labelTitle
         
-        if showButton {
+//        if showButton {
+//
+//        }
+//
+        if pageIndex == 1 {
+            mainImage.image = UIImage(named: "Reading")
+        }
+        
+        if pageIndex == 2 {
+            mainImage.image = UIImage(named: "LanguageHelp")
+            
+        }
+        
+        if pageIndex == 3 {
             view.addSubview(dismissButton)
             dismissButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
             dismissButton.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true

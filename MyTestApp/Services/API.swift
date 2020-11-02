@@ -53,7 +53,7 @@ class API {
         let docRef = db.collection("books").document(id)
         
         docRef.getDocument { (snapshot, error) in
-            
+            print("SNAPSHOT")
             print(snapshot?.data())
             
             var _effects : String?
@@ -61,9 +61,38 @@ class API {
             if let effects = snapshot?.data()?["effects"]{
                 do {
                     let e = effects as! [String]
-//                    let data = try JSONSerialization.data(withJSONObject: e, options: [])
-//                    let f = String(data: data, encoding: .utf8)
                     _effects = e.joined(separator: ",")
+                } catch  {
+                    
+                }
+            }
+
+            
+            var effectSequenceString = ""
+            
+            if let effectSequence = snapshot?.data()?["effect_sequence"]{
+                do {
+                    let e = effectSequence as! [[String:Any]]
+                    
+                    
+                    
+                    for item in e {
+                        let jsonEncoder = JSONEncoder()
+                        
+                        let s = try? JSONSerialization.data(withJSONObject: item, options: [])
+                        if let data = s {
+                            let ss = String(data: data, encoding: .utf8)
+                            print(ss)
+                            
+                            effectSequenceString.append(ss!)
+                            //effectSequenceString.append("-")
+                        }
+                
+                    }
+                    
+                    print("effectSequenceString")
+                    print(effectSequenceString)
+                    
                 } catch  {
                     
                 }
@@ -80,6 +109,8 @@ class API {
                 if let effects = _effects{
                     bookInfo.effects = effects
                 }
+                
+                bookInfo.effectSequence = effectSequenceString
                 
                 completion(bookInfo)
             }
