@@ -92,11 +92,20 @@ class DeepARVM : NSObject{
         
         for item in effects {
             
-            guard let pageNumber = item["page"] as? Int else {return}
+            guard let pageNumbers = item["page"] as? [Int] else {return}
             
-            if currentPage == pageNumber {
-                currentMask = item["effect"] as! String
+            pageNumbers.forEach { (pageNumber) in
+                if currentPage == pageNumber {
+                    currentMask = item["effect"] as! String
+                }
             }
+            
+            
+//            guard let pageNumber = item["page"] as? Int else {return}
+//
+//            if currentPage == pageNumber {
+//                currentMask = item["effect"] as! String
+//            }
         }
     }
     

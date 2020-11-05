@@ -300,7 +300,12 @@ class MyBookDetailVC: UIViewController {
         
         let effectSequence : [[String:Any]] = effects.getEffectSequenceArray()
         
-        //guard let effects = book?.effects?.getEffectArray() else {return}
+        ///
+//        let pages = effectSequence[0]["page"] as? [Int]
+//
+//        print(pages)
+      
+        
         
         if let content = book?.content {
             vc.content = content
@@ -314,7 +319,6 @@ class MyBookDetailVC: UIViewController {
             vc.bookID = id
         }
         
-        //vc.maskPath = effects.first
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
     }

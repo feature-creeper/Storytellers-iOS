@@ -84,10 +84,6 @@ class BookDetailVM {
         
         if let effectSequence = bookInfo?.effectSequence {
             book.effects = effectSequence
-//            book.effects = effects
-            print("EFFECTS")
-            print(effectSequence)
-            
         }
         
         

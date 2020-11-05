@@ -74,17 +74,17 @@ class API {
                 do {
                     let e = effectSequence as! [[String:Any]]
                     
-                    
-                    
                     for item in e {
                         let jsonEncoder = JSONEncoder()
                         
-                        let s = try? JSONSerialization.data(withJSONObject: item, options: [])
-                        if let data = s {
-                            let ss = String(data: data, encoding: .utf8)
-                            print(ss)
+                        let effectSeqData = try? JSONSerialization.data(withJSONObject: item, options: [])
+                        if let data = effectSeqData {
+                            let effect = String(data: data, encoding: .utf8)
                             
-                            effectSequenceString.append(ss!)
+                            print("YOUR EFFECT")
+                            print(effect)
+                            
+                            effectSequenceString.append(effect!)
                             //effectSequenceString.append("-")
                         }
                 

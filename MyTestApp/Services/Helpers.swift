@@ -80,6 +80,10 @@ extension String{
             }
         }
         
+        
+        print("EFFECT SEQ")
+        print(effectSequence)
+        
         return effectSequence
     }
 }
