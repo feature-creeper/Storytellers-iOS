@@ -300,13 +300,6 @@ class MyBookDetailVC: UIViewController {
         
         let effectSequence : [[String:Any]] = effects.getEffectSequenceArray()
         
-        ///
-//        let pages = effectSequence[0]["page"] as? [Int]
-//
-//        print(pages)
-      
-        
-        
         if let content = book?.content {
             vc.content = content
             let story = DeepARVM(rawString: content)

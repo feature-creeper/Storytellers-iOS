@@ -28,12 +28,17 @@ class VideoCompositor {
     
     let bookID:String
     
+    var completionTimer : Timer?
+    
+    var assetExport : AVAssetExportSession?
+    
+    var delegate : CompositorDelegate?
+    
     init(_ view: UIView, pageTimes: [(Int, TimeInterval,Bool)],storyText:[[String]], bookID : String) {
         self.view = view
         self.pageTimes = pageTimes
         self.text = storyText
         self.bookID = bookID
-        print("STORY TEXT: \(storyText)")
     }
     
     func composite(url:URL, completion: @escaping () -> Void) {
@@ -112,8 +117,6 @@ class VideoCompositor {
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videolayer, in: parentlayer)
         
         
-        
-        
         // instruction for watermark
         let instruction = AVMutableVideoCompositionInstruction()
         instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: composition.duration)
@@ -137,24 +140,34 @@ class VideoCompositor {
         let movieDestinationUrl = NSURL(fileURLWithPath: movieFilePath)
         
         // use AVAssetExportSession to export video
-        let assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality)
+        assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality)
         assetExport?.outputFileType = AVFileType.mov
         assetExport?.videoComposition = layercomposition
         
         // Check exist and remove old file
         FileManager.default.removeItemIfExisted(movieDestinationUrl as URL)
         
+        //Progress indicator
+        if let progress = assetExport?.progress{
+             completionTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
+        }
+        
+        
         assetExport?.outputURL = movieDestinationUrl as URL
         assetExport?.exportAsynchronously(completionHandler: { [self] in
             switch assetExport!.status {
+        
             case AVAssetExportSession.Status.failed:
                 print("failed")
                 print(assetExport?.error ?? "unknown error")
+                completionTimer!.invalidate()
             case AVAssetExportSession.Status.cancelled:
                 print("cancelled")
                 print(assetExport?.error ?? "unknown error")
+                completionTimer!.invalidate()
             default:
                 print("Movie complete")
+                completionTimer!.invalidate()
                 
                 self.myurl = movieDestinationUrl as URL
                 
@@ -277,6 +290,15 @@ class VideoCompositor {
         
         return pageBackgroundLayer
     }
+    
+    @objc func fireTimer(timer:Timer) {
+        
+        print( assetExport?.progress)
+ 
+        if let progress = assetExport?.progress {
+            delegate?.progressUpdated(progress: progress)
+        }
+    }
 }
 
 extension FileManager {
@@ -292,3 +314,6 @@ extension FileManager {
     }
 }
 
+protocol CompositorDelegate {
+    func progressUpdated(progress:Float)
+}

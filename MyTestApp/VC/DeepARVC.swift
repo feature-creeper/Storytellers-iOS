@@ -31,7 +31,17 @@ class DeepARVC: UIViewController {
     var chapter = 0
     var page = 0
     
-    var spinner = LoadingView(title: "Creating your video")
+    var spinner = LoadingVideoView(title: "Creating your video")
+    
+    var slatView : SlatView = {
+        let v = SlatView()
+        //         v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+        //         v.applyShadow(offset: CGSize.zero, opacity: 0.4, radius: 6.0)
+        //         v.isHidden = true
+        v.isUserInteractionEnabled = false
+        return v
+    }()
     
     var exitButton : UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 30, width: 70, height: 70))
@@ -199,6 +209,8 @@ class DeepARVC: UIViewController {
         view.addSubview(safeAreaView)
         view.addSubview(startRecordingButton)
         
+        view.addSubview(slatView)
+        
         
         detailStack.axis = .vertical
         detailStack.spacing = 15
@@ -247,6 +259,11 @@ class DeepARVC: UIViewController {
         detailStack.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -15).isActive = true
         detailStack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
         detailStack.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor).isActive = true
+        
+        slatView.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor).isActive = true
+        slatView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        slatView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        slatView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
     
     
@@ -310,9 +327,13 @@ class DeepARVC: UIViewController {
         
     }
     
+    var screenCap : ScreenCapture!
+    
     @objc
     func startRecordTapped()  {
         
+        
+ 
         timerBGView.setImage(UIImage(systemName: "circlebadge.fill"), for: .normal)
         
         startRecordingButton.isHidden = true
@@ -329,6 +350,7 @@ class DeepARVC: UIViewController {
             deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height)
             storyVM.recording = true
         }
+ 
     }
     
     @objc
@@ -344,9 +366,18 @@ class DeepARVC: UIViewController {
     
     @objc
     func endRecordingTapped()  {
+        
         storyVM.tappedRecord()
         deepAR.finishVideoRecording()
         storyVM.recording = false
+    }
+    
+    func lateReturnFunc(){
+        print("LATE")
+        
+        DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+            print("PERFORMED ASYNC FUNC")
+        }
     }
     
 }
@@ -375,7 +406,7 @@ extension DeepARVC : DeepARDelegate {
             let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
 
             let videoCompositor = VideoCompositor(view,pageTimes: storyVM.getPageTimes(),storyText: storyVM.story, bookID : bookID)
-//            let videoCompositor = VideoCompositor(view,pageTimes: pageTurnTimer!.couplet,storyText: story)
+            videoCompositor.delegate = self
             videoCompositor.composite(url: URL(fileURLWithPath: videoFilePath)) {
                 
                 DispatchQueue.main.async {
@@ -413,6 +444,12 @@ extension DeepARVC : StoryDelegate{
     }
 }
 
+extension DeepARVC :CompositorDelegate{
+    func progressUpdated(progress: Float) {
+        spinner.progressBar.progress = progress
+    }
+}
+
 
 class PassthroughView: UIView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -432,5 +469,32 @@ class PassthroughStack: UIStackView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let view = super.hitTest(point, with: event)
         return view == self ? nil : view
+    }
+}
+
+
+class SlatView: UIView {
+    
+    override func layoutSubviews() {
+
+        let rightSlat = CALayer()
+        rightSlat.frame = CGRect(x: 0, y: 0, width: 150, height: bounds.height)
+        rightSlat.anchorPoint = CGPoint(x: 1, y: 0)
+        rightSlat.position = CGPoint(x: bounds.width, y: 0)
+        
+        rightSlat.contents = #imageLiteral(resourceName: "Slat_R").cgImage
+        rightSlat.contentsGravity = .resizeAspectFill
+        
+        self.layer.addSublayer(rightSlat)
+        
+        let leftSlat = CALayer()
+        leftSlat.frame = CGRect(x: 0, y: 0, width: 150, height: bounds.height)
+        leftSlat.anchorPoint = CGPoint(x: 0, y: 0)
+        leftSlat.position = CGPoint(x: 0, y: 0)
+        
+        leftSlat.contents = #imageLiteral(resourceName: "Slat_L").cgImage
+        leftSlat.contentsGravity = .resizeAspectFill
+        
+        self.layer.addSublayer(leftSlat)
     }
 }

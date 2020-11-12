@@ -32,34 +32,34 @@ class LoginVC: UIViewController {
     let emailLoginButton : UIButton = {
         let v = UIButton()
         v.setTitle("Login ", for: .normal)
-        v.backgroundColor = .systemBlue
+        v.backgroundColor = .systemTeal
         v.addTarget(self, action: #selector(tappedLoginWithEmail), for: .touchUpInside)
-        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 16)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
         v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         v.layer.cornerRadius = 10
         return v
     }()
     
-    let emailSignupButton : UIButton = {
-        let v = UIButton()
-        v.setTitle("Signup with email", for: .normal)
-        v.setTitleColor(.systemBlue, for: .normal)
-        v.backgroundColor = .white
-        v.addTarget(self, action: #selector(tappedEmailSignup), for: .touchUpInside)
-        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 16)
-        v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
-        v.layer.cornerRadius = 10
-        v.layer.borderColor = UIColor.systemBlue.cgColor
-        v.layer.borderWidth = 1.0
-        return v
-    }()
+//    let emailSignupButton : UIButton = {
+//        let v = UIButton()
+//        v.setTitle("Signup with email", for: .normal)
+//        v.setTitleColor(.systemBlue, for: .normal)
+//        v.backgroundColor = .white
+//        v.addTarget(self, action: #selector(tappedEmailSignup), for: .touchUpInside)
+//        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 16)
+//        v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+//        v.layer.cornerRadius = 10
+//        v.layer.borderColor = UIColor.systemBlue.cgColor
+//        v.layer.borderWidth = 1.0
+//        return v
+//    }()
     
     let FacebookLoginButton : UIButton = {
         let v = UIButton()
         v.setTitle("Continue with Facebook", for: .normal)
         v.backgroundColor = #colorLiteral(red: 0.07319874316, green: 0.4660471082, blue: 0.9370654821, alpha: 1)
         //v.addTarget(self, action: #selector(signInWithEmail), for: .touchUpInside)
-        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 16)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
         v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         v.layer.cornerRadius = 10
         return v
@@ -72,7 +72,7 @@ class LoginVC: UIViewController {
         v.setTitle("Continue with Google", for: .normal)
         v.backgroundColor = .red
         v.addTarget(self, action: #selector(signInWithGoogle), for: .touchUpInside)
-        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 16)
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 20)
         v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         v.layer.cornerRadius = 10
         return v
@@ -83,7 +83,7 @@ class LoginVC: UIViewController {
         v.autocapitalizationType = .none
         v.returnKeyType = .done
         v.placeholder = "Enter email"
-        v.font = UIFont(name: "Rubik-Regular", size: 16)
+        v.font = UIFont(name: "Rubik-Regular", size: 18)
         v.backgroundColor = .systemGray6
         return v
     }()
@@ -92,7 +92,7 @@ class LoginVC: UIViewController {
         let v = TextField()
         v.returnKeyType = .done
         v.placeholder = "Enter password"
-        v.font = UIFont(name: "Rubik-Regular", size: 16)
+        v.font = UIFont(name: "Rubik-Regular", size: 18)
         v.backgroundColor = .systemGray6
         v.isSecureTextEntry = true
         return v
@@ -116,7 +116,7 @@ class LoginVC: UIViewController {
 //        bottomStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
 //        bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         
-        bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -40).isActive = true
+        bottomStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 40).isActive = true
         bottomStackView.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor,constant: 10).isActive = true
         bottomStackView.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor,constant: -10).isActive = true
         
@@ -124,25 +124,25 @@ class LoginVC: UIViewController {
         bottomStackView.addArrangedSubview(emailTextField)
         bottomStackView.addArrangedSubview(passwordTextField)
         bottomStackView.addArrangedSubview(emailLoginButton)
-        bottomStackView.addArrangedSubview(emailSignupButton)
+//        bottomStackView.addArrangedSubview(emailSignupButton)
         bottomStackView.addArrangedSubview(FacebookLoginButton)
         bottomStackView.addArrangedSubview(googleLoginButton)
         
         bottomStackView.spacing = 10
         
         bottomStackView.setCustomSpacing(20, after: logoImageView)
-//        bottomStackView.setCustomSpacing(20, after: passwordTextField)
-        bottomStackView.setCustomSpacing(45, after: emailSignupButton)
+        bottomStackView.setCustomSpacing(20, after: emailLoginButton)
+//        bottomStackView.setCustomSpacing(45, after: emailSignupButton)
         
-        bottomStackView.distribution = .equalCentering
+//        bottomStackView.distribution = .equalCentering
         
         view.addSubview(logoImageView)
         
-        logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+//        logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         logoImageView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor).isActive = true
         logoImageView.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor).isActive = true
         logoImageView.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
-        logoImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.height / 3).isActive = true
+        logoImageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
         
     }
@@ -154,13 +154,13 @@ class LoginVC: UIViewController {
     //        self.present(alert, animated: true)
     //    }
     
-    @objc
-    func tappedEmailSignup() {
-        let vc = EmailSignupVC()
-//        vc.modalPresentationStyle = .fullScreen
-//        let nvc = UINavigationController(rootViewController: vc)
-        present(vc, animated: true)
-    }
+//    @objc
+//    func tappedEmailSignup() {
+//        let vc = EmailSignupVC()
+////        vc.modalPresentationStyle = .fullScreen
+////        let nvc = UINavigationController(rootViewController: vc)
+//        present(vc, animated: true)
+//    }
     
     @objc
     func emailLogin() {

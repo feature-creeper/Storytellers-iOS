@@ -29,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 window?.rootViewController = tabVC
                 window?.makeKeyAndVisible()
             }else{
-                let vc = LoginVC()
+                let vc = LoginMainVC()
                 window?.rootViewController = vc
                 window?.makeKeyAndVisible()
             }

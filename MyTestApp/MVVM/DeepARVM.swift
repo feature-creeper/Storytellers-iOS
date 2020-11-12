@@ -99,13 +99,6 @@ class DeepARVM : NSObject{
                     currentMask = item["effect"] as! String
                 }
             }
-            
-            
-//            guard let pageNumber = item["page"] as? Int else {return}
-//
-//            if currentPage == pageNumber {
-//                currentMask = item["effect"] as! String
-//            }
         }
     }
     
@@ -120,22 +113,17 @@ class DeepARVM : NSObject{
     
     func startTimer() {
         start = Date()
+        //Timer is for visual timer at top of screen
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
 
         
     }
     
  
-    
     @objc private func fire()
     {
         let currentTime = Date()
         let interval = currentTime.timeIntervalSince(start)
-
-//        print(interval.format(using: [.minute, .second]))
-        print(stringFromTimeInterval(interval: interval))
-        
-//        let formatted = interval.format(using: [.minute, .second])
         let formatted = stringFromTimeInterval(interval: interval)
         delegate?.timerAddedSecond(formatted: formatted)
     }
