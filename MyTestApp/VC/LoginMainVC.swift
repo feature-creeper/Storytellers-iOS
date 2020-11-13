@@ -32,12 +32,12 @@ class LoginMainVC: UIViewController {
         return v
     }()
     
-    let signupButton : GradientButton = {
-        let v = GradientButton()
-//        v.setTitle("Signup", for: .normal)
+    let signupButton : UIButton = {
+        let v = UIButton()
+        v.setTitle("Signup", for: .normal)
         
-        v.title = "Signup"
-        v.colors = [#colorLiteral(red: 1, green: 0.4431372549, blue: 0.1176470588, alpha: 1).cgColor,#colorLiteral(red: 0.8941176471, green: 0.1333333333, blue: 0.9215686275, alpha: 1).cgColor]
+//        v.title = "Signup"
+//        v.colors = [#colorLiteral(red: 1, green: 0.4431372549, blue: 0.1176470588, alpha: 1).cgColor,#colorLiteral(red: 0.8941176471, green: 0.1333333333, blue: 0.9215686275, alpha: 1).cgColor]
         
         v.setTitleColor(.white, for: .normal)
         v.addTarget(self, action: #selector(tappedSignup), for: .touchUpInside)
@@ -70,7 +70,7 @@ class LoginMainVC: UIViewController {
         buttonsStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
         buttonsStack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
         buttonsStack.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor).isActive = true
-        buttonsStack.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        buttonsStack.heightAnchor.constraint(equalToConstant: 110).isActive = true
         
         buttonsStack.addArrangedSubview(loginButton)
         buttonsStack.addArrangedSubview(signupButton)
@@ -83,6 +83,17 @@ class LoginMainVC: UIViewController {
         mainImageView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
         
+
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        let gradientLayer = CAGradientLayer()
+        let colors = [#colorLiteral(red: 0.6147674918, green: 0.943643868, blue: 0.9678253531, alpha: 1).cgColor,#colorLiteral(red: 0.3294117647, green: 0.6588235294, blue: 1, alpha: 1).cgColor]
+        gradientLayer.colors = colors
+        gradientLayer.frame = view.bounds
+        //view.layer.addSublayer(gradientLayer)
+        view.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     override func loadView() {
@@ -171,7 +182,51 @@ internal class MainImagesView: UIImageView {
         setupViews()
     }
     
+    override func layoutSubviews() {
+        let l = CAEmitterLayer()
+        
+        l.anchorPoint = CGPoint(x: 0.5, y: 1)
+        
+        l.frame = bounds
+        l.emitterShape = .point
+        l.setAffineTransform(CGAffineTransform(rotationAngle: -.pi/2))
+        l.emitterPosition = CGPoint(x: center.x - 20, y: bounds.height)
+        l.setAffineTransform(CGAffineTransform(translationX: 0, y: -80).rotated(by: -.pi/2))
+        l.emitterMode = .points
+        
+        
+        let cell = CAEmitterCell()
+        cell.contentsScale = UIScreen.main.scale
+        cell.birthRate = 6
+        cell.lifetime = 11
+        cell.velocity = 25
+        cell.alphaSpeed = -0.15
+        cell.alphaRange = 0.5
+        cell.contents = UIImage(named: "Dot")?.cgImage
+        cell.emissionRange = .pi/2.4
+        cell.color = #colorLiteral(red: 0.08600000292, green: 1, blue: 0.7960000038, alpha: 1).cgColor
+        
+        let cellStar = CAEmitterCell()
+        cellStar.contentsScale = UIScreen.main.scale
+        cellStar.birthRate = 7
+        cellStar.lifetime = 12
+        cellStar.velocity = 30
+        cellStar.alphaSpeed = -0.15
+        cellStar.alphaRange = 0.5
+        cellStar.contents = UIImage(named: "Star")?.cgImage
+        cellStar.emissionRange = .pi/2
+        
+        
+        l.emitterCells = [cell, cellStar]
+        
+        
+        
+        layer.insertSublayer(l, at: 0)
+    }
+    
     func setupViews() {
+        
+        
         addSubview(bookImage)
         addSubview(logoImage)
         addSubview(beeLady)
@@ -185,7 +240,7 @@ internal class MainImagesView: UIImageView {
         
         bookImage.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         bookImage.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
-        bookImage.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        bookImage.heightAnchor.constraint(equalToConstant: 150).isActive = true
         
         logoImage.topAnchor.constraint(equalTo: topAnchor).isActive = true
         logoImage.leftAnchor.constraint(equalTo: layoutMarginsGuide.leftAnchor).isActive = true
