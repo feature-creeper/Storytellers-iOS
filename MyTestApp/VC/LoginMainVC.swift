@@ -32,12 +32,12 @@ class LoginMainVC: UIViewController {
         return v
     }()
     
-    let signupButton : UIButton = {
-        let v = UIButton()
-        v.setTitle("Signup", for: .normal)
+    let signupButton : GradientButton = {
+        let v = GradientButton()
+//        v.setTitle("Signup", for: .normal)
         
-//        v.title = "Signup"
-//        v.colors = [#colorLiteral(red: 1, green: 0.4431372549, blue: 0.1176470588, alpha: 1).cgColor,#colorLiteral(red: 0.8941176471, green: 0.1333333333, blue: 0.9215686275, alpha: 1).cgColor]
+        v.title = "Sign Up"
+        v.colors = [#colorLiteral(red: 0.4709999859, green: 0.2349999994, blue: 1, alpha: 1).cgColor,#colorLiteral(red: 0.2245837152, green: 0.006199446972, blue: 0.7438004613, alpha: 1).cgColor]
         
         v.setTitleColor(.white, for: .normal)
         v.addTarget(self, action: #selector(tappedSignup), for: .touchUpInside)
@@ -57,6 +57,12 @@ class LoginMainVC: UIViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
+    
+    let starsTopImageView : UIImageView = {
+        let v = UIImageView(image: UIImage(named: "StarsTop"))
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +71,7 @@ class LoginMainVC: UIViewController {
     }
     
     func setupViews() {
+        view.addSubview(starsTopImageView)
         view.addSubview(buttonsStack)
         
         buttonsStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
@@ -74,6 +81,11 @@ class LoginMainVC: UIViewController {
         
         buttonsStack.addArrangedSubview(loginButton)
         buttonsStack.addArrangedSubview(signupButton)
+        
+        starsTopImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        starsTopImageView.heightAnchor.constraint(equalTo: starsTopImageView.widthAnchor).isActive = true
+        starsTopImageView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        starsTopImageView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
         view.addSubview(mainImageView)
         
@@ -176,6 +188,20 @@ internal class MainImagesView: UIImageView {
         return v
     }()
     
+    let dad : UIImageView = {
+       let v = UIImageView(image: UIImage(named: "Dad"))
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.contentMode = .scaleAspectFit
+        return v
+    }()
+    
+    let mum : UIImageView = {
+       let v = UIImageView(image: UIImage(named: "Mum"))
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.contentMode = .scaleAspectFit
+        return v
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -229,12 +255,15 @@ internal class MainImagesView: UIImageView {
         
         addSubview(bookImage)
         addSubview(logoImage)
+        addSubview(mum)
+        addSubview(dad)
         addSubview(beeLady)
         addSubview(superDad)
         addSubview(witchGirl)
         addSubview(superBoy)
         addSubview(mummy)
         addSubview(skeleton)
+        
         
         let offset = UIScreen.main.bounds.width/4
         
@@ -247,54 +276,71 @@ internal class MainImagesView: UIImageView {
         logoImage.rightAnchor.constraint(equalTo: layoutMarginsGuide.rightAnchor).isActive = true
         logoImage.heightAnchor.constraint(equalToConstant: 200).isActive = true
         
+        dad.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -110).isActive = true
+        dad.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -offset - 30).isActive = true
+        dad.widthAnchor.constraint(equalToConstant: 140).isActive = true
+        dad.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        
+        mum.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -90).isActive = true
+        mum.centerXAnchor.constraint(equalTo: centerXAnchor, constant: offset + 35).isActive = true
+        mum.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        mum.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        
+//        mummy.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+//        mummy.centerXAnchor.constraint(equalTo: centerXAnchor, constant: offset).isActive = true
+//        mummy.widthAnchor.constraint(equalToConstant: 140).isActive = true
+//        mummy.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        
         beeLady.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50).isActive = true
         beeLady.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -offset - 30).isActive = true
-        beeLady.widthAnchor.constraint(equalToConstant: 160).isActive = true
-        beeLady.heightAnchor.constraint(equalToConstant: 160).isActive = true
+        beeLady.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        beeLady.heightAnchor.constraint(equalToConstant: 130).isActive = true
         
         superDad.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50).isActive = true
         superDad.centerXAnchor.constraint(equalTo: centerXAnchor, constant: offset + 45).isActive = true
-        superDad.widthAnchor.constraint(equalToConstant: 140).isActive = true
-        superDad.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        superDad.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        superDad.heightAnchor.constraint(equalToConstant: 120).isActive = true
         
-        skeleton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -110).isActive = true
+        skeleton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -140).isActive = true
         skeleton.centerXAnchor.constraint(equalTo: centerXAnchor,constant: 15).isActive = true
-        skeleton.widthAnchor.constraint(equalToConstant: 140).isActive = true
-        skeleton.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        skeleton.widthAnchor.constraint(equalToConstant: 110).isActive = true
+        skeleton.heightAnchor.constraint(equalToConstant: 110).isActive = true
         
         witchGirl.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -30).isActive = true
         witchGirl.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -offset - 30).isActive = true
-        witchGirl.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        witchGirl.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        witchGirl.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        witchGirl.heightAnchor.constraint(equalToConstant: 100).isActive = true
         
         superBoy.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -100).isActive = true
         superBoy.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 40).isActive = true
-        superBoy.widthAnchor.constraint(equalToConstant: 160).isActive = true
-        superBoy.heightAnchor.constraint(equalToConstant: 160).isActive = true
+        superBoy.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        superBoy.heightAnchor.constraint(equalToConstant: 150).isActive = true
         
         mummy.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         mummy.centerXAnchor.constraint(equalTo: centerXAnchor, constant: offset).isActive = true
-        mummy.widthAnchor.constraint(equalToConstant: 140).isActive = true
-        mummy.heightAnchor.constraint(equalToConstant: 140).isActive = true
-//        
-//        UIView.animate(withDuration: 3, delay: 0, options: [.autoreverse, .repeat]) {
-//            self.beeLady.transform = CGAffineTransform(rotationAngle: 50)
-//        }
-//        UIView.animate(withDuration: 3, delay: 0, options: [.autoreverse, .repeat]) {
-//            self.superDad.transform = CGAffineTransform(rotationAngle: .pi/9)
-//        }
+        mummy.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        mummy.heightAnchor.constraint(equalToConstant: 120).isActive = true
+
         
-        UIView.animate(withDuration: 3, delay: 0, options: [.autoreverse, .repeat]) {
+        
+        
+        UIView.animate(withDuration: 3, delay: 0, options: [.autoreverse, .repeat, .curveLinear]) {
             self.mummy.transform = CGAffineTransform(rotationAngle: 50)
+            self.mummy.transform = CGAffineTransform(translationX: 30, y: 0)
         }
         
         UIView.animate(withDuration: 4, delay: 0, options: [.autoreverse, .repeat]) {
-            self.witchGirl.transform = CGAffineTransform(translationX: 30, y: 40)
+            self.witchGirl.transform = CGAffineTransform(translationX: 30, y: 32)
         }
         
         UIView.animate(withDuration: 3.5, delay: 0, options: [.autoreverse, .repeat]) {
             self.superBoy.transform = CGAffineTransform(translationX: 0, y: 30)
             self.superBoy.transform = CGAffineTransform(rotationAngle: .pi/11)
+        }
+        
+        UIView.animate(withDuration: 2, delay: 0, options: [.autoreverse, .repeat]) {
+            self.skeleton.transform = CGAffineTransform(translationX: 0, y: 15)
+            
         }
 
     }
