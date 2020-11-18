@@ -184,8 +184,22 @@ class DeepARVC: UIViewController {
         }
         
         if let flatL = storyVM.currentFlatL {
-            slatView.showLeftFlat(index: storyVM.currentPage, image: flatL)
+            print("SHOW LEFT")
+            slatView.showSlat(left: true, index: storyVM.currentPage, image: flatL)
+        }else{
+            print("HIDE LEFT")
+            slatView.hideSlat(left: true)
         }
+        
+        if let flatR = storyVM.currentFlatR {
+            print("SHOW RIGHT")
+            slatView.showSlat(left: false, index: storyVM.currentPage, image: flatR)
+        }else{
+            print("HIDE RIGHT")
+            slatView.hideSlat(left: false)
+        }
+        
+        
     }
     
     func deepARSwitchEffect(name:String) {
@@ -197,7 +211,7 @@ class DeepARVC: UIViewController {
     }
     
     func setupViews() {
-        arViewContainer.addSubview(exitButton)
+        
         
         view.addSubview(timerBGView)
         
@@ -205,11 +219,14 @@ class DeepARVC: UIViewController {
         view.addSubview(endRecordingButton)
         
         view.addSubview(detailStack)
+        
+        view.addSubview(slatView)
+        
         view.addSubview(pageBackgroundView)
         view.addSubview(safeAreaView)
         view.addSubview(startRecordingButton)
         
-        view.addSubview(slatView)
+        view.addSubview(exitButton)
         
         
         detailStack.axis = .vertical
@@ -492,21 +509,27 @@ class SlatView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func showLeftFlat(index : Int, image: String) {
-        print(image)
-        leftSlat.isHidden = false
+    func hideSlat(left : Bool) {
+        if left {
+            leftSlat.isHidden = true
+        }else{
+            rightSlat.isHidden = true
+        }
+    }
+    
+    func showSlat(left : Bool,index : Int, image: String) {
         
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let myEffectPath = documentsURL.appendingPathComponent(image).path
         
-        leftSlat.contents = UIImage(contentsOfFile: myEffectPath)?.cgImage
-    }
-    
-    func showSlat(index : Int) {
-        //CALCULATE IF U SHOW SLATS + WHICH IMAGE BASED ON DATA
-        rightSlat.isHidden = false
-        
+        if left {
+            leftSlat.isHidden = false
+            leftSlat.contents = UIImage(contentsOfFile: myEffectPath)?.cgImage
+        }else{
+            rightSlat.isHidden = false
+            rightSlat.contents = UIImage(contentsOfFile: myEffectPath)?.cgImage
+        }
         
         print("SLAT Index: \(index)")
     }

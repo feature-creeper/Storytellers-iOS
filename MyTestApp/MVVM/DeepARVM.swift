@@ -113,8 +113,14 @@ class DeepARVM : NSObject{
     }
     
     func setCurrentFlats() {
+        
+        var lFound = false
+        var rFound = false
+        
         for item in flats {
             guard let pageNumbers = item["page"] as? [Int] else {return}
+            
+
             
             pageNumbers.forEach { (pageNumber) in
                 if currentPage == pageNumber {
@@ -125,13 +131,21 @@ class DeepARVM : NSObject{
                     
                     if left == 0 {
                         currentFlatR = image
-                        print(currentFlatR)
+                        rFound = true
                     }else{
                         currentFlatL = image
-                        print(currentFlatL)
+                        lFound = true
                     }
                 }
             }
+        }
+        
+        if !lFound {
+            currentFlatL = nil
+        }
+        
+        if !rFound {
+            currentFlatR = nil
         }
     }
     
