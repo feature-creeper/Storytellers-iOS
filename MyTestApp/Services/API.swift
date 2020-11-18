@@ -53,15 +53,24 @@ class API {
         let docRef = db.collection("books").document(id)
         
         docRef.getDocument { (snapshot, error) in
-            print("SNAPSHOT")
-            print(snapshot?.data())
+//            print("SNAPSHOT")
+//            print(snapshot?.data())
             
             var _effects : String?
-            
             if let effects = snapshot?.data()?["effects"]{
                 do {
                     let e = effects as! [String]
                     _effects = e.joined(separator: ",")
+                } catch  {
+                    
+                }
+            }
+            
+            var _images : String?
+            if let images = snapshot?.data()?["images"]{
+                do {
+                    let e = images as! [String]
+                    _images = e.joined(separator: ",")
                 } catch  {
                     
                 }
@@ -81,22 +90,40 @@ class API {
                         if let data = effectSeqData {
                             let effect = String(data: data, encoding: .utf8)
                             
-                            print("YOUR EFFECT")
-                            print(effect)
-                            
                             effectSequenceString.append(effect!)
-                            //effectSequenceString.append("-")
                         }
-                
                     }
-                    
-                    print("effectSequenceString")
-                    print(effectSequenceString)
                     
                 } catch  {
                     
                 }
             }
+            
+            //ImageString
+            
+            var imageSequenceString = ""
+            
+            if let imageSequence = snapshot?.data()?["flat_sequence"]{
+                do {
+                    let e = imageSequence as! [[String:Any]]
+                    
+                    for item in e {
+                        let jsonEncoder = JSONEncoder()
+                        
+                        let effectSeqData = try? JSONSerialization.data(withJSONObject: item, options: [])
+                        if let data = effectSeqData {
+                            let effect = String(data: data, encoding: .utf8)
+                            imageSequenceString.append(effect!)
+                        }
+                
+                    }
+                    
+                } catch  {
+                    
+                }
+            }
+            
+            //Put it together
             
             do {
                 let bookData = try JSONSerialization.data(withJSONObject: snapshot?.data(), options: [])
@@ -110,7 +137,13 @@ class API {
                     bookInfo.effects = effects
                 }
                 
+                if let images = _images{
+                    bookInfo.images = images
+                }
+                
                 bookInfo.effectSequence = effectSequenceString
+                
+                bookInfo.imageSequence = imageSequenceString
                 
                 completion(bookInfo)
             }
@@ -146,6 +179,17 @@ class API {
 
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0].appendingPathComponent(effectName)
+
+        storageRef.write(toFile: documentsDirectory) { (url, error) in
+            completion()
+        }
+    }
+    
+    func saveImageToDocuments(imageName:String, completion: @escaping ()->Void) {
+        let storageRef = Storage.storage().reference().child("Images/\(imageName)")
+
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0].appendingPathComponent(imageName)
 
         storageRef.write(toFile: documentsDirectory) { (url, error) in
             completion()

@@ -37,7 +37,7 @@ class LoginMainVC: UIViewController {
 //        v.setTitle("Signup", for: .normal)
         
         v.title = "Sign Up"
-        v.colors = [#colorLiteral(red: 0.4709999859, green: 0.2349999994, blue: 1, alpha: 1).cgColor,#colorLiteral(red: 0.2245837152, green: 0.006199446972, blue: 0.7438004613, alpha: 1).cgColor]
+        v.colors = [#colorLiteral(red: 0.01327205449, green: 0.7977505326, blue: 0.9842525125, alpha: 1).cgColor,#colorLiteral(red: 0.2245837152, green: 0.006199446972, blue: 0.7438004613, alpha: 1).cgColor]
         
         v.setTitleColor(.white, for: .normal)
         v.addTarget(self, action: #selector(tappedSignup), for: .touchUpInside)
@@ -104,8 +104,36 @@ class LoginMainVC: UIViewController {
         let colors = [#colorLiteral(red: 0.6147674918, green: 0.943643868, blue: 0.9678253531, alpha: 1).cgColor,#colorLiteral(red: 0.3294117647, green: 0.6588235294, blue: 1, alpha: 1).cgColor]
         gradientLayer.colors = colors
         gradientLayer.frame = view.bounds
-        //view.layer.addSublayer(gradientLayer)
         view.layer.insertSublayer(gradientLayer, at: 0)
+        
+        //EMITTER
+        
+        let l = CAEmitterLayer()
+        l.frame = view.bounds
+        l.birthRate = 2
+        l.emitterShape = .line
+        l.emitterSize = CGSize(width: 250, height: 2)
+        l.emitterPosition = CGPoint(x: view.bounds.width/2, y: 140)
+        
+        
+        let cell = CAEmitterCell()
+        cell.contentsScale = UIScreen.main.scale
+        cell.birthRate = 4
+        cell.lifetime = 15
+        cell.velocity = 30
+
+//        cell.emissionLongitude = CGFloat.pi
+        cell.emissionRange = .pi
+        
+        cell.alphaSpeed = -0.3
+        cell.alphaRange = 0.5
+        
+        cell.contents = UIImage(named: "Star")?.cgImage
+        
+        
+        l.emitterCells = [cell]
+                
+        view.layer.insertSublayer(l, at: 2)
     }
     
     override func loadView() {
@@ -278,18 +306,13 @@ internal class MainImagesView: UIImageView {
         
         dad.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -110).isActive = true
         dad.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -offset - 30).isActive = true
-        dad.widthAnchor.constraint(equalToConstant: 140).isActive = true
-        dad.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        dad.widthAnchor.constraint(equalToConstant: 125).isActive = true
+        dad.heightAnchor.constraint(equalToConstant: 125).isActive = true
         
         mum.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -90).isActive = true
         mum.centerXAnchor.constraint(equalTo: centerXAnchor, constant: offset + 35).isActive = true
         mum.widthAnchor.constraint(equalToConstant: 150).isActive = true
         mum.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        
-//        mummy.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-//        mummy.centerXAnchor.constraint(equalTo: centerXAnchor, constant: offset).isActive = true
-//        mummy.widthAnchor.constraint(equalToConstant: 140).isActive = true
-//        mummy.heightAnchor.constraint(equalToConstant: 140).isActive = true
         
         beeLady.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50).isActive = true
         beeLady.centerXAnchor.constraint(equalTo: centerXAnchor, constant: -offset - 30).isActive = true
@@ -298,8 +321,8 @@ internal class MainImagesView: UIImageView {
         
         superDad.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50).isActive = true
         superDad.centerXAnchor.constraint(equalTo: centerXAnchor, constant: offset + 45).isActive = true
-        superDad.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        superDad.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        superDad.widthAnchor.constraint(equalToConstant: 105).isActive = true
+        superDad.heightAnchor.constraint(equalToConstant: 105).isActive = true
         
         skeleton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -140).isActive = true
         skeleton.centerXAnchor.constraint(equalTo: centerXAnchor,constant: 15).isActive = true

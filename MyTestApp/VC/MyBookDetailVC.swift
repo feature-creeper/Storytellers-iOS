@@ -300,11 +300,21 @@ class MyBookDetailVC: UIViewController {
         
         let effectSequence : [[String:Any]] = effects.getEffectSequenceArray()
         
+        
+        var imageSequence : [[String:Any]] = []
+        
+        if let images = book?.images {
+            imageSequence = images.getEffectSequenceArray()
+        }
+        
+        
+        
         if let content = book?.content {
             vc.content = content
             let story = DeepARVM(rawString: content)
             story.delegate = vc
             story.effects = effectSequence
+            story.flats = imageSequence
             vc.storyVM = story
         }
 

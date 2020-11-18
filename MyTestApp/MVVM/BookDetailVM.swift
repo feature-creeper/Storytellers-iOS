@@ -86,6 +86,9 @@ class BookDetailVM {
             book.effects = effectSequence
         }
         
+        if let imageSequence = bookInfo?.imageSequence {
+            book.images = imageSequence
+        }
         
         let dGroup = DispatchGroup()
         
@@ -122,6 +125,21 @@ class BookDetailVM {
             for name in effectNames {
                 dGroup.enter()
                 API.sharedAPI.saveEffectToDocuments(effectName: name) {
+                    dGroup.leave()
+                }
+            }
+           
+        }
+        
+        if let images = bookInfo?.images {
+            
+            let imageNames = images.getEffectArray()
+            
+            print(imageNames)
+            
+            for name in imageNames {
+                dGroup.enter()
+                API.sharedAPI.saveImageToDocuments(imageName: name) {
                     dGroup.leave()
                 }
             }

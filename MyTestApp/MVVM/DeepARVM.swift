@@ -11,15 +11,25 @@ class DeepARVM : NSObject{
     
     var effects : [[String:Any]] = []
     
+    var flats : [[String:Any]] = []{
+        didSet{
+            print("flats \(flats)")
+        }
+    }
+    
     var timer = Timer()
     var start = Date()
 
     private var currChapter : Int = 0
-    private var currentPage : Int = 0
+    var currentPage : Int = 0
     
     var recording = false
     
     var currentMask : String?
+    
+    var currentFlatL : String?
+    var currentFlatR : String?
+    
     
     var currentPageText : String{
         get{
@@ -102,8 +112,32 @@ class DeepARVM : NSObject{
         }
     }
     
+    func setCurrentFlats() {
+        for item in flats {
+            guard let pageNumbers = item["page"] as? [Int] else {return}
+            
+            pageNumbers.forEach { (pageNumber) in
+                if currentPage == pageNumber {
+                    
+                    let left = item["left"] as! Int
+                    
+                    let image = item["image"] as! String
+                    
+                    if left == 0 {
+                        currentFlatR = image
+                        print(currentFlatR)
+                    }else{
+                        currentFlatL = image
+                        print(currentFlatL)
+                    }
+                }
+            }
+        }
+    }
+    
     func turnedPage() {
         setCurrentMask()
+        setCurrentFlats()
         delegate?.changedPage(index: currentPage, totalPages: story[0].count)
     }
     

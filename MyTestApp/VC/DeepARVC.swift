@@ -34,11 +34,8 @@ class DeepARVC: UIViewController {
     var spinner = LoadingVideoView(title: "Creating your video")
     
     var slatView : SlatView = {
-        let v = SlatView()
-        //         v.backgroundColor = .white
+        let v = SlatView(frame: CGRect.zero)
         v.translatesAutoresizingMaskIntoConstraints = false
-        //         v.applyShadow(offset: CGSize.zero, opacity: 0.4, radius: 6.0)
-        //         v.isHidden = true
         v.isUserInteractionEnabled = false
         return v
     }()
@@ -175,20 +172,23 @@ class DeepARVC: UIViewController {
         setMask()
         
         pageLabel.text = storyVM.currentPageText
-        
     }
-    
-    func setMask() {
-        storyVM.setCurrentMask()
-        maskPath = storyVM.currentMask
-        setMask(name: maskPath!)
-    }
-    
+   
     override func viewWillDisappear(_ animated: Bool) {
         deepAR.shutdown()
     }
     
-    func setMask(name:String) {
+    func setMask() {
+        if let maskPath = storyVM.currentMask{
+            deepARSwitchEffect(name: maskPath)
+        }
+        
+        if let flatL = storyVM.currentFlatL {
+            slatView.showLeftFlat(index: storyVM.currentPage, image: flatL)
+        }
+    }
+    
+    func deepARSwitchEffect(name:String) {
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let myEffectPath = documentsURL.appendingPathComponent(name).path
@@ -420,12 +420,14 @@ extension DeepARVC : DeepARDelegate {
 }
 
 extension DeepARVC : StoryDelegate{
+    
     func changedPage(index: Int, totalPages: Int) {
-        
         
         setMask()
         
         pageIndicatorLabel.text = "\(index + 1)/\(totalPages)"
+        
+//        slatView.showSlat(index: index)
         
         instructionLabelContainer.isHidden = true
         
@@ -475,26 +477,54 @@ class PassthroughStack: UIStackView {
 
 class SlatView: UIView {
     
+    let rightSlat = CALayer()
+    let leftSlat = CALayer()
+    
+    let data : [String] = []
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        rightSlat.isHidden = true
+        leftSlat.isHidden = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func showLeftFlat(index : Int, image: String) {
+        print(image)
+        leftSlat.isHidden = false
+        
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let myEffectPath = documentsURL.appendingPathComponent(image).path
+        
+        leftSlat.contents = UIImage(contentsOfFile: myEffectPath)?.cgImage
+    }
+    
+    func showSlat(index : Int) {
+        //CALCULATE IF U SHOW SLATS + WHICH IMAGE BASED ON DATA
+        rightSlat.isHidden = false
+        
+        
+        print("SLAT Index: \(index)")
+    }
+    
     override func layoutSubviews() {
 
-        let rightSlat = CALayer()
         rightSlat.frame = CGRect(x: 0, y: 0, width: 150, height: bounds.height)
         rightSlat.anchorPoint = CGPoint(x: 1, y: 0)
         rightSlat.position = CGPoint(x: bounds.width, y: 0)
-        
-        rightSlat.contents = #imageLiteral(resourceName: "Slat_R").cgImage
+//        rightSlat.contents = #imageLiteral(resourceName: "Slat_R").cgImage
         rightSlat.contentsGravity = .resizeAspectFill
-        
         self.layer.addSublayer(rightSlat)
         
-        let leftSlat = CALayer()
         leftSlat.frame = CGRect(x: 0, y: 0, width: 150, height: bounds.height)
         leftSlat.anchorPoint = CGPoint(x: 0, y: 0)
         leftSlat.position = CGPoint(x: 0, y: 0)
-        
-        leftSlat.contents = #imageLiteral(resourceName: "Slat_L").cgImage
+//        leftSlat.contents = #imageLiteral(resourceName: "Slat_L").cgImage
         leftSlat.contentsGravity = .resizeAspectFill
-        
         self.layer.addSublayer(leftSlat)
     }
 }
