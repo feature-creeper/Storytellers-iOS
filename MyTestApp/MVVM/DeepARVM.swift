@@ -11,11 +11,7 @@ class DeepARVM : NSObject{
     
     var effects : [[String:Any]] = []
     
-    var flats : [[String:Any]] = []{
-        didSet{
-            print("flats \(flats)")
-        }
-    }
+//    var flats : [[String:Any]] = []
     
     var timer = Timer()
     var start = Date()
@@ -111,7 +107,7 @@ class DeepARVM : NSObject{
             }
         }
     }
-    
+    /*
     func setCurrentFlats() {
         
         var lFound = false
@@ -147,11 +143,11 @@ class DeepARVM : NSObject{
         if !rFound {
             currentFlatR = nil
         }
-    }
+    }*/
     
     func turnedPage() {
         setCurrentMask()
-        setCurrentFlats()
+//        setCurrentFlats()
         delegate?.changedPage(index: currentPage, totalPages: story[0].count)
     }
     
@@ -191,8 +187,3 @@ protocol StoryDelegate {
     func changedPage(index:Int, totalPages: Int)
     func timerAddedSecond(formatted:String)
 }
-
-let dummyData = ["Spotty the Hyena is very sad, he has lost his laugh. ","""
-Please help me find my laugh", said Spotty.
-"I can't find a laugh up here" replied Giraffe.
-"""]

@@ -26,6 +26,8 @@ class VideoCompositor {
     
     let text:[[String]]
     
+//    var flats : [[String:Any]]
+    
     let bookID:String
     
     var completionTimer : Timer?
@@ -39,7 +41,15 @@ class VideoCompositor {
         self.pageTimes = pageTimes
         self.text = storyText
         self.bookID = bookID
+//        self.flats = flats
     }
+    
+//    init(_ view: UIView, pageTimes: [(Int, TimeInterval,Bool)],storyText:[[String]], bookID : String) {
+//        self.view = view
+//        self.pageTimes = pageTimes
+//        self.text = storyText
+//        self.bookID = bookID
+//    }
     
     func composite(url:URL, completion: @escaping () -> Void) {
         
@@ -108,7 +118,6 @@ class VideoCompositor {
         parentlayer.addSublayer(videolayer)
         
         createTextLayers(parentLayer: parentlayer,pageHeight: pageHeight,size: size)
-        
         
         
         let layercomposition = AVMutableVideoComposition()
@@ -181,6 +190,47 @@ class VideoCompositor {
             }
         })
     }
+    /*
+    func createImageLayers(parentLayer:CALayer, pageHeight : CGFloat, size : CGSize) {
+        
+        //Make width size.width / 3 - in DeepARVC
+        
+        let flatR = CALayer()
+        flatR.frame = CGRect(x: 0, y: 0, width: size.width / 3, height: size.height - pageHeight)
+//        flatR.backgroundColor = UIColor.purple.cgColor
+        
+        flatR.anchorPoint = CGPoint(x: 1, y: 0)
+        flatR.position = CGPoint(x: size.width, y: 0)
+        flatR.contentsGravity = .resizeAspectFill
+        
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let myImagePath = documentsURL.appendingPathComponent("Laugh_r.png").path
+        flatR.contents = UIImage(contentsOfFile: myImagePath)?.cgImage
+        
+        parentLayer.addSublayer(flatR)
+        
+        //UNFLIP AT END?
+        parentLayer.isGeometryFlipped = true
+        
+        var pageIndex = 0
+        
+      
+        //Create a layer for every image.
+        //If the page is the image page, animate in image, --> If not animate out image layer
+        
+        
+        for item in flats {
+//            if item["left"] == 0 {
+//                print("FOUND A RIGHT LAYER \(item["image"])")
+//            }
+            if let left = item["left"] as? Int {
+                if left == 0 {
+                    print("FOUND A RIGHT LAYER \(item["image"])")
+                }
+            }
+        }
+    }\*/
     
     func createTextLayers(parentLayer:CALayer, pageHeight : CGFloat, size : CGSize) {
         

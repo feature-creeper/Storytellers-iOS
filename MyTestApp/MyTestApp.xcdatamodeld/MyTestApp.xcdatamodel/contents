@@ -6,7 +6,6 @@
         <attribute name="cover" optional="YES" attributeType="String"/>
         <attribute name="effects" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="images" optional="YES" attributeType="String"/>
         <attribute name="synopsis" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Video" inverseName="book" inverseEntity="Video"/>
@@ -18,7 +17,7 @@
         <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="videos" inverseEntity="Book"/>
     </entity>
     <elements>
-        <element name="Book" positionX="-63" positionY="-18" width="128" height="164"/>
+        <element name="Book" positionX="-63" positionY="-18" width="128" height="149"/>
         <element name="Video" positionX="159.2578125" positionY="-3.45703125" width="128" height="103"/>
     </elements>
 </model>

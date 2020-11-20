@@ -99,31 +99,6 @@ class API {
                 }
             }
             
-            //ImageString
-            
-            var imageSequenceString = ""
-            
-            if let imageSequence = snapshot?.data()?["flat_sequence"]{
-                do {
-                    let e = imageSequence as! [[String:Any]]
-                    
-                    for item in e {
-                        let jsonEncoder = JSONEncoder()
-                        
-                        let effectSeqData = try? JSONSerialization.data(withJSONObject: item, options: [])
-                        if let data = effectSeqData {
-                            let effect = String(data: data, encoding: .utf8)
-                            imageSequenceString.append(effect!)
-                        }
-                
-                    }
-                    
-                } catch  {
-                    
-                }
-            }
-            
-            //Put it together
             
             do {
                 let bookData = try JSONSerialization.data(withJSONObject: snapshot?.data(), options: [])
@@ -142,8 +117,6 @@ class API {
                 }
                 
                 bookInfo.effectSequence = effectSequenceString
-                
-                bookInfo.imageSequence = imageSequenceString
                 
                 completion(bookInfo)
             }

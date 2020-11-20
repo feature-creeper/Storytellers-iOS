@@ -33,12 +33,12 @@ class DeepARVC: UIViewController {
     
     var spinner = LoadingVideoView(title: "Creating your video")
     
-    var slatView : SlatView = {
-        let v = SlatView(frame: CGRect.zero)
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.isUserInteractionEnabled = false
-        return v
-    }()
+//    var slatView : SlatView = {
+//        let v = SlatView(frame: CGRect.zero)
+//        v.translatesAutoresizingMaskIntoConstraints = false
+//        v.isUserInteractionEnabled = false
+//        return v
+//    }()
     
     var exitButton : UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 30, width: 70, height: 70))
@@ -165,9 +165,9 @@ class DeepARVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupDeepARAndCamera()
-        
         setupViews()
+        
+        setupDeepARAndCamera()
         
         setMask()
         
@@ -183,21 +183,21 @@ class DeepARVC: UIViewController {
             deepARSwitchEffect(name: maskPath)
         }
         
-        if let flatL = storyVM.currentFlatL {
-            print("SHOW LEFT")
-            slatView.showSlat(left: true, index: storyVM.currentPage, image: flatL)
-        }else{
-            print("HIDE LEFT")
-            slatView.hideSlat(left: true)
-        }
-        
-        if let flatR = storyVM.currentFlatR {
-            print("SHOW RIGHT")
-            slatView.showSlat(left: false, index: storyVM.currentPage, image: flatR)
-        }else{
-            print("HIDE RIGHT")
-            slatView.hideSlat(left: false)
-        }
+//        if let flatL = storyVM.currentFlatL {
+//            print("SHOW LEFT")
+//            slatView.showSlat(left: true, index: storyVM.currentPage, image: flatL)
+//        }else{
+//            print("HIDE LEFT")
+//            slatView.hideSlat(left: true)
+//        }
+//
+//        if let flatR = storyVM.currentFlatR {
+//            print("SHOW RIGHT")
+//            slatView.showSlat(left: false, index: storyVM.currentPage, image: flatR)
+//        }else{
+//            print("HIDE RIGHT")
+//            slatView.hideSlat(left: false)
+//        }
         
         
     }
@@ -220,7 +220,7 @@ class DeepARVC: UIViewController {
         
         view.addSubview(detailStack)
         
-        view.addSubview(slatView)
+//        view.addSubview(slatView)
         
         view.addSubview(pageBackgroundView)
         view.addSubview(safeAreaView)
@@ -258,11 +258,13 @@ class DeepARVC: UIViewController {
         startRecordingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         startRecordingButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
         
+        
+        
         pageBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         pageBackgroundView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         pageBackgroundView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         pageBackgroundView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        
+                
         pageBackgroundView.addSubview(pageLabel)
         pageLabel.topAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: 15).isActive = true
         pageLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
@@ -277,10 +279,10 @@ class DeepARVC: UIViewController {
         detailStack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
         detailStack.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor).isActive = true
         
-        slatView.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor).isActive = true
-        slatView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        slatView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        slatView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+//        slatView.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor).isActive = true
+//        slatView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//        slatView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+//        slatView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
     
     
@@ -308,7 +310,7 @@ class DeepARVC: UIViewController {
         self.arView.leftAnchor.constraint(equalTo: self.arViewContainer.leftAnchor, constant: 0).isActive = true
         self.arView.rightAnchor.constraint(equalTo: self.arViewContainer.rightAnchor, constant: 0).isActive = true
         self.arView.topAnchor.constraint(equalTo: self.arViewContainer.topAnchor, constant: 0).isActive = true
-        self.arView.bottomAnchor.constraint(equalTo: self.arViewContainer.bottomAnchor, constant: 0).isActive = true
+        self.arView.bottomAnchor.constraint(equalTo: self.arViewContainer.bottomAnchor).isActive = true
         
         cameraController.startCamera()
         
@@ -349,8 +351,6 @@ class DeepARVC: UIViewController {
     @objc
     func startRecordTapped()  {
         
-        
- 
         timerBGView.setImage(UIImage(systemName: "circlebadge.fill"), for: .normal)
         
         startRecordingButton.isHidden = true
@@ -490,7 +490,7 @@ class PassthroughStack: UIStackView {
         return view == self ? nil : view
     }
 }
-
+/*
 
 class SlatView: UIView {
     
@@ -530,8 +530,6 @@ class SlatView: UIView {
             rightSlat.isHidden = false
             rightSlat.contents = UIImage(contentsOfFile: myEffectPath)?.cgImage
         }
-        
-        print("SLAT Index: \(index)")
     }
     
     override func layoutSubviews() {
@@ -539,15 +537,14 @@ class SlatView: UIView {
         rightSlat.frame = CGRect(x: 0, y: 0, width: 150, height: bounds.height)
         rightSlat.anchorPoint = CGPoint(x: 1, y: 0)
         rightSlat.position = CGPoint(x: bounds.width, y: 0)
-//        rightSlat.contents = #imageLiteral(resourceName: "Slat_R").cgImage
         rightSlat.contentsGravity = .resizeAspectFill
         self.layer.addSublayer(rightSlat)
         
         leftSlat.frame = CGRect(x: 0, y: 0, width: 150, height: bounds.height)
         leftSlat.anchorPoint = CGPoint(x: 0, y: 0)
         leftSlat.position = CGPoint(x: 0, y: 0)
-//        leftSlat.contents = #imageLiteral(resourceName: "Slat_L").cgImage
         leftSlat.contentsGravity = .resizeAspectFill
         self.layer.addSublayer(leftSlat)
     }
 }
+*/

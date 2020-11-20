@@ -301,11 +301,11 @@ class MyBookDetailVC: UIViewController {
         let effectSequence : [[String:Any]] = effects.getEffectSequenceArray()
         
         
-        var imageSequence : [[String:Any]] = []
-        
-        if let images = book?.images {
-            imageSequence = images.getEffectSequenceArray()
-        }
+//        var imageSequence : [[String:Any]] = []
+//
+//        if let images = book?.images {
+//            imageSequence = images.getEffectSequenceArray()
+//        }
         
         
         
@@ -314,7 +314,7 @@ class MyBookDetailVC: UIViewController {
             let story = DeepARVM(rawString: content)
             story.delegate = vc
             story.effects = effectSequence
-            story.flats = imageSequence
+//            story.flats = imageSequence
             vc.storyVM = story
         }
 

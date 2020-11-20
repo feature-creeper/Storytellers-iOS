@@ -86,9 +86,9 @@ class BookDetailVM {
             book.effects = effectSequence
         }
         
-        if let imageSequence = bookInfo?.imageSequence {
-            book.images = imageSequence
-        }
+//        if let imageSequence = bookInfo?.imageSequence {
+//            book.images = imageSequence
+//        }
         
         let dGroup = DispatchGroup()
         
