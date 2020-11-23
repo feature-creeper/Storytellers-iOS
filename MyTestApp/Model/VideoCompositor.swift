@@ -22,12 +22,10 @@ class VideoCompositor {
     
     var myurl: URL?
     
-    let view:UIView?
+//    let view:UIView?
     
     let text:[[String]]
-    
-//    var flats : [[String:Any]]
-    
+   
     let bookID:String
     
     var completionTimer : Timer?
@@ -36,20 +34,14 @@ class VideoCompositor {
     
     var delegate : CompositorDelegate?
     
-    init(_ view: UIView, pageTimes: [(Int, TimeInterval,Bool)],storyText:[[String]], bookID : String) {
-        self.view = view
+    init(//_ view: UIView,
+         pageTimes: [(Int, TimeInterval,Bool)],storyText:[[String]], bookID : String) {
+//        self.view = view
         self.pageTimes = pageTimes
         self.text = storyText
         self.bookID = bookID
-//        self.flats = flats
     }
     
-//    init(_ view: UIView, pageTimes: [(Int, TimeInterval,Bool)],storyText:[[String]], bookID : String) {
-//        self.view = view
-//        self.pageTimes = pageTimes
-//        self.text = storyText
-//        self.bookID = bookID
-//    }
     
     func composite(url:URL, completion: @escaping () -> Void) {
         
@@ -104,25 +96,33 @@ class VideoCompositor {
         
         
         let pageHeight : CGFloat = 550
+//        let size = videoTrack.naturalSize
         
+        let screenBounds = UIScreen.main.bounds
+        let screenScale = UIScreen.main.scale
+        let screenSize = CGSize(width: screenBounds.size.width * screenScale, height: screenBounds.size.height * screenScale)
         
-        // Watermark Effect
-        let size = videoTrack.naturalSize
         
         let videolayer = CALayer()
-        videolayer.frame = CGRect(x: 0, y: pageHeight, width: size.width, height: size.height - 100)
+        videolayer.frame = CGRect(x: 0, y: pageHeight - 280, width: screenSize.width, height: screenSize.height)
+        
         
         let parentlayer = CALayer()
-        parentlayer.backgroundColor = UIColor.white.cgColor
-        parentlayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        parentlayer.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height)
         parentlayer.addSublayer(videolayer)
         
-        createTextLayers(parentLayer: parentlayer,pageHeight: pageHeight,size: size)
+        let pageLayer = CALayer()
+        pageLayer.backgroundColor = UIColor.white.cgColor
+        pageLayer.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: pageHeight)
+        
+        parentlayer.addSublayer(pageLayer)
+
+        createTextLayers(parentLayer: pageLayer, pageHeight: pageHeight, size: screenSize)
         
         
         let layercomposition = AVMutableVideoComposition()
-        layercomposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
-        layercomposition.renderSize = size
+        layercomposition.frameDuration = CMTimeMake(value: 1, timescale: 25)
+        layercomposition.renderSize = screenSize
         layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videolayer, in: parentlayer)
         
         
@@ -190,47 +190,7 @@ class VideoCompositor {
             }
         })
     }
-    /*
-    func createImageLayers(parentLayer:CALayer, pageHeight : CGFloat, size : CGSize) {
-        
-        //Make width size.width / 3 - in DeepARVC
-        
-        let flatR = CALayer()
-        flatR.frame = CGRect(x: 0, y: 0, width: size.width / 3, height: size.height - pageHeight)
-//        flatR.backgroundColor = UIColor.purple.cgColor
-        
-        flatR.anchorPoint = CGPoint(x: 1, y: 0)
-        flatR.position = CGPoint(x: size.width, y: 0)
-        flatR.contentsGravity = .resizeAspectFill
-        
-        let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let myImagePath = documentsURL.appendingPathComponent("Laugh_r.png").path
-        flatR.contents = UIImage(contentsOfFile: myImagePath)?.cgImage
-        
-        parentLayer.addSublayer(flatR)
-        
-        //UNFLIP AT END?
-        parentLayer.isGeometryFlipped = true
-        
-        var pageIndex = 0
-        
-      
-        //Create a layer for every image.
-        //If the page is the image page, animate in image, --> If not animate out image layer
-        
-        
-        for item in flats {
-//            if item["left"] == 0 {
-//                print("FOUND A RIGHT LAYER \(item["image"])")
-//            }
-            if let left = item["left"] as? Int {
-                if left == 0 {
-                    print("FOUND A RIGHT LAYER \(item["image"])")
-                }
-            }
-        }
-    }\*/
+
     
     func createTextLayers(parentLayer:CALayer, pageHeight : CGFloat, size : CGSize) {
         

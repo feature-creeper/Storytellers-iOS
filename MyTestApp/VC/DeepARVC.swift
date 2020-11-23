@@ -422,7 +422,8 @@ extension DeepARVC : DeepARDelegate {
             guard let last = components.last else { return }
             let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
 
-            let videoCompositor = VideoCompositor(view,pageTimes: storyVM.getPageTimes(),storyText: storyVM.story, bookID : bookID)
+            let videoCompositor = VideoCompositor(//view,
+                                                  pageTimes: storyVM.getPageTimes(),storyText: storyVM.story, bookID : bookID)
             videoCompositor.delegate = self
             videoCompositor.composite(url: URL(fileURLWithPath: videoFilePath)) {
                 
