@@ -296,27 +296,25 @@ class MyBookDetailVC: UIViewController {
         
         let vc = DeepARVC(nibName: nil, bundle: nil)
         
-        guard let effects = book?.effects else {return}
+        guard let pages = book?.pages else {return}
         
-        let effectSequence : [[String:Any]] = effects.getEffectSequenceArray()
+        let pagesArray = pages.getEffectArray()
+        
+        vc.pages = pagesArray
+        
+//        guard let effects = book?.effects else {return}
+        
+//        let effectSequence : [[String:Any]] = effects.getEffectSequenceArray()
         
         
-//        var imageSequence : [[String:Any]] = []
-//
-//        if let images = book?.images {
-//            imageSequence = images.getEffectSequenceArray()
+        
+//        if let content = book?.content {
+//            vc.content = content
+//            let story = DeepARVM(rawString: content)
+//            story.delegate = vc
+//            story.effects = effectSequence
+//            vc.storyVM = story
 //        }
-        
-        
-        
-        if let content = book?.content {
-            vc.content = content
-            let story = DeepARVM(rawString: content)
-            story.delegate = vc
-            story.effects = effectSequence
-//            story.flats = imageSequence
-            vc.storyVM = story
-        }
 
         if let id = book?.id {
             vc.bookID = id
@@ -350,6 +348,9 @@ class MyBookDetailVC: UIViewController {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
          alert.addAction(UIAlertAction(title: "Play", style: .default , handler:{ (UIAlertAction)in
+            
+            
+            print(videoURL)
             
             self.playVideo(videoURL: videoURL)
          }))

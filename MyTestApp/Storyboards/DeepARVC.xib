@@ -21,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qct-OU-1oO">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="746"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
             </subviews>
@@ -31,7 +31,7 @@
                 <constraint firstItem="qct-OU-1oO" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="U3C-lW-r94"/>
                 <constraint firstItem="qct-OU-1oO" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="eW1-FD-EDd"/>
                 <constraint firstItem="qct-OU-1oO" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="kwE-bg-F06"/>
-                <constraint firstAttribute="bottom" secondItem="qct-OU-1oO" secondAttribute="bottom" constant="150" id="lqk-4u-2bk"/>
+                <constraint firstAttribute="bottom" secondItem="qct-OU-1oO" secondAttribute="bottom" id="lqk-4u-2bk"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="119.86607142857142"/>
         </view>

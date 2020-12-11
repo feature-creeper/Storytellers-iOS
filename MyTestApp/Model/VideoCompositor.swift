@@ -18,27 +18,33 @@ import CoreData
 
 class VideoCompositor {
     
-    var pageTimes : [(Int, TimeInterval,Bool)]
+//    var pageTimes : [(Int, TimeInterval,Bool)]
     
     var myurl: URL?
     
 //    let view:UIView?
     
-    let text:[[String]]
+//    let text:[[String]]
    
     let bookID:String
     
-    var completionTimer : Timer?
+//    var completionTimer : Timer?
     
     var assetExport : AVAssetExportSession?
     
     var delegate : CompositorDelegate?
     
-    init(//_ view: UIView,
-         pageTimes: [(Int, TimeInterval,Bool)],storyText:[[String]], bookID : String) {
-//        self.view = view
-        self.pageTimes = pageTimes
-        self.text = storyText
+//    init(//_ view: UIView,
+//         pageTimes: [(Int, TimeInterval,Bool)],storyText:[[String]], bookID : String) {
+////        self.view = view
+//        self.pageTimes = pageTimes
+//        self.text = storyText
+//        self.bookID = bookID
+//    }
+    
+    init(
+        bookID : String) {
+
         self.bookID = bookID
     }
     
@@ -117,7 +123,7 @@ class VideoCompositor {
         
         parentlayer.addSublayer(pageLayer)
 
-        createTextLayers(parentLayer: pageLayer, pageHeight: pageHeight, size: screenSize)
+//        createTextLayers(parentLayer: pageLayer, pageHeight: pageHeight, size: screenSize)
         
         
         let layercomposition = AVMutableVideoComposition()
@@ -156,10 +162,10 @@ class VideoCompositor {
         // Check exist and remove old file
         FileManager.default.removeItemIfExisted(movieDestinationUrl as URL)
         
-        //Progress indicator
-        if let progress = assetExport?.progress{
-             completionTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
-        }
+//        //Progress indicator
+//        if let progress = assetExport?.progress{
+//             completionTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
+//        }
         
         
         assetExport?.outputURL = movieDestinationUrl as URL
@@ -169,14 +175,14 @@ class VideoCompositor {
             case AVAssetExportSession.Status.failed:
                 print("failed")
                 print(assetExport?.error ?? "unknown error")
-                completionTimer!.invalidate()
+//                completionTimer!.invalidate()
             case AVAssetExportSession.Status.cancelled:
                 print("cancelled")
                 print(assetExport?.error ?? "unknown error")
-                completionTimer!.invalidate()
+//                completionTimer!.invalidate()
             default:
                 print("Movie complete")
-                completionTimer!.invalidate()
+//                completionTimer!.invalidate()
                 
                 self.myurl = movieDestinationUrl as URL
                 
@@ -190,7 +196,7 @@ class VideoCompositor {
             }
         })
     }
-
+/*
     
     func createTextLayers(parentLayer:CALayer, pageHeight : CGFloat, size : CGSize) {
         
@@ -309,6 +315,8 @@ class VideoCompositor {
             delegate?.progressUpdated(progress: progress)
         }
     }
+ 
+ */
 }
 
 extension FileManager {

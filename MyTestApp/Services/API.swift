@@ -53,18 +53,29 @@ class API {
         let docRef = db.collection("books").document(id)
         
         docRef.getDocument { (snapshot, error) in
-//            print("SNAPSHOT")
-//            print(snapshot?.data())
             
-            var _effects : String?
-            if let effects = snapshot?.data()?["effects"]{
+//            var _effects : String?
+//            if let effects = snapshot?.data()?["effects"]{
+//                do {
+//                    let e = effects as! [String]
+//                    _effects = e.joined(separator: ",")
+//                } catch  {
+//
+//                }
+//            }
+            
+            var _pages : String?
+            if let pages = snapshot?.data()?["pages"]{
                 do {
-                    let e = effects as! [String]
-                    _effects = e.joined(separator: ",")
+                    let e = pages as! [String]
+                    _pages = e.joined(separator: ",")
+                    
                 } catch  {
                     
                 }
             }
+            
+            
             
             var _images : String?
             if let images = snapshot?.data()?["images"]{
@@ -77,27 +88,27 @@ class API {
             }
 
             
-            var effectSequenceString = ""
-            
-            if let effectSequence = snapshot?.data()?["effect_sequence"]{
-                do {
-                    let e = effectSequence as! [[String:Any]]
-                    
-                    for item in e {
-                        let jsonEncoder = JSONEncoder()
-                        
-                        let effectSeqData = try? JSONSerialization.data(withJSONObject: item, options: [])
-                        if let data = effectSeqData {
-                            let effect = String(data: data, encoding: .utf8)
-                            
-                            effectSequenceString.append(effect!)
-                        }
-                    }
-                    
-                } catch  {
-                    
-                }
-            }
+//            var effectSequenceString = ""
+//
+//            if let effectSequence = snapshot?.data()?["effect_sequence"]{
+//                do {
+//                    let e = effectSequence as! [[String:Any]]
+//
+//                    for item in e {
+//                        let jsonEncoder = JSONEncoder()
+//
+//                        let effectSeqData = try? JSONSerialization.data(withJSONObject: item, options: [])
+//                        if let data = effectSeqData {
+//                            let effect = String(data: data, encoding: .utf8)
+//
+//                            effectSequenceString.append(effect!)
+//                        }
+//                    }
+//
+//                } catch  {
+//
+//                }
+//            }
             
             
             do {
@@ -108,15 +119,19 @@ class API {
                 var bookInfo = try decoder.decode(BookInfo.self, from: bookData)
                 bookInfo.id = snapshot?.documentID
                 
-                if let effects = _effects{
-                    bookInfo.effects = effects
-                }
+//                if let effects = _effects{
+//                    bookInfo.effects = effects
+//                }
                 
                 if let images = _images{
                     bookInfo.images = images
                 }
                 
-                bookInfo.effectSequence = effectSequenceString
+//                bookInfo.effectSequence = effectSequenceString
+                
+                if let pages = _pages{
+                    bookInfo.pages = pages
+                }
                 
                 completion(bookInfo)
             }

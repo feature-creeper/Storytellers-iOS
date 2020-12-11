@@ -22,23 +22,21 @@ class DeepARVC: UIViewController {
     
     var maskPath : String!
     
-    var storyVM : DeepARVM!
+    //    var storyVM : DeepARVM!
+    
+    var recording = false
+    
     
     var content : String?
-
+    
     var bookID : String!
     
     var chapter = 0
-    var page = 0
+    var pageNum = 0
+    
+    var pages : [String] = []
     
     var spinner = LoadingVideoView(title: "Creating your video")
-    
-//    var slatView : SlatView = {
-//        let v = SlatView(frame: CGRect.zero)
-//        v.translatesAutoresizingMaskIntoConstraints = false
-//        v.isUserInteractionEnabled = false
-//        return v
-//    }()
     
     var exitButton : UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 30, width: 70, height: 70))
@@ -51,17 +49,17 @@ class DeepARVC: UIViewController {
         return button
     }()
     
-    var pageBackgroundView : PassthroughView = {
-       let v = PassthroughView()
-        v.backgroundColor = .white
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.applyShadow(offset: CGSize.zero, opacity: 0.4, radius: 6.0)
-        v.isHidden = true
-        return v
-    }()
+    //    var pageBackgroundView : PassthroughView = {
+    //       let v = PassthroughView()
+    //        v.backgroundColor = .white
+    //        v.translatesAutoresizingMaskIntoConstraints = false
+    //        v.applyShadow(offset: CGSize.zero, opacity: 0.4, radius: 6.0)
+    //        v.isHidden = true
+    //        return v
+    //    }()
     
     var timerBGView : UIButton = {
-       let v = UIButton()
+        let v = UIButton()
         v.backgroundColor = .white
         v.translatesAutoresizingMaskIntoConstraints = false
         v.setTitle("00:00:00", for: .normal)
@@ -75,7 +73,7 @@ class DeepARVC: UIViewController {
     }()
     
     var startRecordingButton : UIButton = {
-       let v = UIButton()
+        let v = UIButton()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.setTitle("Start", for: .normal)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 30)
@@ -84,7 +82,7 @@ class DeepARVC: UIViewController {
         v.backgroundColor = .green
         v.addTarget(self, action: #selector(startRecordTapped), for: .touchUpInside)
         v.layer.cornerRadius = 30
-
+        
         v.setImage(UIImage(named: "RecordIcon"), for: .normal)
         v.adjustsImageWhenHighlighted = false
         
@@ -94,7 +92,7 @@ class DeepARVC: UIViewController {
     }()
     
     var endRecordingButton : UIButton = {
-       let v = UIButton()
+        let v = UIButton()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.setTitle("Finish", for: .normal)
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 30)
@@ -107,15 +105,15 @@ class DeepARVC: UIViewController {
         return v
     }()
     
-    var pageLabel : PassthroughLabel = {
-       let v = PassthroughLabel()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.font = UIFont(name: Globals.easyRead, size: 19)
-        v.textColor = UIColor.black
-        v.numberOfLines = 0
-        v.lineBreakMode = .byWordWrapping
-        return v
-    }()
+    //    var pageLabel : PassthroughLabel = {
+    //       let v = PassthroughLabel()
+    //        v.translatesAutoresizingMaskIntoConstraints = false
+    //        v.font = UIFont(name: Globals.easyRead, size: 19)
+    //        v.textColor = UIColor.black
+    //        v.numberOfLines = 0
+    //        v.lineBreakMode = .byWordWrapping
+    //        return v
+    //    }()
     
     var instructionLabelContainer : PassthroughView = {
         let v = PassthroughView()
@@ -138,7 +136,7 @@ class DeepARVC: UIViewController {
     }()
     
     var safeAreaView : UIView = {
-       let v = UIView()
+        let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = .white
         return v
@@ -161,7 +159,7 @@ class DeepARVC: UIViewController {
         v.alignment = .center
         return v
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -169,38 +167,14 @@ class DeepARVC: UIViewController {
         
         setupDeepARAndCamera()
         
-        setMask()
+        deepARSwitchEffect(name: pages[pageNum])
         
-        pageLabel.text = storyVM.currentPageText
     }
-   
+    
     override func viewWillDisappear(_ animated: Bool) {
         deepAR.shutdown()
     }
     
-    func setMask() {
-        if let maskPath = storyVM.currentMask{
-            deepARSwitchEffect(name: maskPath)
-        }
-        
-//        if let flatL = storyVM.currentFlatL {
-//            print("SHOW LEFT")
-//            slatView.showSlat(left: true, index: storyVM.currentPage, image: flatL)
-//        }else{
-//            print("HIDE LEFT")
-//            slatView.hideSlat(left: true)
-//        }
-//
-//        if let flatR = storyVM.currentFlatR {
-//            print("SHOW RIGHT")
-//            slatView.showSlat(left: false, index: storyVM.currentPage, image: flatR)
-//        }else{
-//            print("HIDE RIGHT")
-//            slatView.hideSlat(left: false)
-//        }
-        
-        
-    }
     
     func deepARSwitchEffect(name:String) {
         let fileManager = FileManager.default
@@ -220,9 +194,7 @@ class DeepARVC: UIViewController {
         
         view.addSubview(detailStack)
         
-//        view.addSubview(slatView)
-        
-        view.addSubview(pageBackgroundView)
+        //        view.addSubview(pageBackgroundView)
         view.addSubview(safeAreaView)
         view.addSubview(startRecordingButton)
         
@@ -240,7 +212,7 @@ class DeepARVC: UIViewController {
         popupInstructionLabel.leadingAnchor.constraint(equalTo: instructionLabelContainer.leadingAnchor, constant: 15).isActive = true
         popupInstructionLabel.trailingAnchor.constraint(equalTo: instructionLabelContainer.trailingAnchor, constant: -15).isActive = true
         instructionLabelContainer.bottomAnchor.constraint(equalTo: popupInstructionLabel.bottomAnchor, constant: 15).isActive = true
-    
+        
         
         
         spinner.translatesAutoresizingMaskIntoConstraints = false
@@ -259,30 +231,11 @@ class DeepARVC: UIViewController {
         startRecordingButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
         
         
-        
-        pageBackgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        pageBackgroundView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        pageBackgroundView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        pageBackgroundView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-                
-        pageBackgroundView.addSubview(pageLabel)
-        pageLabel.topAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: 15).isActive = true
-        pageLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
-        pageLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -15).isActive = true
-
-        safeAreaView.topAnchor.constraint(equalTo: pageBackgroundView.bottomAnchor).isActive = true
-        safeAreaView.leftAnchor.constraint(equalTo: pageBackgroundView.leftAnchor).isActive = true
-        safeAreaView.rightAnchor.constraint(equalTo: pageBackgroundView.rightAnchor).isActive = true
         safeAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        detailStack.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor, constant: -15).isActive = true
         detailStack.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true
         detailStack.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor).isActive = true
         
-//        slatView.bottomAnchor.constraint(equalTo: pageBackgroundView.topAnchor).isActive = true
-//        slatView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//        slatView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//        slatView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
     
     
@@ -294,7 +247,7 @@ class DeepARVC: UIViewController {
         
         cameraController = CameraController()
         
-        self.arView = self.deepAR.createARView(withFrame: self.arViewContainer.frame) as! ARView
+        self.arView = self.deepAR.createARView(withFrame: CGRect(x: 0, y: 0, width: view.frame.width - 40, height: view.frame.height - 80)) as! ARView//self.arViewContainer.frame) as! ARView
         self.arView.translatesAutoresizingMaskIntoConstraints = false
         self.arViewContainer.addSubview(self.arView)
         
@@ -307,9 +260,9 @@ class DeepARVC: UIViewController {
         
         cameraController.arview = arView
         
-        self.arView.leftAnchor.constraint(equalTo: self.arViewContainer.leftAnchor, constant: 0).isActive = true
-        self.arView.rightAnchor.constraint(equalTo: self.arViewContainer.rightAnchor, constant: 0).isActive = true
-        self.arView.topAnchor.constraint(equalTo: self.arViewContainer.topAnchor, constant: 0).isActive = true
+        self.arView.leftAnchor.constraint(equalTo: self.arViewContainer.leftAnchor).isActive = true
+        self.arView.rightAnchor.constraint(equalTo: self.arViewContainer.rightAnchor).isActive = true
+        self.arView.topAnchor.constraint(equalTo: self.arViewContainer.topAnchor).isActive = true
         self.arView.bottomAnchor.constraint(equalTo: self.arViewContainer.bottomAnchor).isActive = true
         
         cameraController.startCamera()
@@ -322,28 +275,56 @@ class DeepARVC: UIViewController {
             self.endRecordingTapped()
         }))
         alert.addAction(UIAlertAction(title: "Quit without saving", style: .destructive, handler: { [self] (action) in
-            storyVM.invalidateTimer()
+            //            storyVM.invalidateTimer()
             self.dismiss(animated: true, completion: nil)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-
+        
         self.present(alert, animated: true)
     }
     
+    
+    
     @objc
     func swipedRight(){
-        if storyVM.recording {
-            pageLabel.text = storyVM.prevPage()
+        
+        if !recording {
+            return
         }
+        
+        if pageNum > 0 {
+            pageNum -= 1
+            
+            changePage()
+        }
+        
+        
         
     }
     
     @objc
     func swipedLeft(){
-        if storyVM.recording {
-            pageLabel.text = storyVM.nextPage()
+        
+        if !recording {
+            return
         }
         
+        if pageNum < pages.count - 1 {
+            pageNum += 1
+            
+            changePage()
+        }
+        
+    }
+    
+    func changePage() {
+        deepARSwitchEffect(name: pages[pageNum])
+        
+        if pageNum == pages.count - 1 {
+            endRecordingButton.isHidden = false
+        }else{
+            endRecordingButton.isHidden = true
+        }
     }
     
     var screenCap : ScreenCapture!
@@ -354,39 +335,42 @@ class DeepARVC: UIViewController {
         timerBGView.setImage(UIImage(systemName: "circlebadge.fill"), for: .normal)
         
         startRecordingButton.isHidden = true
-        pageBackgroundView.isHidden = false
-        endRecordingButton.isHidden = false
+        //        pageBackgroundView.isHidden = false
+        //        endRecordingButton.isHidden = false
         pageIndicatorLabel.isHidden = false
-
-        storyVM.tappedRecord()
-        storyVM.startTimer()
+        
+        //        storyVM.tappedRecord()
+        //        storyVM.startTimer()
         
         DispatchQueue.main.async { [self] in
             let width: Int32 = Int32(deepAR.renderingResolution.width)
             let height: Int32 =  Int32(deepAR.renderingResolution.height)
             deepAR.startVideoRecording(withOutputWidth: width, outputHeight: height)
-            storyVM.recording = true
+            //            storyVM.recording = true
+            
+            recording = true
         }
- 
+        
     }
     
     @objc
     func dismissTapped()  {
-        if storyVM.recording {
-            showExitDialogue(message: "Are you sure?", title: "Quit recording")
-        }else{
-            storyVM.invalidateTimer()
-            self.dismiss(animated: true, completion: nil)
-        }
+        //        if storyVM.recording {
+        //            showExitDialogue(message: "Are you sure?", title: "Quit recording")
+        //        }else{
+        //            storyVM.invalidateTimer()
+        //            self.dismiss(animated: true, completion: nil)
+        //        }
         
     }
     
     @objc
     func endRecordingTapped()  {
         
-        storyVM.tappedRecord()
+        //storyVM.tappedRecord()
         deepAR.finishVideoRecording()
-        storyVM.recording = false
+        recording = false
+        //storyVM.recording = false
     }
     
     func lateReturnFunc(){
@@ -407,62 +391,84 @@ extension DeepARVC : DeepARDelegate {
     }
     
     func didFinishPreparingForVideoRecording() { }
+    
+    func didStartVideoRecording() {
+        print("START RECORDING Protocol")
+    }
+    
+    func didFinishVideoRecording(_ videoFilePath: String!) {
         
-        func didStartVideoRecording() {
-            print("START RECORDING Protocol")
-        }
+        //            storyVM.invalidateTimer()
+        spinner.isHidden = false
         
-        func didFinishVideoRecording(_ videoFilePath: String!) {
-                        
-            storyVM.invalidateTimer()
-            spinner.isHidden = false
-                      
-            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
-            let components = videoFilePath.components(separatedBy: "/")
-            guard let last = components.last else { return }
-            let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
-
-            let videoCompositor = VideoCompositor(//view,
-                                                  pageTimes: storyVM.getPageTimes(),storyText: storyVM.story, bookID : bookID)
-            videoCompositor.delegate = self
-            videoCompositor.composite(url: URL(fileURLWithPath: videoFilePath)) {
-                
-                DispatchQueue.main.async {
-                    self.spinner.isHidden = true
-                    self.dismiss(animated: true, completion: nil)
-                    
-                }
-            }
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+        let components = videoFilePath.components(separatedBy: "/")
+        guard let last = components.last else { return }
+        let destination = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, last))
+        
+        print("---> The destination")
+        print(last)
+        
+        
+        let seconds = String(Date().timeIntervalSince1970)
+        let uniqueFileName = seconds.replacingOccurrences(of: ".", with: "_")
+        let videoFileName = uniqueFileName + ".mov"
+        
+        DatabaseHelper.shared.createVideoMO(bookID: bookID, videoFileName: last, videoURL: URL(fileURLWithPath:videoFilePath)) {
+            print("SAVING COMPLETE")
             
+            self.dismiss(animated: true, completion: nil)
         }
-}
-
-extension DeepARVC : StoryDelegate{
-    
-    func changedPage(index: Int, totalPages: Int) {
         
-        setMask()
+//        let playerController = AVPlayerViewController()
+//                let player = AVPlayer(url: destination)
+//                playerController.player = player
+//                present(playerController, animated: true) {
+//                    player.play()
+//        }
         
-        pageIndicatorLabel.text = "\(index + 1)/\(totalPages)"
         
-//        slatView.showSlat(index: index)
+//        let videoCompositor = VideoCompositor( bookID : bookID)
+//        videoCompositor.delegate = self
+//        videoCompositor.composite(url: URL(fileURLWithPath: videoFilePath)) {
+//
+//            DispatchQueue.main.async {
+//                self.spinner.isHidden = true
+//                self.dismiss(animated: true, completion: nil)
+//
+//            }
+//        }
         
-        instructionLabelContainer.isHidden = true
-        
-        if index == 0 {
-            endRecordingButton.isHidden = true
-            instructionLabelContainer.isHidden = false
-        } else if index == (totalPages - 1){
-            endRecordingButton.isHidden = false
-        }else{
-            endRecordingButton.isHidden = true
-        }
-    }
-    
-    func timerAddedSecond(formatted: String) {
-        timerBGView.setTitle(formatted, for: .normal)
     }
 }
+/*
+ extension DeepARVC : StoryDelegate{
+ 
+ 
+ func changedPage(index: Int, totalPages: Int) {
+ 
+ setMask()
+ 
+ pageIndicatorLabel.text = "\(index + 1)/\(totalPages)"
+ 
+ //        slatView.showSlat(index: index)
+ 
+ instructionLabelContainer.isHidden = true
+ 
+ if index == 0 {
+ endRecordingButton.isHidden = true
+ instructionLabelContainer.isHidden = false
+ } else if index == (totalPages - 1){
+ endRecordingButton.isHidden = false
+ }else{
+ endRecordingButton.isHidden = true
+ }
+ }
+ 
+ func timerAddedSecond(formatted: String) {
+ timerBGView.setTitle(formatted, for: .normal)
+ }
+ }*/
 
 extension DeepARVC :CompositorDelegate{
     func progressUpdated(progress: Float) {
@@ -491,61 +497,3 @@ class PassthroughStack: UIStackView {
         return view == self ? nil : view
     }
 }
-/*
-
-class SlatView: UIView {
-    
-    let rightSlat = CALayer()
-    let leftSlat = CALayer()
-    
-    let data : [String] = []
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        rightSlat.isHidden = true
-        leftSlat.isHidden = true
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func hideSlat(left : Bool) {
-        if left {
-            leftSlat.isHidden = true
-        }else{
-            rightSlat.isHidden = true
-        }
-    }
-    
-    func showSlat(left : Bool,index : Int, image: String) {
-        
-        let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let myEffectPath = documentsURL.appendingPathComponent(image).path
-        
-        if left {
-            leftSlat.isHidden = false
-            leftSlat.contents = UIImage(contentsOfFile: myEffectPath)?.cgImage
-        }else{
-            rightSlat.isHidden = false
-            rightSlat.contents = UIImage(contentsOfFile: myEffectPath)?.cgImage
-        }
-    }
-    
-    override func layoutSubviews() {
-
-        rightSlat.frame = CGRect(x: 0, y: 0, width: 150, height: bounds.height)
-        rightSlat.anchorPoint = CGPoint(x: 1, y: 0)
-        rightSlat.position = CGPoint(x: bounds.width, y: 0)
-        rightSlat.contentsGravity = .resizeAspectFill
-        self.layer.addSublayer(rightSlat)
-        
-        leftSlat.frame = CGRect(x: 0, y: 0, width: 150, height: bounds.height)
-        leftSlat.anchorPoint = CGPoint(x: 0, y: 0)
-        leftSlat.position = CGPoint(x: 0, y: 0)
-        leftSlat.contentsGravity = .resizeAspectFill
-        self.layer.addSublayer(leftSlat)
-    }
-}
-*/

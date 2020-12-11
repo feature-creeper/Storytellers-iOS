@@ -81,6 +81,8 @@ extension UIView{
 }
 
 extension String{
+    
+    
     func getEffectArray() -> [String] {
         return self.components(separatedBy: ",")
     }

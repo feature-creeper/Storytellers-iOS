@@ -2,10 +2,9 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17511" systemVersion="20B29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Book" representedClassName="Book" syncable="YES" codeGenerationType="class">
         <attribute name="author" optional="YES" attributeType="String"/>
-        <attribute name="content" optional="YES" attributeType="String" valueTransformerName="[String]]"/>
         <attribute name="cover" optional="YES" attributeType="String"/>
-        <attribute name="effects" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="pages" optional="YES" attributeType="String"/>
         <attribute name="synopsis" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Video" inverseName="book" inverseEntity="Video"/>
@@ -17,7 +16,7 @@
         <relationship name="book" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Book" inverseName="videos" inverseEntity="Book"/>
     </entity>
     <elements>
-        <element name="Book" positionX="-63" positionY="-18" width="128" height="149"/>
+        <element name="Book" positionX="-63" positionY="-18" width="128" height="134"/>
         <element name="Video" positionX="159.2578125" positionY="-3.45703125" width="128" height="103"/>
     </elements>
 </model>

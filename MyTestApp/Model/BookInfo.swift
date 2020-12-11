@@ -13,6 +13,7 @@ struct BookInfo : Codable {
     var cover : String?
     var id : String?
     var effects : String?
+    var pages : String?
     var about : String?
     var readtime : String?
     var effectSequence : String?
