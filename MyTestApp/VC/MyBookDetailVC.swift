@@ -391,6 +391,7 @@ class MyBookDetailVC: UIViewController {
             vc.bookID = id
         }
         
+        
         vc.currentLanguage = currentLanguage
 
         vc.modalPresentationStyle = .fullScreen
