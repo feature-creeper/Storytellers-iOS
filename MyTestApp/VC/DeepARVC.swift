@@ -12,8 +12,10 @@ import AVKit
 
 class DeepARVC: UIViewController {
     
-    @IBOutlet weak var arViewContainer: UIView!
+    var currentLanguage = 0
     
+    
+    @IBOutlet weak var arViewContainer: UIView!
     
     private var deepAR: DeepAR!
     private var arView: ARView!
@@ -177,11 +179,22 @@ class DeepARVC: UIViewController {
     
     
     func deepARSwitchEffect(name:String) {
-        let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let myEffectPath = documentsURL.appendingPathComponent(name).path
         
-        deepAR.switchEffect(withSlot: "masks", path: myEffectPath)
+        
+        if currentLanguage == 0 {
+            let fileManager = FileManager.default
+            let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let myEffectPath = documentsURL.appendingPathComponent(name).path
+            
+            deepAR.switchEffect(withSlot: "masks", path: myEffectPath)
+        }else{
+            guard let path = Bundle.main.path(forResource: name, ofType:"") else { return }
+//            let fileURL = NSURL(fileURLWithPath: path)
+            
+            deepAR.switchEffect(withSlot: "masks", path: path)
+        }
+        
+        
     }
     
     func setupViews() {

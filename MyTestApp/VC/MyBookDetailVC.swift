@@ -9,6 +9,11 @@ import UIKit
 import AVKit
 
 class MyBookDetailVC: UIViewController {
+    
+    var currentLanguage = 0
+    
+    var spanishBooks:[String] = []
+    var germanBooks:[String] = []
 
     var book : Book? {
         didSet{
@@ -147,6 +152,45 @@ class MyBookDetailVC: UIViewController {
         return v
     }()
     
+    let languageEngButton : UIButton = {
+        let v = UIButton()
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 22)
+        v.setTitleColor(.systemBlue, for: .normal)
+        v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        v.setTitle("English", for: .normal)
+        v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.layer.cornerRadius = 9
+        v.addTarget(self, action: #selector(tappedENG), for: .touchUpInside)
+        return v
+    }()
+    
+    let languageSpaButton : UIButton = {
+        let v = UIButton()
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 22)
+        v.setTitleColor(.systemBlue, for: .normal)
+        v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        v.setTitle("Spanish", for: .normal)
+        v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.layer.cornerRadius = 9
+        v.addTarget(self, action: #selector(tappedSPA), for: .touchUpInside)
+        return v
+    }()
+    
+    let languageGerButton : UIButton = {
+        let v = UIButton()
+        v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 22)
+        v.setTitleColor(.systemBlue, for: .normal)
+        v.contentEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
+        v.setTitle("German", for: .normal)
+        v.backgroundColor = .white
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.layer.cornerRadius = 9
+        v.addTarget(self, action: #selector(tappedGER), for: .touchUpInside)
+        return v
+    }()
+    
     let readButton : UIButton = {
         let v = UIButton()
         v.titleLabel?.font = UIFont(name: Globals.semiboldWeight, size: 25)
@@ -181,7 +225,7 @@ class MyBookDetailVC: UIViewController {
         myVideosCollectionView.delegate = self
         myVideosCollectionView.dataSource = self
         
-        
+        fillBookArrays()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -238,6 +282,9 @@ class MyBookDetailVC: UIViewController {
         topDetailsStack.addArrangedSubview(authorLabel)
         topDetailsStack.addArrangedSubview(ageLabel)
         topDetailsStack.addArrangedSubview(durationLabel)
+        topDetailsStack.addArrangedSubview(languageEngButton)
+        topDetailsStack.addArrangedSubview(languageSpaButton)
+        topDetailsStack.addArrangedSubview(languageGerButton)
         topDetailsStack.addArrangedSubview(readButton)
 
         lowerDetailsStack.addArrangedSubview(aboutLabel)
@@ -283,6 +330,15 @@ class MyBookDetailVC: UIViewController {
         lowerDetailsStack.rightAnchor.constraint(equalTo: view.readableContentGuide.rightAnchor).isActive = true
         
         scrollView.bottomAnchor.constraint(equalTo: lowerDetailsStack.bottomAnchor, constant: 50).isActive = true
+        
+        
+    }
+    
+    func fillBookArrays() {
+        for n in 1...40 {
+            germanBooks.append("BB" + n.description)
+            spanishBooks.append("CC" + n.description)
+        }
     }
     
     @objc
@@ -292,34 +348,51 @@ class MyBookDetailVC: UIViewController {
     }
     
     @objc
+    func tappedENG() {
+        currentLanguage = 0
+        print("ENG")
+    }
+    
+    @objc
+    func tappedSPA() {
+        currentLanguage = 1
+        print("SPA")
+    }
+    
+    @objc
+    func tappedGER() {
+        currentLanguage = 2
+        print("GER")
+    }
+    
+    @objc
     func tappedRead() {
         
         let vc = DeepARVC(nibName: nil, bundle: nil)
         
         guard let pages = book?.pages else {return}
         
-        let pagesArray = pages.getEffectArray()
+        let pagesArray:[String]
+        if currentLanguage == 0 {
+            pagesArray = pages.getEffectArray()
+        }else if currentLanguage == 1{
+            pagesArray = spanishBooks
+        }else{
+            pagesArray = germanBooks
+        }
+         
+        
+        
+        print(pagesArray)
         
         vc.pages = pagesArray
-        
-//        guard let effects = book?.effects else {return}
-        
-//        let effectSequence : [[String:Any]] = effects.getEffectSequenceArray()
-        
-        
-        
-//        if let content = book?.content {
-//            vc.content = content
-//            let story = DeepARVM(rawString: content)
-//            story.delegate = vc
-//            story.effects = effectSequence
-//            vc.storyVM = story
-//        }
 
         if let id = book?.id {
             vc.bookID = id
         }
         
+        vc.currentLanguage = currentLanguage
+
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
     }
@@ -349,8 +422,6 @@ class MyBookDetailVC: UIViewController {
 
          alert.addAction(UIAlertAction(title: "Play", style: .default , handler:{ (UIAlertAction)in
             
-            
-            print(videoURL)
             
             self.playVideo(videoURL: videoURL)
          }))
