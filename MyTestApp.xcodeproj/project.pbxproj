@@ -223,7 +223,7 @@
 		697E47B725308C7E00E769A1 /* DatabaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseHelper.swift; sourceTree = "<group>"; };
 		69882DBF254475C500833B96 /* AllMyVideosVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMyVideosVC.swift; sourceTree = "<group>"; };
 		69882DC32544781600833B96 /* LanguageSelectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectVC.swift; sourceTree = "<group>"; };
-		69A97F42252C7424006EA658 /* MyTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		69A97F42252C7424006EA658 /* Storytellers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Storytellers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69A97F45252C7424006EA658 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69A97F47252C7424006EA658 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		69A97F49252C7424006EA658 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -521,7 +521,7 @@
 		69A97F43252C7424006EA658 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				69A97F42252C7424006EA658 /* MyTestApp.app */,
+				69A97F42252C7424006EA658 /* Storytellers.app */,
 				69A97F58252C7424006EA658 /* MyTestAppTests.xctest */,
 				69A97F63252C7424006EA658 /* MyTestAppUITests.xctest */,
 			);
@@ -714,7 +714,7 @@
 			);
 			name = MyTestApp;
 			productName = MyTestApp;
-			productReference = 69A97F42252C7424006EA658 /* MyTestApp.app */;
+			productReference = 69A97F42252C7424006EA658 /* Storytellers.app */;
 			productType = "com.apple.product-type.application";
 		};
 		69A97F57252C7424006EA658 /* MyTestAppTests */ = {
@@ -1302,7 +1302,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.storytellers.storytellers;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storytellers;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1329,7 +1329,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.storytellers.storytellers;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Storytellers;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
