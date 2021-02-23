@@ -23,7 +23,7 @@ class LoginVC: UIViewController {
     let logoImageView : UIImageView = {
         let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.image = #imageLiteral(resourceName: "LogoCircle")
+        v.image = #imageLiteral(resourceName: "CircleLogo")
         v.contentMode = .scaleAspectFit
         
         return v
@@ -125,7 +125,7 @@ class LoginVC: UIViewController {
         bottomStackView.addArrangedSubview(passwordTextField)
         bottomStackView.addArrangedSubview(emailLoginButton)
 //        bottomStackView.addArrangedSubview(emailSignupButton)
-        bottomStackView.addArrangedSubview(FacebookLoginButton)
+//        bottomStackView.addArrangedSubview(FacebookLoginButton)
         bottomStackView.addArrangedSubview(googleLoginButton)
         
         bottomStackView.spacing = 10

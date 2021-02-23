@@ -28,7 +28,7 @@ class HelpVC: UIPageViewController, UIPageViewControllerDelegate, UIPageViewCont
         
         vc.pageIndex = 3
 //        vc.showButton = true
-        vc.labelTitle = "CCCC"
+//        vc.labelTitle = ""
         return vc
     }()
     
@@ -214,6 +214,7 @@ class HelpContentVC: UIViewController {
         }
         
         if pageIndex == 3 {
+            mainImage.image = UIImage(named: "CircleLogo")
             view.addSubview(dismissButton)
             dismissButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
             dismissButton.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor).isActive = true

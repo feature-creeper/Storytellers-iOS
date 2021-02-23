@@ -200,7 +200,7 @@ class DeepARVC: UIViewController {
     func setupViews() {
         
         
-        view.addSubview(timerBGView)
+//        view.addSubview(timerBGView)
         
         view.addSubview(pageIndicatorLabel)
         view.addSubview(endRecordingButton)
@@ -236,8 +236,8 @@ class DeepARVC: UIViewController {
         spinner.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         spinner.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         
-        timerBGView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        timerBGView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        timerBGView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+//        timerBGView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         startRecordingButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60).isActive = true
         startRecordingButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -374,7 +374,7 @@ class DeepARVC: UIViewController {
         //            storyVM.invalidateTimer()
         //            self.dismiss(animated: true, completion: nil)
         //        }
-        
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc
